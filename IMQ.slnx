@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/IMQ.Api/IMQ.Api.csproj" />
+    <Project Path="src/IMQ.Core/IMQ.Core.csproj" />
+    <Project Path="src/IMQ.Data/IMQ.Data.csproj" />
+    <Project Path="src/IMQ.Web/IMQ.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/IMQ.Tests/IMQ.Tests.csproj" />
+  </Folder>
+</Solution>

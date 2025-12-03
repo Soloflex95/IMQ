@@ -1,0 +1,277 @@
+@page "/workers"
+@rendermode InteractiveServer
+
+<PageTitle>Team Management - IMQ</PageTitle>
+
+<h1>
+    <i class="bi bi-people"></i> Team Management
+</h1>
+<p class="lead">Manage your team's qualifications and assignments</p>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="input-group w-50">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Search workers..." @bind="searchQuery" @bind:event="oninput" @onkeyup="FilterWorkers" />
+                </div>
+                <button class="btn btn-success" @onclick="AddWorker">
+                    <i class="bi bi-person-plus"></i> Add Worker
+                </button>
+            </div>
+            <div class="card-body">
+                @if (filteredWorkers == null)
+                {
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-2">Loading team...</p>
+                    </div>
+                }
+                else if (!filteredWorkers.Any())
+                {
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> No workers found matching your search.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Department</th>
+                                    <th>Primary Job</th>
+                                    <th>Qualifications</th>
+                                    <th>Overall Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var worker in filteredWorkers)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@worker.FirstName @worker.LastName</strong>
+                                            @if (worker.IsManager)
+                                            {
+                                                <span class="badge bg-primary ms-2">Manager</span>
+                                            }
+                                        </td>
+                                        <td><small>@worker.Email</small></td>
+                                        <td>@worker.Department</td>
+                                        <td>@worker.PrimaryJob</td>
+                                        <td>
+                                            <div class="progress" style="height: 20px; width: 120px;">
+                                                <div class="progress-bar bg-success" style="width: @worker.QualifiedCount%">
+                                                    @worker.QualifiedCount
+                                                </div>
+                                                <div class="progress-bar bg-warning" style="width: @worker.ReviewCount%">
+                                                    @worker.ReviewCount
+                                                </div>
+                                                <div class="progress-bar bg-danger" style="width: @worker.NotQualifiedCount%">
+                                                    @worker.NotQualifiedCount
+                                                </div>
+                                            </div>
+                                            <small class="text-muted">@worker.TotalQualifications total</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge @GetOverallStatusBadgeClass(worker.OverallStatus)">
+                                                @worker.OverallStatus
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <button class="btn btn-outline-primary" @onclick="() => ViewWorker(worker.Id)">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                                <button class="btn btn-outline-success" @onclick="() => AssessWorker(worker.Id)">
+                                                    <i class="bi bi-clipboard-check"></i>
+                                                </button>
+                                                <button class="btn btn-outline-secondary" @onclick="() => EditWorker(worker.Id)">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-diagram-3"></i> Department Overview
+                </h5>
+            </div>
+            <div class="card-body">
+                @if (departmentStats != null)
+                {
+                    <canvas id="departmentChart" style="max-height: 300px;"></canvas>
+                    <div class="mt-3">
+                        @foreach (var dept in departmentStats)
+                        {
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>@dept.Name</span>
+                                <span class="badge bg-secondary">@dept.WorkerCount workers</span>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">
+                    <i class="bi bi-exclamation-triangle"></i> Requires Attention
+                </h5>
+            </div>
+            <div class="card-body">
+                @if (attentionItems != null && attentionItems.Any())
+                {
+                    <div class="list-group">
+                        @foreach (var item in attentionItems)
+                        {
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">@item.WorkerName</h6>
+                                    <span class="badge @GetSeverityBadgeClass(item.Severity)">@item.Severity</span>
+                                </div>
+                                <p class="mb-1">@item.Issue</p>
+                                <small class="text-muted">@item.JobTitle</small>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-success mb-0">
+                        <i class="bi bi-check-circle"></i> No items requiring attention.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<WorkerViewModel>? workers;
+    private List<WorkerViewModel>? filteredWorkers;
+    private List<DepartmentStatViewModel>? departmentStats;
+    private List<AttentionItemViewModel>? attentionItems;
+    private string searchQuery = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(300);
+        
+        workers = new List<WorkerViewModel>
+        {
+            new() { Id = Guid.NewGuid(), FirstName = "John", LastName = "Smith", Email = "john.smith@company.com", Department = "Quality Control", PrimaryJob = "QA Specialist", QualifiedCount = 7, ReviewCount = 2, NotQualifiedCount = 1, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { Id = Guid.NewGuid(), FirstName = "Jane", LastName = "Doe", Email = "jane.doe@company.com", Department = "Compliance", PrimaryJob = "GMP Auditor", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = true },
+            new() { Id = Guid.NewGuid(), FirstName = "Mike", LastName = "Johnson", Email = "mike.johnson@company.com", Department = "Production", PrimaryJob = "Mfg Technician", QualifiedCount = 5, ReviewCount = 3, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
+            new() { Id = Guid.NewGuid(), FirstName = "Sarah", LastName = "Williams", Email = "sarah.williams@company.com", Department = "Engineering", PrimaryJob = "Validation Engineer", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { Id = Guid.NewGuid(), FirstName = "Bob", LastName = "Brown", Email = "bob.brown@company.com", Department = "Quality Control", PrimaryJob = "Lab Analyst", QualifiedCount = 4, ReviewCount = 2, NotQualifiedCount = 4, TotalQualifications = 10, OverallStatus = "Not Qualified", IsManager = false }
+        };
+        
+        filteredWorkers = workers;
+        
+        departmentStats = new List<DepartmentStatViewModel>
+        {
+            new() { Name = "Quality Control", WorkerCount = 15 },
+            new() { Name = "Compliance", WorkerCount = 8 },
+            new() { Name = "Production", WorkerCount = 24 },
+            new() { Name = "Engineering", WorkerCount = 12 }
+        };
+        
+        attentionItems = new List<AttentionItemViewModel>
+        {
+            new() { WorkerName = "Bob Brown", Issue = "Multiple critical skills not qualified", JobTitle = "Lab Analyst", Severity = "High" },
+            new() { WorkerName = "Mike Johnson", Issue = "GMP certification expiring in 10 days", JobTitle = "Mfg Technician", Severity = "Medium" },
+            new() { WorkerName = "John Smith", Issue = "Pending manager approval for SOP Documentation", JobTitle = "QA Specialist", Severity = "Low" }
+        };
+    }
+
+    private void FilterWorkers()
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery))
+        {
+            filteredWorkers = workers;
+        }
+        else
+        {
+            var query = searchQuery.ToLower();
+            filteredWorkers = workers?.Where(w =>
+                w.FirstName.ToLower().Contains(query) ||
+                w.LastName.ToLower().Contains(query) ||
+                w.Email.ToLower().Contains(query) ||
+                w.Department.ToLower().Contains(query) ||
+                w.PrimaryJob.ToLower().Contains(query)
+            ).ToList();
+        }
+    }
+
+    private string GetOverallStatusBadgeClass(string status) => status switch
+    {
+        "Qualified" => "bg-success",
+        "Needs Review" => "bg-warning text-dark",
+        "Not Qualified" => "bg-danger",
+        _ => "bg-secondary"
+    };
+
+    private string GetSeverityBadgeClass(string severity) => severity switch
+    {
+        "High" => "bg-danger",
+        "Medium" => "bg-warning text-dark",
+        "Low" => "bg-info",
+        _ => "bg-secondary"
+    };
+
+    private void ViewWorker(Guid id) => Console.WriteLine($"View Worker {id}");
+    private void AssessWorker(Guid id) => Console.WriteLine($"Assess Worker {id}");
+    private void EditWorker(Guid id) => Console.WriteLine($"Edit Worker {id}");
+    private void AddWorker() => Console.WriteLine("Add Worker");
+
+    private class WorkerViewModel
+    {
+        public Guid Id { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Department { get; set; } = string.Empty;
+        public string PrimaryJob { get; set; } = string.Empty;
+        public int QualifiedCount { get; set; }
+        public int ReviewCount { get; set; }
+        public int NotQualifiedCount { get; set; }
+        public int TotalQualifications { get; set; }
+        public string OverallStatus { get; set; } = string.Empty;
+        public bool IsManager { get; set; }
+    }
+
+    private class DepartmentStatViewModel
+    {
+        public string Name { get; set; } = string.Empty;
+        public int WorkerCount { get; set; }
+    }
+
+    private class AttentionItemViewModel
+    {
+        public string WorkerName { get; set; } = string.Empty;
+        public string Issue { get; set; } = string.Empty;
+        public string JobTitle { get; set; } = string.Empty;
+        public string Severity { get; set; } = string.Empty;
+    }
+}

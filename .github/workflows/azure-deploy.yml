@@ -1,0 +1,102 @@
+# GitHub Actions workflow for Azure App Service deployment
+name: Deploy IMQ to Azure App Service
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: imq-poc-webapp
+  DOTNET_VERSION: '10.0.x'
+  AZURE_WEBAPP_PACKAGE_PATH: './publish'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build solution
+      run: dotnet build --configuration Release --no-restore
+      
+    - name: Run tests
+      run: dotnet test --no-build --verbosity normal --configuration Release
+      
+    - name: Publish application
+      run: dotnet publish src/IMQ.Web/IMQ.Web.csproj -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      
+    - name: Upload artifact for deployment
+      uses: actions/upload-artifact@v4
+      with:
+        name: imq-webapp
+        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+  deploy-to-dev:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.ref == 'refs/heads/develop'
+    environment:
+      name: 'Development'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: imq-webapp
+        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS_DEV }}
+        
+    - name: Deploy to Azure Web App (Dev)
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}-dev
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+  deploy-to-production:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: imq-webapp
+        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS_PROD }}
+        
+    - name: Deploy to Azure Web App (Production)
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}-prod
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

@@ -1,0 +1,267 @@
+@page "/assessments"
+@rendermode InteractiveServer
+
+<PageTitle>Assessments - IMQ</PageTitle>
+
+<h1>
+    <i class="bi bi-clipboard-check"></i> Assessment Results
+</h1>
+<p class="lead">Review and approve worker qualification assessments</p>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link @(activeTab == "pending" ? "active" : "")" @onclick='() => SetActiveTab("pending")' style="cursor: pointer;">
+                            Pending Approval <span class="badge bg-warning text-dark ms-2">5</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(activeTab == "approved" ? "active" : "")" @onclick='() => SetActiveTab("approved")' style="cursor: pointer;">
+                            Approved
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(activeTab == "rejected" ? "active" : "")" @onclick='() => SetActiveTab("rejected")' style="cursor: pointer;">
+                            Rejected
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                @if (currentAssessments == null)
+                {
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-2">Loading assessments...</p>
+                    </div>
+                }
+                else if (!currentAssessments.Any())
+                {
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> No assessments in this category.
+                    </div>
+                }
+                else
+                {
+                    @foreach (var assessment in currentAssessments)
+                    {
+                        <div class="card mb-3 @GetAssessmentCardClass(assessment.Status)">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h5 class="card-title">
+                                            @assessment.WorkerName - @assessment.JobTitle
+                                            <span class="badge @GetStatusBadgeClass(assessment.Status) ms-2">
+                                                @assessment.Status
+                                            </span>
+                                        </h5>
+                                        <p class="card-text">
+                                            <strong>Match Score:</strong> 
+                                            <span class="fs-4 @GetScoreClass(assessment.MatchScore)">@assessment.MatchScore.ToString("F0")%</span>
+                                        </p>
+                                        <p class="card-text">
+                                            <strong>Assessed:</strong> @assessment.AssessedAt.ToString("MMM dd, yyyy HH:mm")
+                                        </p>
+                                        
+                                        @if (!string.IsNullOrEmpty(assessment.Rationale))
+                                        {
+                                            <div class="alert alert-light mb-2">
+                                                <strong>Assessment Rationale:</strong><br/>
+                                                @assessment.Rationale
+                                            </div>
+                                        }
+                                        
+                                        @if (assessment.Gaps?.Any() == true)
+                                        {
+                                            <div class="alert alert-warning mb-2">
+                                                <strong><i class="bi bi-exclamation-triangle"></i> Identified Gaps:</strong>
+                                                <ul class="mb-0 mt-2">
+                                                    @foreach (var gap in assessment.Gaps)
+                                                    {
+                                                        <li>@gap</li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        @if (assessment.Status == "Needs Review")
+                                        {
+                                            <button class="btn btn-success w-100 mb-2" @onclick="() => ShowApprovalDialog(assessment.Id)">
+                                                <i class="bi bi-check-circle"></i> Approve
+                                            </button>
+                                            <button class="btn btn-warning w-100 mb-2" @onclick="() => ShowOverrideDialog(assessment.Id)">
+                                                <i class="bi bi-shield-check"></i> Override & Approve
+                                            </button>
+                                            <button class="btn btn-danger w-100 mb-2" @onclick="() => RejectAssessment(assessment.Id)">
+                                                <i class="bi bi-x-circle"></i> Reject
+                                            </button>
+                                        }
+                                        <button class="btn btn-outline-primary w-100" @onclick="() => ViewFullReport(assessment.Id)">
+                                            <i class="bi bi-file-earmark-text"></i> Full Report
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (showApprovalModal)
+{
+    <div class="modal show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-check-circle"></i> Approve Assessment
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="bi bi-shield-exclamation"></i>
+                        <strong>21 CFR Part 11 Electronic Signature Required</strong>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Reason Code *</label>
+                        <select class="form-select" @bind="approvalReasonCode">
+                            <option value="">-- Select Reason --</option>
+                            <option value="QUAL_COMPLETE">Qualification Complete</option>
+                            <option value="CERT_VERIFIED">Certification Verified</option>
+                            <option value="EXP_CONFIRMED">Experience Confirmed</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Additional Comments (Optional)</label>
+                        <textarea class="form-control" rows="3" @bind="approvalComments"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Re-enter Password *</label>
+                        <input type="password" class="form-control" @bind="confirmPassword" placeholder="Confirm your identity" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal">Cancel</button>
+                    <button type="button" class="btn btn-success" @onclick="ConfirmApproval" disabled="@(!CanApprove)">
+                        <i class="bi bi-check-circle"></i> Sign & Approve
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private string activeTab = "pending";
+    private List<AssessmentViewModel>? allAssessments;
+    private List<AssessmentViewModel>? currentAssessments;
+    private bool showApprovalModal = false;
+    private Guid? selectedAssessmentId;
+    private string approvalReasonCode = string.Empty;
+    private string approvalComments = string.Empty;
+    private string confirmPassword = string.Empty;
+
+    private bool CanApprove => !string.IsNullOrWhiteSpace(approvalReasonCode) && !string.IsNullOrWhiteSpace(confirmPassword);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(300);
+        
+        allAssessments = new List<AssessmentViewModel>
+        {
+            new() { Id = Guid.NewGuid(), WorkerName = "John Smith", JobTitle = "QA Specialist", Status = "Needs Review", MatchScore = 78m, AssessedAt = DateTime.Now.AddHours(-2), Rationale = "Worker has 5 years experience in quality control. Minor gaps in SOP documentation skills.", Gaps = new List<string> { "SOP Documentation - needs Level 3, has Level 2" } },
+            new() { Id = Guid.NewGuid(), WorkerName = "Mike Johnson", JobTitle = "GMP Auditor", Status = "Needs Review", MatchScore = 85m, AssessedAt = DateTime.Now.AddHours(-5), Rationale = "Strong GMP background with relevant certifications. Needs manager override for experience gap.", Gaps = new List<string> { "Min 5 years required, has 4.5 years" } },
+            new() { Id = Guid.NewGuid(), WorkerName = "Jane Doe", JobTitle = "Lab Analyst", Status = "Qualified", MatchScore = 95m, AssessedAt = DateTime.Now.AddDays(-1), Rationale = "Fully qualified with all required certifications current.", Gaps = new List<string>() },
+            new() { Id = Guid.NewGuid(), WorkerName = "Sarah Williams", JobTitle = "Validation Engineer", Status = "Qualified", MatchScore = 92m, AssessedAt = DateTime.Now.AddDays(-2), Rationale = "Excellent match with advanced validation experience.", Gaps = new List<string>() },
+            new() { Id = Guid.NewGuid(), WorkerName = "Bob Brown", JobTitle = "Mfg Technician", Status = "Not Qualified", MatchScore = 45m, AssessedAt = DateTime.Now.AddDays(-3), Rationale = "Significant gaps in required skills. Expired certification.", Gaps = new List<string> { "Aseptic Technique certification expired", "Quality Control Testing - needs Level 3, has Level 1" } }
+        };
+        
+        FilterAssessments();
+    }
+
+    private void SetActiveTab(string tab)
+    {
+        activeTab = tab;
+        FilterAssessments();
+    }
+
+    private void FilterAssessments()
+    {
+        currentAssessments = activeTab switch
+        {
+            "pending" => allAssessments?.Where(a => a.Status == "Needs Review").ToList(),
+            "approved" => allAssessments?.Where(a => a.Status == "Qualified").ToList(),
+            "rejected" => allAssessments?.Where(a => a.Status == "Not Qualified").ToList(),
+            _ => allAssessments
+        };
+    }
+
+    private string GetAssessmentCardClass(string status) => status switch
+    {
+        "Needs Review" => "border-warning",
+        "Qualified" => "border-success",
+        "Not Qualified" => "border-danger",
+        _ => ""
+    };
+
+    private string GetStatusBadgeClass(string status) => status switch
+    {
+        "Qualified" => "bg-success",
+        "Needs Review" => "bg-warning text-dark",
+        "Not Qualified" => "bg-danger",
+        _ => "bg-secondary"
+    };
+
+    private string GetScoreClass(decimal score) => score switch
+    {
+        >= 85 => "text-success fw-bold",
+        >= 70 => "text-warning fw-bold",
+        _ => "text-danger fw-bold"
+    };
+
+    private void ShowApprovalDialog(Guid id)
+    {
+        selectedAssessmentId = id;
+        showApprovalModal = true;
+        approvalReasonCode = string.Empty;
+        approvalComments = string.Empty;
+        confirmPassword = string.Empty;
+    }
+
+    private void ShowOverrideDialog(Guid id) => Console.WriteLine($"Override Assessment {id}");
+    private void RejectAssessment(Guid id) => Console.WriteLine($"Reject Assessment {id}");
+    private void ViewFullReport(Guid id) => Console.WriteLine($"View Report {id}");
+
+    private void CloseModal()
+    {
+        showApprovalModal = false;
+        selectedAssessmentId = null;
+    }
+
+    private void ConfirmApproval()
+    {
+        // TODO: Implement actual approval with e-signature
+        Console.WriteLine($"Approved Assessment {selectedAssessmentId} with reason {approvalReasonCode}");
+        CloseModal();
+    }
+
+    private class AssessmentViewModel
+    {
+        public Guid Id { get; set; }
+        public string WorkerName { get; set; } = string.Empty;
+        public string JobTitle { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public decimal MatchScore { get; set; }
+        public DateTime AssessedAt { get; set; }
+        public string? Rationale { get; set; }
+        public List<string> Gaps { get; set; } = new();
+    }
+}

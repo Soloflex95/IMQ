@@ -1,0 +1,365 @@
+@page "/qualifications"
+@rendermode InteractiveServer
+
+<PageTitle>My Qualifications - IMQ</PageTitle>
+
+<h1>My Qualifications</h1>
+
+<p class="lead">View and manage your professional qualifications and competencies.</p>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-award"></i> Current Qualifications
+                </h5>
+            </div>
+            <div class="card-body">
+                @if (qualifications == null)
+                {
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Loading qualifications...</p>
+                    </div>
+                }
+                else if (!qualifications.Any())
+                {
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>No qualifications found.</strong> Click "Add Qualification" to get started.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Skill</th>
+                                    <th>Years Experience</th>
+                                    <th>Proficiency</th>
+                                    <th>Certification</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var qual in qualifications)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@qual.SkillName</strong>
+                                        </td>
+                                        <td>@qual.YearsExperience.ToString("F1")</td>
+                                        <td>
+                                            @if (qual.ProficiencyLevel.HasValue)
+                                            {
+                                                <span class="badge bg-secondary">Level @qual.ProficiencyLevel</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">N/A</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(qual.CertificationName))
+                                            {
+                                                <div>
+                                                    <small class="text-muted">@qual.CertificationName</small>
+                                                    @if (qual.CertificationExpiryDate.HasValue)
+                                                    {
+                                                        <br/>
+                                                        <small class="@GetExpiryClass(qual.CertificationExpiryDate.Value)">
+                                                            Expires: @qual.CertificationExpiryDate.Value.ToString("MMM dd, yyyy")
+                                                        </small>
+                                                    }
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">None</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <span class="badge @GetStatusBadgeClass(qual.Status)">
+                                                @GetStatusText(qual.Status)
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" @onclick="() => EditQualification(qual.Id)">
+                                                <i class="bi bi-pencil"></i> Edit
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-success" @onclick="AddQualification">
+                    <i class="bi bi-plus-circle"></i> Add Qualification
+                </button>
+                <button class="btn btn-outline-secondary ms-2" @onclick="UploadCV">
+                    <i class="bi bi-file-earmark-arrow-up"></i> Upload CV
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h6 class="mb-0">
+                    <i class="bi bi-briefcase"></i> Job Assignments
+                </h6>
+            </div>
+            <div class="card-body">
+                @if (jobAssignments == null || !jobAssignments.Any())
+                {
+                    <p class="text-muted">No current job assignments.</p>
+                }
+                else
+                {
+                    <ul class="list-group">
+                        @foreach (var job in jobAssignments)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>@job.JobTitle</strong>
+                                    @if (job.IsPrimary)
+                                    {
+                                        <span class="badge bg-primary ms-2">Primary</span>
+                                    }
+                                    <br/>
+                                    <small class="text-muted">Since @job.AssignedDate.ToString("MMM dd, yyyy")</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-info" @onclick="() => ViewJobDetails(job.JobId)">
+                                    Details
+                                </button>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h6 class="mb-0">
+                    <i class="bi bi-exclamation-triangle"></i> Recent Assessments
+                </h6>
+            </div>
+            <div class="card-body">
+                @if (recentAssessments == null || !recentAssessments.Any())
+                {
+                    <p class="text-muted">No recent assessments.</p>
+                }
+                else
+                {
+                    <ul class="list-group">
+                        @foreach (var assessment in recentAssessments)
+                        {
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@assessment.JobTitle</strong>
+                                        <br/>
+                                        <small class="text-muted">@assessment.AssessedAt.ToString("MMM dd, yyyy")</small>
+                                    </div>
+                                    <div>
+                                        <span class="badge @GetStatusBadgeClass(assessment.Status)">
+                                            @GetStatusText(assessment.Status)
+                                        </span>
+                                        <div class="mt-1">
+                                            <small class="text-muted">Match: @assessment.MatchScore.ToString("F0")%</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<QualificationViewModel>? qualifications;
+    private List<JobAssignmentViewModel>? jobAssignments;
+    private List<AssessmentViewModel>? recentAssessments;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate loading data - replace with actual service calls
+        await Task.Delay(500); // Simulate API call
+        
+        // Sample data for demonstration
+        qualifications = new List<QualificationViewModel>
+        {
+            new QualificationViewModel
+            {
+                Id = Guid.NewGuid(),
+                SkillName = "Aseptic Technique Level 2",
+                YearsExperience = 5.5m,
+                ProficiencyLevel = 4,
+                CertificationName = "GMP Certified",
+                CertificationExpiryDate = DateTime.Now.AddMonths(6),
+                Status = "Qualified"
+            },
+            new QualificationViewModel
+            {
+                Id = Guid.NewGuid(),
+                SkillName = "Quality Control Testing",
+                YearsExperience = 3.0m,
+                ProficiencyLevel = 3,
+                CertificationName = null,
+                CertificationExpiryDate = null,
+                Status = "NeedsReview"
+            },
+            new QualificationViewModel
+            {
+                Id = Guid.NewGuid(),
+                SkillName = "SOP Documentation",
+                YearsExperience = 2.0m,
+                ProficiencyLevel = 2,
+                CertificationName = "Technical Writing Certificate",
+                CertificationExpiryDate = DateTime.Now.AddDays(-30),
+                Status = "NotQualified"
+            }
+        };
+
+        jobAssignments = new List<JobAssignmentViewModel>
+        {
+            new JobAssignmentViewModel
+            {
+                JobId = Guid.NewGuid(),
+                JobTitle = "Quality Assurance Specialist",
+                AssignedDate = DateTime.Now.AddMonths(-6),
+                IsPrimary = true
+            },
+            new JobAssignmentViewModel
+            {
+                JobId = Guid.NewGuid(),
+                JobTitle = "GMP Auditor",
+                AssignedDate = DateTime.Now.AddMonths(-2),
+                IsPrimary = false
+            }
+        };
+
+        recentAssessments = new List<AssessmentViewModel>
+        {
+            new AssessmentViewModel
+            {
+                JobTitle = "Quality Assurance Specialist",
+                AssessedAt = DateTime.Now.AddDays(-5),
+                Status = "Qualified",
+                MatchScore = 92m
+            },
+            new AssessmentViewModel
+            {
+                JobTitle = "GMP Auditor",
+                AssessedAt = DateTime.Now.AddDays(-15),
+                Status = "NeedsReview",
+                MatchScore = 78m
+            }
+        };
+    }
+
+    private string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Qualified" => "bg-success",
+            "NeedsReview" => "bg-warning text-dark",
+            "NotQualified" => "bg-danger",
+            "ManagerApproved" => "bg-info",
+            "Draft" => "bg-secondary",
+            _ => "bg-secondary"
+        };
+    }
+
+    private string GetStatusText(string status)
+    {
+        return status switch
+        {
+            "Qualified" => "✓ Qualified",
+            "NeedsReview" => "⚠ Needs Review",
+            "NotQualified" => "✗ Not Qualified",
+            "ManagerApproved" => "✓ Manager Approved",
+            "Draft" => "Draft",
+            _ => status
+        };
+    }
+
+    private string GetExpiryClass(DateTime expiryDate)
+    {
+        var daysUntilExpiry = (expiryDate - DateTime.Now).Days;
+        if (daysUntilExpiry < 0)
+            return "text-danger fw-bold";
+        if (daysUntilExpiry < 90)
+            return "text-warning fw-bold";
+        return "text-success";
+    }
+
+    private void AddQualification()
+    {
+        // TODO: Navigate to add qualification page
+        Console.WriteLine("Add Qualification clicked");
+    }
+
+    private void EditQualification(Guid id)
+    {
+        // TODO: Navigate to edit qualification page
+        Console.WriteLine($"Edit Qualification {id} clicked");
+    }
+
+    private void UploadCV()
+    {
+        // TODO: Open CV upload dialog with AI parsing
+        Console.WriteLine("Upload CV clicked");
+    }
+
+    private void ViewJobDetails(Guid jobId)
+    {
+        // TODO: Navigate to job details page
+        Console.WriteLine($"View Job {jobId} clicked");
+    }
+
+    // View Models for demonstration
+    private class QualificationViewModel
+    {
+        public Guid Id { get; set; }
+        public string SkillName { get; set; } = string.Empty;
+        public decimal YearsExperience { get; set; }
+        public int? ProficiencyLevel { get; set; }
+        public string? CertificationName { get; set; }
+        public DateTime? CertificationExpiryDate { get; set; }
+        public string Status { get; set; } = "Draft";
+    }
+
+    private class JobAssignmentViewModel
+    {
+        public Guid JobId { get; set; }
+        public string JobTitle { get; set; } = string.Empty;
+        public DateTime AssignedDate { get; set; }
+        public bool IsPrimary { get; set; }
+    }
+
+    private class AssessmentViewModel
+    {
+        public string JobTitle { get; set; } = string.Empty;
+        public DateTime AssessedAt { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public decimal MatchScore { get; set; }
+    }
+}

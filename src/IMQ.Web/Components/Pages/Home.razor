@@ -1,0 +1,99 @@
+@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>IMQ Dashboard</PageTitle>
+
+<h1><i class="bi bi-speedometer2"></i> IMQ Dashboard</h1>
+<p class="lead">Welcome to I aM Qualified - Your compliance qualification management system</p>
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body text-center">
+                <i class="bi bi-check-circle display-1"></i>
+                <h2 class="mt-3">24</h2>
+                <p>Qualified Workers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body text-center">
+                <i class="bi bi-exclamation-triangle display-1"></i>
+                <h2 class="mt-3">8</h2>
+                <p>Needs Review</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body text-center">
+                <i class="bi bi-x-circle display-1"></i>
+                <h2 class="mt-3">3</h2>
+                <p>Not Qualified</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body text-center">
+                <i class="bi bi-briefcase display-1"></i>
+                <h2 class="mt-3">12</h2>
+                <p>Active Jobs</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6 mb-3">
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-lightning"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="/qualifications" class="btn btn-outline-primary">
+                        <i class="bi bi-award"></i> View My Qualifications
+                    </a>
+                    <a href="/workers" class="btn btn-outline-primary">
+                        <i class="bi bi-people"></i> Manage Team
+                    </a>
+                    <a href="/jobs" class="btn btn-outline-primary">
+                        <i class="bi bi-briefcase"></i> Browse Jobs
+                    </a>
+                    <a href="/assessments" class="btn btn-outline-primary">
+                        <i class="bi bi-clipboard-check"></i> Review Assessments
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card h-100">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Activity</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <small class="text-muted"><i class="bi bi-clipboard-check"></i> 2h ago</small>
+                        <p class="mb-0">Jane Doe assessed for Quality Specialist - Qualified</p>
+                    </div>
+                    <div class="list-group-item">
+                        <small class="text-muted"><i class="bi bi-check-circle"></i> 5h ago</small>
+                        <p class="mb-0">Override approved for Mike Johnson - QA Lead</p>
+                    </div>
+                    <div class="list-group-item">
+                        <small class="text-muted"><i class="bi bi-file-earmark-arrow-up"></i> 1d ago</small>
+                        <p class="mb-0">New CV uploaded and parsed successfully</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    // Dashboard logic will go here
+}

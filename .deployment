@@ -1,0 +1,17 @@
+# Azure Web App deployment configuration
+# This file specifies runtime, build commands, and startup for Azure App Service
+
+version: 1
+# .NET 10 runtime
+framework: dotnet
+runtimeVersion: '10.0'
+
+# Build the solution
+build:
+  command: 'dotnet publish src/IMQ.Web/IMQ.Web.csproj -c Release -o ./publish'
+
+# Startup command
+startup:
+  command: 'dotnet IMQ.Web.dll'
+  
+# Application settings will be configured in Azure Portal

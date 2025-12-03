@@ -1,0 +1,251 @@
+@page "/jobs"
+@rendermode InteractiveServer
+
+<PageTitle>Jobs - IMQ</PageTitle>
+
+<h1>
+    <i class="bi bi-briefcase"></i> Job Management
+</h1>
+<p class="lead">Define jobs and their qualification requirements</p>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-list"></i> Active Jobs
+                </h5>
+                <button class="btn btn-success" @onclick="CreateJob">
+                    <i class="bi bi-plus-circle"></i> Create New Job
+                </button>
+            </div>
+            <div class="card-body">
+                @if (jobs == null)
+                {
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-2">Loading jobs...</p>
+                    </div>
+                }
+                else if (!jobs.Any())
+                {
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> No jobs defined yet.
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        @foreach (var job in jobs)
+                        {
+                            <div class="col-md-6 col-lg-4 mb-3">
+                                <div class="card h-100 @(job.IsCritical ? "border-danger" : "")">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            @job.Title
+                                            @if (job.IsCritical)
+                                            {
+                                                <span class="badge bg-danger ms-2">Critical</span>
+                                            }
+                                        </h5>
+                                        <p class="card-text text-muted">@job.Department</p>
+                                        
+                                        <div class="mb-2">
+                                            <small class="text-muted">
+                                                <i class="bi bi-clock"></i> Min. Experience: <strong>@job.MinYearsExperience years</strong>
+                                            </small>
+                                        </div>
+                                        
+                                        <div class="mb-2">
+                                            <small class="text-muted">
+                                                <i class="bi bi-list-check"></i> Requirements: <strong>@job.RequirementCount</strong>
+                                            </small>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <small class="text-muted">
+                                                <i class="bi bi-people"></i> Assigned Workers: <strong>@job.AssignedWorkerCount</strong>
+                                            </small>
+                                        </div>
+                                        
+                                        <div class="progress mb-2" style="height: 20px;">
+                                            <div class="progress-bar bg-success" style="width: @job.QualifiedPercentage%">
+                                                @job.QualifiedPercentage%
+                                            </div>
+                                        </div>
+                                        <small class="text-muted">Workers Qualified</small>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button class="btn btn-sm btn-primary" @onclick="() => ViewJobDetails(job.Id)">
+                                            <i class="bi bi-eye"></i> View Details
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary" @onclick="() => EditJob(job.Id)">
+                                            <i class="bi bi-pencil"></i> Edit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (selectedJob != null)
+{
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-info-circle"></i> Job Details: @selectedJob.Title
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Required Skills & Competencies</h6>
+                            <ul class="list-group">
+                                @foreach (var req in selectedJob.Requirements)
+                                {
+                                    <li class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <strong>@req.SkillName</strong>
+                                                @if (req.IsRequired)
+                                                {
+                                                    <span class="badge bg-danger ms-2">Required</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary ms-2">Optional</span>
+                                                }
+                                                @if (req.MinLevel.HasValue)
+                                                {
+                                                    <br/><small class="text-muted">Min Level: @req.MinLevel</small>
+                                                }
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Assigned Workers</h6>
+                            <div class="list-group">
+                                @foreach (var worker in selectedJob.Workers)
+                                {
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>@worker.Name</strong>
+                                            <br/>
+                                            <small class="text-muted">@worker.Email</small>
+                                        </div>
+                                        <span class="badge @GetQualificationBadgeClass(worker.QualificationStatus)">
+                                            @worker.QualificationStatus
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-secondary" @onclick="CloseDetails">
+                        <i class="bi bi-x"></i> Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<JobViewModel>? jobs;
+    private JobDetailViewModel? selectedJob;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(300);
+        
+        jobs = new List<JobViewModel>
+        {
+            new() { Id = Guid.NewGuid(), Title = "Quality Assurance Specialist", Department = "Quality Control", MinYearsExperience = 3, RequirementCount = 8, AssignedWorkerCount = 12, QualifiedPercentage = 85, IsCritical = true },
+            new() { Id = Guid.NewGuid(), Title = "GMP Auditor", Department = "Compliance", MinYearsExperience = 5, RequirementCount = 10, AssignedWorkerCount = 6, QualifiedPercentage = 92, IsCritical = true },
+            new() { Id = Guid.NewGuid(), Title = "Manufacturing Technician", Department = "Production", MinYearsExperience = 2, RequirementCount = 6, AssignedWorkerCount = 24, QualifiedPercentage = 78, IsCritical = false },
+            new() { Id = Guid.NewGuid(), Title = "Validation Engineer", Department = "Engineering", MinYearsExperience = 4, RequirementCount = 12, AssignedWorkerCount = 8, QualifiedPercentage = 88, IsCritical = true },
+            new() { Id = Guid.NewGuid(), Title = "Laboratory Analyst", Department = "QC Lab", MinYearsExperience = 2, RequirementCount = 7, AssignedWorkerCount = 15, QualifiedPercentage = 95, IsCritical = false },
+            new() { Id = Guid.NewGuid(), Title = "SOP Writer", Department = "Documentation", MinYearsExperience = 3, RequirementCount = 5, AssignedWorkerCount = 4, QualifiedPercentage = 75, IsCritical = false }
+        };
+    }
+
+    private void ViewJobDetails(Guid jobId)
+    {
+        selectedJob = new JobDetailViewModel
+        {
+            Id = jobId,
+            Title = "Quality Assurance Specialist",
+            Requirements = new List<JobRequirementViewModel>
+            {
+                new() { SkillName = "Aseptic Technique Level 2", IsRequired = true, MinLevel = 3 },
+                new() { SkillName = "GMP Knowledge", IsRequired = true, MinLevel = 4 },
+                new() { SkillName = "Quality Control Testing", IsRequired = true, MinLevel = 3 },
+                new() { SkillName = "SOP Documentation", IsRequired = false, MinLevel = 2 }
+            },
+            Workers = new List<WorkerAssignmentViewModel>
+            {
+                new() { Name = "John Smith", Email = "john.smith@company.com", QualificationStatus = "Qualified" },
+                new() { Name = "Jane Doe", Email = "jane.doe@company.com", QualificationStatus = "Qualified" },
+                new() { Name = "Mike Johnson", Email = "mike.johnson@company.com", QualificationStatus = "Needs Review" }
+            }
+        };
+    }
+
+    private void CreateJob() => Console.WriteLine("Create Job clicked");
+    private void EditJob(Guid id) => Console.WriteLine($"Edit Job {id} clicked");
+    private void CloseDetails() => selectedJob = null;
+
+    private string GetQualificationBadgeClass(string status) => status switch
+    {
+        "Qualified" => "bg-success",
+        "Needs Review" => "bg-warning text-dark",
+        "Not Qualified" => "bg-danger",
+        _ => "bg-secondary"
+    };
+
+    private class JobViewModel
+    {
+        public Guid Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Department { get; set; } = string.Empty;
+        public int MinYearsExperience { get; set; }
+        public int RequirementCount { get; set; }
+        public int AssignedWorkerCount { get; set; }
+        public int QualifiedPercentage { get; set; }
+        public bool IsCritical { get; set; }
+    }
+
+    private class JobDetailViewModel
+    {
+        public Guid Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public List<JobRequirementViewModel> Requirements { get; set; } = new();
+        public List<WorkerAssignmentViewModel> Workers { get; set; } = new();
+    }
+
+    private class JobRequirementViewModel
+    {
+        public string SkillName { get; set; } = string.Empty;
+        public bool IsRequired { get; set; }
+        public int? MinLevel { get; set; }
+    }
+
+    private class WorkerAssignmentViewModel
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string QualificationStatus { get; set; } = string.Empty;
+    }
+}
