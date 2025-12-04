@@ -1,4 +1,6 @@
 @page "/workers"
+@using Microsoft.AspNetCore.Components
+@inject NavigationManager Navigation
 @rendermode InteractiveServer
 
 <PageTitle>Team Management - IMQ</PageTitle>
@@ -12,9 +14,17 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <div class="input-group w-50">
-                    <span class="input-group-text"><i class="bi bi-search"></i></span>
-                    <input type="text" class="form-control" placeholder="Search workers..." @bind="searchQuery" @bind:event="oninput" @onkeyup="FilterWorkers" />
+                <div class="d-flex gap-2 w-75">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Search workers..." @bind="searchQuery" @bind:event="oninput" @onkeyup="FilterWorkers" />
+                    </div>
+                    <select class="form-select" style="max-width: 200px;" @bind="statusFilter" @bind:after="FilterWorkers">
+                        <option value="">All Statuses</option>
+                        <option value="Qualified">Qualified</option>
+                        <option value="Needs Review">Needs Review</option>
+                        <option value="Not Qualified">Not Qualified</option>
+                    </select>
                 </div>
                 <button class="btn btn-success" @onclick="AddWorker">
                     <i class="bi bi-person-plus"></i> Add Worker
@@ -168,15 +178,25 @@
 </div>
 
 @code {
+    [SupplyParameterFromQuery(Name = "status")]
+    public string? StatusFilter { get; set; }
+    
     private List<WorkerViewModel>? workers;
     private List<WorkerViewModel>? filteredWorkers;
     private List<DepartmentStatViewModel>? departmentStats;
     private List<AttentionItemViewModel>? attentionItems;
     private string searchQuery = string.Empty;
+    private string statusFilter = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(300);
+        
+        // Set filter from querystring if provided
+        if (!string.IsNullOrEmpty(StatusFilter))
+        {
+            statusFilter = StatusFilter;
+        }
         
         workers = new List<WorkerViewModel>
         {
@@ -207,20 +227,25 @@
 
     private void FilterWorkers()
     {
-        if (string.IsNullOrWhiteSpace(searchQuery))
-        {
-            filteredWorkers = workers;
-        }
-        else
+        filteredWorkers = workers;
+        
+        // Apply search filter
+        if (!string.IsNullOrWhiteSpace(searchQuery))
         {
             var query = searchQuery.ToLower();
-            filteredWorkers = workers?.Where(w =>
+            filteredWorkers = filteredWorkers?.Where(w =>
                 w.FirstName.ToLower().Contains(query) ||
                 w.LastName.ToLower().Contains(query) ||
                 w.Email.ToLower().Contains(query) ||
                 w.Department.ToLower().Contains(query) ||
                 w.PrimaryJob.ToLower().Contains(query)
             ).ToList();
+        }
+        
+        // Apply status filter
+        if (!string.IsNullOrWhiteSpace(statusFilter))
+        {
+            filteredWorkers = filteredWorkers?.Where(w => w.OverallStatus == statusFilter).ToList();
         }
     }
 

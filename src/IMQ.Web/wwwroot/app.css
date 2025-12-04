@@ -58,3 +58,64 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+/* IMQ Color Scheme */
+:root {
+    --imq-primary: #2E5C8A;
+    --imq-primary-dark: #1f3d5c;
+    --imq-light-blue: #7DB9DE;
+    --imq-accent: #000000;
+}
+
+/* Override Bootstrap primary colors */
+.btn-primary {
+    background-color: var(--imq-primary);
+    border-color: var(--imq-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--imq-primary-dark);
+    border-color: var(--imq-primary-dark);
+}
+
+.bg-primary {
+    background-color: var(--imq-primary) !important;
+}
+
+.text-primary {
+    color: var(--imq-primary) !important;
+}
+
+.card-header.bg-primary {
+    background-color: var(--imq-primary) !important;
+}
+
+.navbar-dark {
+    background-color: var(--imq-primary);
+}
+
+.btn-outline-primary {
+    color: var(--imq-primary);
+    border-color: var(--imq-primary);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--imq-primary);
+    border-color: var(--imq-primary);
+}
+
+/* Dashboard clickable cards */
+.dashboard-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* Navigation active link */
+.nav-link.active {
+    background-color: var(--imq-light-blue);
+    color: white;
+}
