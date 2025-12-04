@@ -104,12 +104,9 @@
                 }
             </div>
             <div class="card-footer">
-                <button class="btn btn-success" @onclick="AddQualification" @onclick:preventDefault="false">
-                    <i class="bi bi-plus-circle"></i> Add Qualification [NEW CODE v1.3]
+                <button class="btn btn-success" @onclick="AddQualification">
+                    <i class="bi bi-plus-circle"></i> Add Qualification
                 </button>
-                <div id="test-element" style="margin-top: 10px;">
-                    <small class="text-muted">Debug: Page loaded at @DateTime.Now.ToString("HH:mm:ss")</small>
-                </div>
                 <button class="btn btn-outline-secondary ms-2" @onclick="UploadCV">
                     <i class="bi bi-file-earmark-arrow-up"></i> Upload CV
                 </button>
