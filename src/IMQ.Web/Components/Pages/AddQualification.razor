@@ -1,0 +1,269 @@
+@using IMQ.Web.Models
+@using IMQ.Web.Services
+@page "/qualifications/add"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject IQualificationService QualificationService
+
+<PageTitle>Add Qualification - IMQ</PageTitle>
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/qualifications">My Qualifications</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Add Qualification</li>
+                </ol>
+            </nav>
+            <h1>Add Qualification</h1>
+            <p class="lead">Add a new qualification to your profile</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <EditForm Model="@model" OnValidSubmit="HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="alert alert-danger" />
+
+                        @if (!string.IsNullOrEmpty(errorMessage))
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="bi bi-exclamation-triangle"></i> @errorMessage
+                                <button type="button" class="btn-close" @onclick="@(() => errorMessage = null)"></button>
+                            </div>
+                        }
+
+                        <!-- Qualification Title -->
+                        <div class="mb-3">
+                            <label for="title" class="form-label">
+                                Qualification Title <span class="text-danger">*</span>
+                            </label>
+                            <InputText id="title" class="form-control" @bind-Value="model.Title" 
+                                       placeholder="e.g., Aseptic Technique" />
+                            <ValidationMessage For="@(() => model.Title)" />
+                        </div>
+
+                        <!-- Qualification Type -->
+                        <div class="mb-3">
+                            <label for="type" class="form-label">
+                                Qualification Type <span class="text-danger">*</span>
+                            </label>
+                            <InputSelect id="type" class="form-select" @bind-Value="model.Type">
+                                <option value="">-- Select Type --</option>
+                                <option value="Training">Training</option>
+                                <option value="Certification">Certification</option>
+                                <option value="Experience">Experience</option>
+                                <option value="Other">Other</option>
+                            </InputSelect>
+                            <ValidationMessage For="@(() => model.Type)" />
+                        </div>
+
+                        <!-- Description / Notes -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label">
+                                Description / Notes
+                            </label>
+                            <InputTextArea id="description" class="form-control" rows="3" 
+                                          @bind-Value="model.Description"
+                                          placeholder="Optional internal context or notes" />
+                        </div>
+
+                        <!-- Years of Experience (conditional) -->
+                        @if (model.Type == "Experience")
+                        {
+                            <div class="mb-3">
+                                <label for="yearsExperience" class="form-label">
+                                    Years of Experience <span class="text-danger">*</span>
+                                </label>
+                                <InputNumber id="yearsExperience" class="form-control" 
+                                           @bind-Value="model.YearsExperience" 
+                                           step="0.5" min="0" />
+                                <ValidationMessage For="@(() => model.YearsExperience)" />
+                            </div>
+                        }
+
+                        <!-- Issuing Organization -->
+                        <div class="mb-3">
+                            <label for="issuingOrg" class="form-label">
+                                Issuing Organization
+                            </label>
+                            <InputText id="issuingOrg" class="form-control" @bind-Value="model.IssuingOrganization" 
+                                       placeholder="e.g., American Red Cross" />
+                        </div>
+
+                        <!-- Date Acquired -->
+                        <div class="mb-3">
+                            <label for="dateAcquired" class="form-label">
+                                Date Acquired <span class="text-danger">*</span>
+                            </label>
+                            <InputDate id="dateAcquired" class="form-control" @bind-Value="model.DateAcquired" />
+                            <ValidationMessage For="@(() => model.DateAcquired)" />
+                        </div>
+
+                        <!-- Expiration Date (conditional for Certification) -->
+                        @if (model.Type == "Certification")
+                        {
+                            <div class="mb-3">
+                                <label for="expirationDate" class="form-label">
+                                    Expiration Date <span class="text-danger">*</span>
+                                </label>
+                                <InputDate id="expirationDate" class="form-control" @bind-Value="model.ExpirationDate" />
+                                <ValidationMessage For="@(() => model.ExpirationDate)" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="mb-3">
+                                <label for="expirationDateOptional" class="form-label">
+                                    Expiration Date
+                                </label>
+                                <InputDate id="expirationDateOptional" class="form-control" @bind-Value="model.ExpirationDate" />
+                            </div>
+                        }
+
+                        <!-- Self-Attestation -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <InputCheckbox id="attestation" class="form-check-input" @bind-Value="model.SelfAttestation" />
+                                <label class="form-check-label" for="attestation">
+                                    I confirm this qualification is valid and current. <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                            <ValidationMessage For="@(() => model.SelfAttestation)" />
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary" disabled="@isSaving">
+                                @if (isSaving)
+                                {
+                                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                    <span>Saving...</span>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-save"></i>
+                                    <span>Save</span>
+                                }
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" @onclick="Cancel" disabled="@isSaving">
+                                Cancel
+                            </button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-info-circle"></i> Tips</h5>
+                    <ul class="small">
+                        <li>Be specific with qualification titles</li>
+                        <li>Certifications require an expiration date</li>
+                        <li>Experience-type qualifications require years of experience</li>
+                        <li>All dates must be valid (Date Acquired ≤ today, Expiration ≥ today)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private AddQualificationModel model = new();
+    private bool isSaving = false;
+    private string? errorMessage;
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("AddQualification page initialized");
+        base.OnInitialized();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        Console.WriteLine("HandleValidSubmit called");
+        errorMessage = null;
+
+        // Additional validation beyond DataAnnotations
+        if (!ValidateForm())
+        {
+            Console.WriteLine("Form validation failed");
+            return;
+        }
+
+        Console.WriteLine("Form validation passed, saving...");
+        isSaving = true;
+
+        try
+        {
+            // Save to data service
+            var record = new QualificationRecord
+            {
+                Title = model.Title,
+                Type = model.Type,
+                Description = model.Description,
+                YearsExperience = model.YearsExperience,
+                IssuingOrganization = model.IssuingOrganization,
+                DateAcquired = model.DateAcquired,
+                ExpirationDate = model.ExpirationDate,
+                SelfAttestation = model.SelfAttestation
+            };
+            
+            await QualificationService.AddAsync(record);
+            
+            // Navigate back to qualifications list
+            Navigation.NavigateTo("/qualifications");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error saving qualification: {ex.Message}";
+            isSaving = false;
+        }
+    }
+
+    private bool ValidateForm()
+    {
+        // Date Acquired must be <= today
+        if (model.DateAcquired > DateTime.Today)
+        {
+            errorMessage = "Date Acquired cannot be in the future.";
+            return false;
+        }
+
+        // If Type is Certification, Expiration Date is required
+        if (model.Type == "Certification" && !model.ExpirationDate.HasValue)
+        {
+            errorMessage = "Expiration Date is required for Certifications.";
+            return false;
+        }
+
+        // If Type is Experience, Years of Experience is required
+        if (model.Type == "Experience" && (!model.YearsExperience.HasValue || model.YearsExperience.Value <= 0))
+        {
+            errorMessage = "Years of Experience is required and must be greater than 0 for Experience type.";
+            return false;
+        }
+
+        // Expiration Date must be >= today (if provided)
+        if (model.ExpirationDate.HasValue && model.ExpirationDate.Value < DateTime.Today)
+        {
+            errorMessage = "Expiration Date cannot be in the past.";
+            return false;
+        }
+
+        return true;
+    }
+
+    private void Cancel()
+    {
+        Console.WriteLine("Cancel button clicked");
+        Navigation.NavigateTo("/qualifications");
+    }
+}

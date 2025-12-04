@@ -1,8 +1,11 @@
 using IMQ.Web.Components;
+using IMQ.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<IQualificationService, InMemoryQualificationService>();
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 

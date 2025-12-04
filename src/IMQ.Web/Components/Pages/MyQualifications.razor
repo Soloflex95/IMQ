@@ -1,4 +1,7 @@
 @page "/qualifications"
+@inject NavigationManager Navigation
+@inject IQualificationService QualificationService
+@using IMQ.Web.Services
 @rendermode InteractiveServer
 
 <PageTitle>My Qualifications - IMQ</PageTitle>
@@ -101,9 +104,12 @@
                 }
             </div>
             <div class="card-footer">
-                <button class="btn btn-success" @onclick="AddQualification">
-                    <i class="bi bi-plus-circle"></i> Add Qualification
+                <button class="btn btn-success" @onclick="AddQualification" @onclick:preventDefault="false">
+                    <i class="bi bi-plus-circle"></i> Add Qualification [NEW CODE v1.3]
                 </button>
+                <div id="test-element" style="margin-top: 10px;">
+                    <small class="text-muted">Debug: Page loaded at @DateTime.Now.ToString("HH:mm:ss")</small>
+                </div>
                 <button class="btn btn-outline-secondary ms-2" @onclick="UploadCV">
                     <i class="bi bi-file-earmark-arrow-up"></i> Upload CV
                 </button>
@@ -198,47 +204,28 @@
     private List<JobAssignmentViewModel>? jobAssignments;
     private List<AssessmentViewModel>? recentAssessments;
 
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("MyQualifications PAGE INITIALIZED - Blazor is working!");
+        base.OnInitialized();
+    }
+
     protected override async Task OnInitializedAsync()
     {
-        // Simulate loading data - replace with actual service calls
-        await Task.Delay(500); // Simulate API call
+        Console.WriteLine("MyQualifications OnInitializedAsync started");
+        // Load data from service
+        var records = await QualificationService.GetAllAsync();
         
-        // Sample data for demonstration
-        qualifications = new List<QualificationViewModel>
+        qualifications = records.Select(r => new QualificationViewModel
         {
-            new QualificationViewModel
-            {
-                Id = Guid.NewGuid(),
-                SkillName = "Aseptic Technique Level 2",
-                YearsExperience = 5.5m,
-                ProficiencyLevel = 4,
-                CertificationName = "GMP Certified",
-                CertificationExpiryDate = DateTime.Now.AddMonths(6),
-                Status = "Qualified"
-            },
-            new QualificationViewModel
-            {
-                Id = Guid.NewGuid(),
-                SkillName = "Quality Control Testing",
-                YearsExperience = 3.0m,
-                ProficiencyLevel = 3,
-                CertificationName = null,
-                CertificationExpiryDate = null,
-                Status = "NeedsReview"
-            },
-            new QualificationViewModel
-            {
-                Id = Guid.NewGuid(),
-                SkillName = "SOP Documentation",
-                YearsExperience = 2.0m,
-                ProficiencyLevel = 2,
-                CertificationName = "Technical Writing Certificate",
-                CertificationExpiryDate = DateTime.Now.AddDays(-30),
-                Status = "NotQualified"
-            }
-        };
-
-        jobAssignments = new List<JobAssignmentViewModel>
+            Id = r.Id,
+            SkillName = r.Title,
+            YearsExperience = r.YearsExperience ?? 0m,
+            ProficiencyLevel = null, // Will be calculated/assigned later
+            CertificationName = r.IssuingOrganization,
+            CertificationExpiryDate = r.ExpirationDate,
+            Status = r.Status
+        }).ToList();        jobAssignments = new List<JobAssignmentViewModel>
         {
             new JobAssignmentViewModel
             {
@@ -311,10 +298,11 @@
         return "text-success";
     }
 
-    private void AddQualification()
-    {
-        // TODO: Navigate to add qualification page
-        Console.WriteLine("Add Qualification clicked");
+    private void AddQualification() 
+    { 
+        Console.WriteLine("AddQualification button clicked");
+        Console.WriteLine($"Navigating to: /qualifications/add");
+        Navigation.NavigateTo("/qualifications/add"); 
     }
 
     private void EditQualification(Guid id)
