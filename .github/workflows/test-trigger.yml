@@ -1,0 +1,13 @@
+name: Test Workflow
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  test:
+    if: github.event.label.name == 'test-label'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo test
+        run: echo "Workflow triggered!"
