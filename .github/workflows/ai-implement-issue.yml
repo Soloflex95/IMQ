@@ -11,9 +11,9 @@ permissions:
 
 jobs:
   ai-implement:
-    # Check if the added label is ai-ready
-    if: contains(github.event.issue.labels.*.name, 'ai-ready')
     runs-on: ubuntu-latest
+    # Check if the added label is ai-ready
+    if: github.event.label.name == 'ai-ready'
 
     steps:
       - name: Checkout repository
