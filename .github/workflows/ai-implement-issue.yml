@@ -11,7 +11,8 @@ permissions:
 
 jobs:
   ai-implement:
-    if: github.event.label.name == 'ai-ready'
+    # Check if the added label is ai-ready
+    if: contains(github.event.issue.labels.*.name, 'ai-ready')
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +25,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: 9.0.x
 
       - name: Install dependencies
         run: |
@@ -62,7 +63,7 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          cat > /tmp/prompt.json <<'EOF'
+          cat > /tmp/prompt.json <<'PROMPTEND'
           {
             "model": "claude-3-5-sonnet-20241022",
             "max_tokens": 8000,
@@ -71,7 +72,7 @@ jobs:
               "content": "You are a .NET 9 Blazor developer. Implement this GitHub issue.\n\nIssue #${{ github.event.issue.number }}: ${{ github.event.issue.title }}\n\n${{ github.event.issue.body }}\n\nRespond with JSON:\n{\n  \"files\": [{\n    \"path\": \"src/IMQ.Web/Components/Pages/File.razor\",\n    \"action\": \"modify\",\n    \"changes\": \"FULL FILE CONTENT HERE\"\n  }],\n  \"summary\": \"commit message\"\n}"
             }]
           }
-          EOF
+          PROMPTEND
 
           RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
             -H "Content-Type: application/json" \
@@ -148,7 +149,7 @@ Fixes #${{ github.event.issue.number }}"
             --base develop \
             --head ${{ env.BRANCH_NAME }} \
             --title "AI: ${{ env.COMMIT_MESSAGE }}" \
-            --body "🤖 AI Implementation
+            --body " AI Implementation
 
 Closes #${{ github.event.issue.number }}
 
@@ -163,7 +164,7 @@ Review before merging to deploy to Development." \
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh issue comment ${{ github.event.issue.number }} \
-            --body "✅ AI implementation complete! PR created. Merging to \`develop\` will deploy to Development."
+            --body " AI implementation complete! PR created. Merging to develop will deploy to Development."
 
       - name: Comment no changes
         if: steps.ai_generate.outputs.success == 'true' && env.HAS_CHANGES != 'true'
@@ -171,7 +172,7 @@ Review before merging to deploy to Development." \
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh issue comment ${{ github.event.issue.number }} \
-            --body "⚠️ No changes made. AI couldn't determine what to change. Add more details to the issue."
+            --body " No changes made. AI could not determine what to change. Add more details to the issue."
 
       - name: Comment failure
         if: steps.ai_generate.outputs.success != 'true'
@@ -179,4 +180,4 @@ Review before merging to deploy to Development." \
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh issue comment ${{ github.event.issue.number }} \
-            --body "❌ AI implementation failed: ${{ steps.ai_generate.outputs.error }}"
+            --body " AI implementation failed: ${{ steps.ai_generate.outputs.error }}"
