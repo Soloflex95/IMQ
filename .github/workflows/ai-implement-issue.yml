@@ -11,7 +11,6 @@ permissions:
 
 jobs:
   ai-implement:
-    # Only run when 'ai-ready' label is added
     if: github.event.label.name == 'ai-ready'
     runs-on: ubuntu-latest
 
@@ -19,18 +18,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: develop  # Always work from develop branch
+          ref: develop
           fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
 
       - name: Install dependencies
         run: |
@@ -41,14 +35,16 @@ jobs:
         id: issue
         run: |
           echo "issue_number=${{ github.event.issue.number }}" >> $GITHUB_OUTPUT
-          echo "issue_title=${{ github.event.issue.title }}" >> $GITHUB_OUTPUT
+          echo "issue_title<<EOF" >> $GITHUB_OUTPUT
+          echo "${{ github.event.issue.title }}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
           echo "issue_body<<EOF" >> $GITHUB_OUTPUT
           echo "${{ github.event.issue.body }}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create feature branch
         run: |
-          BRANCH_NAME="ai/issue-${{ steps.issue.outputs.issue_number }}-$(date +%s)"
+          BRANCH_NAME="ai/issue-${{ github.event.issue.number }}-$(date +%s)"
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -57,155 +53,93 @@ jobs:
       - name: Gather codebase context
         id: context
         run: |
-          # Read copilot instructions
-          COPILOT_INSTRUCTIONS=""
-          if [ -f ".github/copilot-instructions.md" ]; then
-            COPILOT_INSTRUCTIONS=$(cat .github/copilot-instructions.md | head -200)
-          fi
-          echo "copilot_instructions<<EOF" >> $GITHUB_OUTPUT
-          echo "$COPILOT_INSTRUCTIONS" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-          # Get Blazor pages list
-          BLAZOR_PAGES=$(find src/IMQ.Web/Components/Pages -name "*.razor" 2>/dev/null | head -20 || echo "")
           echo "blazor_pages<<EOF" >> $GITHUB_OUTPUT
-          echo "$BLAZOR_PAGES" >> $GITHUB_OUTPUT
+          find src/IMQ.Web/Components/Pages -name "*.razor" 2>/dev/null || echo "No pages found"
           echo "EOF" >> $GITHUB_OUTPUT
 
-          # Get Services list
-          SERVICES=$(find src/IMQ.Web/Services -name "*.cs" 2>/dev/null | head -20 || echo "")
-          echo "services<<EOF" >> $GITHUB_OUTPUT
-          echo "$SERVICES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Call Claude API for code generation
+      - name: Call Claude API
         id: ai_generate
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ISSUE_TITLE: ${{ steps.issue.outputs.issue_title }}
-          ISSUE_BODY: ${{ steps.issue.outputs.issue_body }}
-          ISSUE_NUMBER: ${{ steps.issue.outputs.issue_number }}
-          COPILOT_CONTEXT: ${{ steps.context.outputs.copilot_instructions }}
-          BLAZOR_PAGES: ${{ steps.context.outputs.blazor_pages }}
-          SERVICES: ${{ steps.context.outputs.services }}
         run: |
-          # Create AI prompt with better structure
-          cat > /tmp/ai_prompt.json <<'PROMPTEOF'
-{
-  "model": "claude-3-5-sonnet-20241022",
-  "max_tokens": 8000,
-  "messages": [
-    {
-      "role": "user",
-      "content": "You are an expert .NET 9 and Blazor developer working on the IMQ compliance management system. Your task is to implement the changes described in a GitHub issue.\n\n## Project Context\n\nThis is a Blazor Web App (.NET 9) with Interactive Server rendering. Key conventions:\n- Blazor pages are in: src/IMQ.Web/Components/Pages/\n- Always use @rendermode InteractiveServer\n- Follow existing Bootstrap 5 styling patterns\n- All changes must be precise and complete\n\n## Available Files\n\nBlazor Pages:\n${BLAZOR_PAGES}\n\nServices:\n${SERVICES}\n\n## GitHub Issue #${ISSUE_NUMBER}\n\n**Title:** ${ISSUE_TITLE}\n\n**Description:**\n${ISSUE_BODY}\n\n## Your Task\n\n1. Identify which file(s) need to be modified\n2. Read the current file content if needed\n3. Make ONLY the changes requested in the issue\n4. Return the COMPLETE modified file content\n\n## Response Format (JSON ONLY)\n\nRespond with ONLY valid JSON in this exact format:\n\n```json\n{\n  \"analysis\": \"Brief explanation of what needs to change and why\",\n  \"files\": [\n    {\n      \"path\": \"src/IMQ.Web/Components/Pages/FileName.razor\",\n      \"action\": \"modify\",\n      \"changes\": \"<COMPLETE FILE CONTENT HERE>\"\n    }\n  ],\n  \"summary\": \"Brief commit message describing the change\"\n}\n```\n\nIMPORTANT:\n- Include the FULL file content in \"changes\", not just the modified section\n- Use exact file paths from the repository\n- If you need to see a file's current content, make your best educated guess based on common patterns\n- For simple text changes, be confident and make the change\n- Only return \"no changes needed\" if you're absolutely certain the change already exists"
-    }
-  ]
-}
-PROMPTEOF
+          cat > /tmp/prompt.json <<'EOF'
+          {
+            "model": "claude-3-5-sonnet-20241022",
+            "max_tokens": 8000,
+            "messages": [{
+              "role": "user",
+              "content": "You are a .NET 9 Blazor developer. Implement this GitHub issue.\n\nIssue #${{ github.event.issue.number }}: ${{ github.event.issue.title }}\n\n${{ github.event.issue.body }}\n\nRespond with JSON:\n{\n  \"files\": [{\n    \"path\": \"src/IMQ.Web/Components/Pages/File.razor\",\n    \"action\": \"modify\",\n    \"changes\": \"FULL FILE CONTENT HERE\"\n  }],\n  \"summary\": \"commit message\"\n}"
+            }]
+          }
+          EOF
 
-          # Substitute environment variables
-          sed -i "s|\${ISSUE_NUMBER}|$ISSUE_NUMBER|g" /tmp/ai_prompt.json
-          sed -i "s|\${ISSUE_TITLE}|$ISSUE_TITLE|g" /tmp/ai_prompt.json
-          sed -i "s|\${BLAZOR_PAGES}|$BLAZOR_PAGES|g" /tmp/ai_prompt.json
-          sed -i "s|\${SERVICES}|$SERVICES|g" /tmp/ai_prompt.json
-          
-          # Escape issue body for JSON
-          ESCAPED_BODY=$(echo "$ISSUE_BODY" | jq -Rs .)
-          sed -i "s|\${ISSUE_BODY}|$ESCAPED_BODY|g" /tmp/ai_prompt.json
-
-          # Call Claude API
           RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
             -H "Content-Type: application/json" \
             -H "x-api-key: $ANTHROPIC_API_KEY" \
             -H "anthropic-version: 2023-06-01" \
-            -d @/tmp/ai_prompt.json)
+            -d @/tmp/prompt.json)
 
-          echo "$RESPONSE" > /tmp/ai_response.json
-
-          # Extract content
           AI_CONTENT=$(echo "$RESPONSE" | jq -r '.content[0].text // empty')
           
           if [ -z "$AI_CONTENT" ]; then
             echo "success=false" >> $GITHUB_OUTPUT
-            echo "error=Empty response from Claude API" >> $GITHUB_OUTPUT
+            echo "error=Empty API response" >> $GITHUB_OUTPUT
             exit 0
           fi
 
-          echo "$AI_CONTENT" > /tmp/ai_content.txt
-
-          # Extract JSON from potential markdown code blocks
           if echo "$AI_CONTENT" | grep -q '```json'; then
-            EXTRACTED_JSON=$(echo "$AI_CONTENT" | sed -n '/```json/,/```/p' | sed '1d;$d')
-          elif echo "$AI_CONTENT" | grep -q '```'; then
-            EXTRACTED_JSON=$(echo "$AI_CONTENT" | sed -n '/```/,/```/p' | sed '1d;$d')
+            EXTRACTED=$(echo "$AI_CONTENT" | sed -n '/```json/,/```/p' | sed '1d;$d')
           else
-            EXTRACTED_JSON="$AI_CONTENT"
+            EXTRACTED="$AI_CONTENT"
           fi
 
-          # Validate JSON
-          if echo "$EXTRACTED_JSON" | jq empty 2>/dev/null; then
+          if echo "$EXTRACTED" | jq empty 2>/dev/null; then
             echo "ai_output<<EOF" >> $GITHUB_OUTPUT
-            echo "$EXTRACTED_JSON" >> $GITHUB_OUTPUT
+            echo "$EXTRACTED" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
             echo "success=true" >> $GITHUB_OUTPUT
           else
             echo "success=false" >> $GITHUB_OUTPUT
-            echo "error=Failed to parse AI response as JSON" >> $GITHUB_OUTPUT
-            echo "ai_output<<EOF" >> $GITHUB_OUTPUT
-            echo "$AI_CONTENT" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+            echo "error=Invalid JSON response" >> $GITHUB_OUTPUT
           fi
 
-      - name: Apply code changes
+      - name: Apply changes
         if: steps.ai_generate.outputs.success == 'true'
         run: |
           echo '${{ steps.ai_generate.outputs.ai_output }}' > /tmp/changes.json
           
-          # Check if files array exists and has items
           FILES_COUNT=$(jq '.files | length' /tmp/changes.json 2>/dev/null || echo "0")
           
           if [ "$FILES_COUNT" -eq "0" ]; then
-            echo "No files to modify"
-            echo "CHANGES_COMMITTED=false" >> $GITHUB_ENV
+            echo "HAS_CHANGES=false" >> $GITHUB_ENV
             exit 0
           fi
 
           for i in $(seq 0 $(($FILES_COUNT - 1))); do
             FILE_PATH=$(jq -r ".files[$i].path" /tmp/changes.json)
-            FILE_ACTION=$(jq -r ".files[$i].action" /tmp/changes.json)
             FILE_CONTENT=$(jq -r ".files[$i].changes" /tmp/changes.json)
-
-            echo "Processing: $FILE_PATH (action: $FILE_ACTION)"
-
-            # Create directory if needed
+            
             mkdir -p "$(dirname "$FILE_PATH")"
-
-            # Write content
             echo "$FILE_CONTENT" > "$FILE_PATH"
-
             git add "$FILE_PATH"
           done
 
-          # Get summary
           SUMMARY=$(jq -r '.summary' /tmp/changes.json)
           echo "COMMIT_MESSAGE=$SUMMARY" >> $GITHUB_ENV
           echo "HAS_CHANGES=true" >> $GITHUB_ENV
 
-      - name: Commit and push changes
+      - name: Commit and push
         if: env.HAS_CHANGES == 'true'
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "AI: ${{ env.COMMIT_MESSAGE }}
 
-Fixes #${{ steps.issue.outputs.issue_number }}"
+Fixes #${{ github.event.issue.number }}"
             git push origin ${{ env.BRANCH_NAME }}
             echo "CHANGES_COMMITTED=true" >> $GITHUB_ENV
-          else
-            echo "No changes to commit"
-            echo "CHANGES_COMMITTED=false" >> $GITHUB_ENV
           fi
 
-      - name: Create Pull Request
+      - name: Create PR
         if: env.CHANGES_COMMITTED == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -214,76 +148,35 @@ Fixes #${{ steps.issue.outputs.issue_number }}"
             --base develop \
             --head ${{ env.BRANCH_NAME }} \
             --title "AI: ${{ env.COMMIT_MESSAGE }}" \
-            --body " **AI-Generated Implementation**
+            --body "🤖 AI Implementation
 
-## Closes Issue
-#${{ steps.issue.outputs.issue_number }}
+Closes #${{ github.event.issue.number }}
 
-## Changes
-${{ env.COMMIT_MESSAGE }}
+**Changes:** ${{ env.COMMIT_MESSAGE }}
 
-##  Review Checklist
-- [ ] Code follows project conventions
-- [ ] Changes match issue requirements exactly
-- [ ] No security concerns
-- [ ] Ready to deploy to dev environment
-
----
-*Auto-generated by AI workflow  Will deploy to Development after merge*" \
+Review before merging to deploy to Development." \
             --label "ai-generated"
 
-      - name: Comment on issue (success)
-        if: steps.ai_generate.outputs.success == 'true' && env.CHANGES_COMMITTED == 'true'
+      - name: Comment success
+        if: env.CHANGES_COMMITTED == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh issue comment ${{ steps.issue.outputs.issue_number }} \
-            --body " **AI implementation complete!**
+          gh issue comment ${{ github.event.issue.number }} \
+            --body "✅ AI implementation complete! PR created. Merging to \`develop\` will deploy to Development."
 
-A pull request has been created: Check the PRs tab
-
-**Branch:** \`${{ env.BRANCH_NAME }}\`
-
-Once merged to \`develop\`, it will automatically deploy to the Development environment."
-
-      - name: Comment on issue (no changes)
-        if: steps.ai_generate.outputs.success == 'true' && env.CHANGES_COMMITTED != 'true'
+      - name: Comment no changes
+        if: steps.ai_generate.outputs.success == 'true' && env.HAS_CHANGES != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh issue comment ${{ steps.issue.outputs.issue_number }} \
-            --body " **No changes were made**
+          gh issue comment ${{ github.event.issue.number }} \
+            --body "⚠️ No changes made. AI couldn't determine what to change. Add more details to the issue."
 
-The AI analyzed the issue but either:
-- The requested changes already exist in the code
-- The AI couldn't confidently identify what needs to change
-
-**AI Response:**
-\`\`\`
-${{ steps.ai_generate.outputs.ai_output }}
-\`\`\`
-
-Please review the issue description and either:
-1. Add more specific details about what file/line to change
-2. Implement the change manually"
-
-      - name: Comment on issue (failure)
+      - name: Comment failure
         if: steps.ai_generate.outputs.success != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh issue comment ${{ steps.issue.outputs.issue_number }} \
-            --body " **AI implementation failed**
-
-**Error:** ${{ steps.ai_generate.outputs.error }}
-
-**Debug Info:**
-\`\`\`
-${{ steps.ai_generate.outputs.ai_output }}
-\`\`\`
-
-Please review and either:
-1. Refine the issue description with more details
-2. Implement manually"
-          
-          gh issue edit ${{ steps.issue.outputs.issue_number }} --remove-label "ai-ready"
+          gh issue comment ${{ github.event.issue.number }} \
+            --body "❌ AI implementation failed: ${{ steps.ai_generate.outputs.error }}"
