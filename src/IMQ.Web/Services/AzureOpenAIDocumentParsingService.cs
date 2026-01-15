@@ -30,29 +30,51 @@ public class AzureOpenAIDocumentParsingService : IDocumentParsingService
     {
         try
         {
-            // Read document content
-            using var reader = new StreamReader(fileStream);
-            var documentText = await reader.ReadToEndAsync(cancellationToken);
-
-            if (string.IsNullOrWhiteSpace(documentText))
+            _logger.LogInformation("Processing document: {FileName}", fileName);
+            
+            // For now, we'll use mock data since actual PDF/DOCX parsing requires additional libraries
+            // In production, use Azure Document Intelligence or a PDF parsing library
+            var extension = Path.GetExtension(fileName).ToLowerInvariant();
+            
+            if (extension == ".txt")
             {
-                return new DocumentParseResult
+                // Read text file content
+                using var reader = new StreamReader(fileStream);
+                var documentText = await reader.ReadToEndAsync(cancellationToken);
+
+                if (string.IsNullOrWhiteSpace(documentText))
                 {
-                    Success = false,
-                    ErrorMessage = "Document is empty or could not be read"
-                };
+                    return new DocumentParseResult
+                    {
+                        Success = false,
+                        ErrorMessage = "Document is empty or could not be read"
+                    };
+                }
+                
+                // Process text with AI (implementation remains same)
+                // For now, fall through to mock data
+            }
+
+                // Process text with AI (implementation remains same)
+                // For now, fall through to mock data
             }
 
             // Get Azure OpenAI configuration
             var endpoint = _configuration["AzureOpenAI:Endpoint"];
             var apiKey = _configuration["AzureOpenAI:ApiKey"];
-            var deploymentName = _configuration["AzureOpenAI:DeploymentName"] ?? "gpt-4";
 
-            if (string.IsNullOrWhiteSpace(endpoint) || string.IsNullOrWhiteSpace(apiKey))
+            // For PDF/DOCX files or when Azure OpenAI is not configured, use mock data
+            // In production, integrate Azure Document Intelligence for PDF/DOCX parsing
+            if (string.IsNullOrWhiteSpace(endpoint) || string.IsNullOrWhiteSpace(apiKey) || extension != ".txt")
             {
-                _logger.LogWarning("Azure OpenAI not configured, using mock extraction");
+                _logger.LogInformation("Using mock extraction for {FileName} (file type: {Extension})", fileName, extension);
                 return GetMockExtractionResult(fileName);
             }
+
+            // Text file processing with Azure OpenAI (when configured)
+            var deploymentName = _configuration["AzureOpenAI:DeploymentName"] ?? "gpt-4";
+            using var reader = new StreamReader(fileStream);
+            var documentText = await reader.ReadToEndAsync(cancellationToken);
 
             // Build prompt for structured extraction
             var prompt = BuildExtractionPrompt(documentText);
