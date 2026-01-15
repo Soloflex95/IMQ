@@ -1,0 +1,103 @@
+﻿{
+    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/4",
+    "repository_url":  "https://api.github.com/repos/Soloflex95/IMQ",
+    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/4/labels{/name}",
+    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/4/comments",
+    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/4/events",
+    "html_url":  "https://github.com/Soloflex95/IMQ/issues/4",
+    "id":  3818756452,
+    "node_id":  "I_kwDOQh91ws7jnZlk",
+    "number":  4,
+    "title":  "Feature: AI Extraction Service for CVs and Certificates",
+    "user":  {
+                 "login":  "Soloflex95",
+                 "id":  45412620,
+                 "node_id":  "MDQ6VXNlcjQ1NDEyNjIw",
+                 "avatar_url":  "https://avatars.githubusercontent.com/u/45412620?v=4",
+                 "gravatar_id":  "",
+                 "url":  "https://api.github.com/users/Soloflex95",
+                 "html_url":  "https://github.com/Soloflex95",
+                 "followers_url":  "https://api.github.com/users/Soloflex95/followers",
+                 "following_url":  "https://api.github.com/users/Soloflex95/following{/other_user}",
+                 "gists_url":  "https://api.github.com/users/Soloflex95/gists{/gist_id}",
+                 "starred_url":  "https://api.github.com/users/Soloflex95/starred{/owner}{/repo}",
+                 "subscriptions_url":  "https://api.github.com/users/Soloflex95/subscriptions",
+                 "organizations_url":  "https://api.github.com/users/Soloflex95/orgs",
+                 "repos_url":  "https://api.github.com/users/Soloflex95/repos",
+                 "events_url":  "https://api.github.com/users/Soloflex95/events{/privacy}",
+                 "received_events_url":  "https://api.github.com/users/Soloflex95/received_events",
+                 "type":  "User",
+                 "user_view_type":  "public",
+                 "site_admin":  false
+             },
+    "labels":  [
+                   {
+                       "id":  10000975426,
+                       "node_id":  "LA_kwDOQh91ws8AAAACVBrGQg",
+                       "url":  "https://api.github.com/repos/Soloflex95/IMQ/labels/backend",
+                       "name":  "backend",
+                       "color":  "aaaaaa",
+                       "default":  false,
+                       "description":  null
+                   },
+                   {
+                       "id":  10000978353,
+                       "node_id":  "LA_kwDOQh91ws8AAAACVBrRsQ",
+                       "url":  "https://api.github.com/repos/Soloflex95/IMQ/labels/ai",
+                       "name":  "ai",
+                       "color":  "aaf717",
+                       "default":  false,
+                       "description":  ""
+                   },
+                   {
+                       "id":  10000980213,
+                       "node_id":  "LA_kwDOQh91ws8AAAACVBrY9Q",
+                       "url":  "https://api.github.com/repos/Soloflex95/IMQ/labels/core-feature",
+                       "name":  "core-feature",
+                       "color":  "d48b31",
+                       "default":  false,
+                       "description":  ""
+                   }
+               ],
+    "state":  "open",
+    "locked":  false,
+    "assignee":  null,
+    "assignees":  [
+
+                  ],
+    "milestone":  null,
+    "comments":  0,
+    "created_at":  "2026-01-15T18:57:24Z",
+    "updated_at":  "2026-01-15T18:57:24Z",
+    "closed_at":  null,
+    "author_association":  "OWNER",
+    "active_lock_reason":  null,
+    "sub_issues_summary":  {
+                               "total":  0,
+                               "completed":  0,
+                               "percent_completed":  0
+                           },
+    "issue_dependencies_summary":  {
+                                       "blocked_by":  0,
+                                       "total_blocked_by":  0,
+                                       "blocking":  0,
+                                       "total_blocking":  0
+                                   },
+    "body":  "**Description:** We need to implement the core \"Opportunity\" defined in the vision: extracting structured data from unstructured documents. The system must allow users to upload PDF/Word documents (CVs, training certs) and use an AI service to parse them into JSON.\n\n**Acceptance Criteria:**\n[ ] User can upload a file (PDF, DOCX) via the frontend.\n[ ] Backend sends the file to an AI service (e.g., Azure OpenAI or Document Intelligence).\n[ ] System extracts the following fields: Skill Name, Date Acquired, Expiration Date, Issuing Authority.\n[ ] Extracted data is saved to the database linked to the user\u0027s profile.\n\n**Context for Copilot:**\nUse Azure Blob Storage for temporary file holding.\nUse a prompt strategy that asks the LLM to return strictly valid JSON.\nCreate a Mongoose/SQL schema for UserQualification that matches the extracted fields.",
+    "closed_by":  null,
+    "reactions":  {
+                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/4/reactions",
+                      "total_count":  0,
+                      "+1":  0,
+                      "-1":  0,
+                      "laugh":  0,
+                      "hooray":  0,
+                      "confused":  0,
+                      "heart":  0,
+                      "rocket":  0,
+                      "eyes":  0
+                  },
+    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/4/timeline",
+    "performed_via_github_app":  null,
+    "state_reason":  null
+}
