@@ -36,29 +36,6 @@ public class AzureOpenAIDocumentParsingService : IDocumentParsingService
             // In production, use Azure Document Intelligence or a PDF parsing library
             var extension = Path.GetExtension(fileName).ToLowerInvariant();
             
-            if (extension == ".txt")
-            {
-                // Read text file content
-                using var reader = new StreamReader(fileStream);
-                var documentText = await reader.ReadToEndAsync(cancellationToken);
-
-                if (string.IsNullOrWhiteSpace(documentText))
-                {
-                    return new DocumentParseResult
-                    {
-                        Success = false,
-                        ErrorMessage = "Document is empty or could not be read"
-                    };
-                }
-                
-                // Process text with AI (implementation remains same)
-                // For now, fall through to mock data
-            }
-
-                // Process text with AI (implementation remains same)
-                // For now, fall through to mock data
-            }
-
             // Get Azure OpenAI configuration
             var endpoint = _configuration["AzureOpenAI:Endpoint"];
             var apiKey = _configuration["AzureOpenAI:ApiKey"];
@@ -75,6 +52,15 @@ public class AzureOpenAIDocumentParsingService : IDocumentParsingService
             var deploymentName = _configuration["AzureOpenAI:DeploymentName"] ?? "gpt-4";
             using var reader = new StreamReader(fileStream);
             var documentText = await reader.ReadToEndAsync(cancellationToken);
+
+            if (string.IsNullOrWhiteSpace(documentText))
+            {
+                return new DocumentParseResult
+                {
+                    Success = false,
+                    ErrorMessage = "Document is empty or could not be read"
+                };
+            }
 
             // Build prompt for structured extraction
             var prompt = BuildExtractionPrompt(documentText);
