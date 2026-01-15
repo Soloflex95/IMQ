@@ -1,0 +1,322 @@
+@page "/pending-approvals"
+@rendermode InteractiveServer
+
+<PageTitle>Pending Approvals - IMQ</PageTitle>
+
+<h1>
+    <i class="bi bi-clipboard-check"></i> Pending Approvals
+</h1>
+<p class="lead">Review and approve qualification submissions requiring manager authorization</p>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-hourglass-split"></i> Awaiting Your Approval
+                </h5>
+            </div>
+            <div class="card-body">
+                @if (pendingApprovals == null)
+                {
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-2">Loading pending approvals...</p>
+                    </div>
+                }
+                else if (!pendingApprovals.Any())
+                {
+                    <div class="alert alert-success">
+                        <i class="bi bi-check-circle"></i> No pending approvals at this time.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Worker</th>
+                                    <th>Qualification</th>
+                                    <th>Date Acquired</th>
+                                    <th>Expiration</th>
+                                    <th>Issuing Authority</th>
+                                    <th>Confidence</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var approval in pendingApprovals)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@approval.WorkerName</strong><br />
+                                            <small class="text-muted">@approval.WorkerEmail</small>
+                                        </td>
+                                        <td>
+                                            <strong>@approval.SkillName</strong>
+                                            @if (!string.IsNullOrWhiteSpace(approval.CertificateNumber))
+                                            {
+                                                <br />
+                                                <small class="text-muted">Cert #: @approval.CertificateNumber</small>
+                                            }
+                                        </td>
+                                        <td>@(approval.DateAcquired?.ToString("MMM dd, yyyy") ?? "N/A")</td>
+                                        <td>
+                                            @if (approval.ExpirationDate.HasValue)
+                                            {
+                                                var daysUntilExpiry = (approval.ExpirationDate.Value - DateTime.UtcNow).Days;
+                                                <span class="@GetExpiryClass(daysUntilExpiry)">
+                                                    @approval.ExpirationDate.Value.ToString("MMM dd, yyyy")
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">No expiration</span>
+                                            }
+                                        </td>
+                                        <td>@(approval.IssuingAuthority ?? "N/A")</td>
+                                        <td>
+                                            <span class="badge bg-info">@((approval.ConfidenceScore * 100).ToString("F0"))%</span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-success me-1" @onclick="() => ShowApprovalDialog(approval.Id, true)">
+                                                <i class="bi bi-check-circle"></i> Approve
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" @onclick="() => ShowApprovalDialog(approval.Id, false)">
+                                                <i class="bi bi-x-circle"></i> Reject
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (showSignatureDialog)
+{
+    <div class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-pen"></i> Electronic Signature Required
+                    </h5>
+                    <button type="button" class="btn-close" @onclick="CloseSignatureDialog"></button>
+                </div>
+                <div class="modal-body">
+                    @if (isApproving)
+                    {
+                        <div class="alert alert-success">
+                            <i class="bi bi-check-circle"></i> You are about to <strong>APPROVE</strong> this qualification.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger">
+                            <i class="bi bi-x-circle"></i> You are about to <strong>REJECT</strong> this qualification.
+                        </div>
+                    }
+
+                    <p class="mb-3">
+                        By signing this action, you certify that you have reviewed the qualification evidence and approve this decision 
+                        in accordance with 21 CFR Part 11 electronic signature requirements.
+                    </p>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Type your full name to sign:</label>
+                        <input type="text" class="form-control" placeholder="Enter your full name" @bind="signatureName" />
+                        @if (!string.IsNullOrWhiteSpace(signatureError))
+                        {
+                            <div class="text-danger mt-2">
+                                <small>@signatureError</small>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Reason:</label>
+                        <select class="form-select" @bind="reasonCode">
+                            <option value="">-- Select Reason --</option>
+                            <option value="EvidenceVerified">Evidence Verified</option>
+                            <option value="TrainingCompleted">Training Completed</option>
+                            <option value="CertificationValid">Certification Valid</option>
+                            <option value="InsufficientEvidence">Insufficient Evidence</option>
+                            <option value="ExpiredCredential">Expired Credential</option>
+                            <option value="RequirementsNotMet">Requirements Not Met</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Additional Comments (Optional):</label>
+                        <textarea class="form-control" rows="3" @bind="comments" placeholder="Enter any additional notes..."></textarea>
+                    </div>
+
+                    @if (isSigning)
+                    {
+                        <div class="text-center py-3">
+                            <div class="spinner-border text-primary" role="status"></div>
+                            <p class="mt-2">Processing signature...</p>
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseSignatureDialog" disabled="@isSigning">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" @onclick="SubmitSignature" disabled="@isSigning">
+                        <i class="bi bi-pen"></i> Sign and @(isApproving ? "Approve" : "Reject")
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<PendingApprovalViewModel>? pendingApprovals;
+    private bool showSignatureDialog = false;
+    private Guid selectedApprovalId;
+    private bool isApproving = false;
+    private string signatureName = string.Empty;
+    private string reasonCode = string.Empty;
+    private string comments = string.Empty;
+    private string? signatureError;
+    private bool isSigning = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(300);
+
+        // Mock data - in production, fetch from database
+        pendingApprovals = new List<PendingApprovalViewModel>
+        {
+            new()
+            {
+                Id = Guid.NewGuid(),
+                WorkerName = "John Smith",
+                WorkerEmail = "john.smith@company.com",
+                SkillName = "Advanced Aseptic Processing",
+                DateAcquired = DateTime.UtcNow.AddMonths(-2),
+                ExpirationDate = DateTime.UtcNow.AddYears(2),
+                IssuingAuthority = "Pharmaceutical Training Institute",
+                CertificateNumber = "AAP-2024-789",
+                ConfidenceScore = 0.88
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                WorkerName = "Sarah Williams",
+                WorkerEmail = "sarah.williams@company.com",
+                SkillName = "Cleanroom Qualification Level 3",
+                DateAcquired = DateTime.UtcNow.AddMonths(-1),
+                ExpirationDate = DateTime.UtcNow.AddMonths(18),
+                IssuingAuthority = "ISO Certification Body",
+                CertificateNumber = "CRQ3-2025-456",
+                ConfidenceScore = 0.92
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                WorkerName = "Mike Johnson",
+                WorkerEmail = "mike.johnson@company.com",
+                SkillName = "FDA 21 CFR Part 11 Compliance",
+                DateAcquired = DateTime.UtcNow.AddDays(-15),
+                ExpirationDate = null,
+                IssuingAuthority = "FDA Training Center",
+                CertificateNumber = null,
+                ConfidenceScore = 0.85
+            }
+        };
+    }
+
+    private void ShowApprovalDialog(Guid approvalId, bool approve)
+    {
+        selectedApprovalId = approvalId;
+        isApproving = approve;
+        showSignatureDialog = true;
+        signatureName = string.Empty;
+        reasonCode = string.Empty;
+        comments = string.Empty;
+        signatureError = null;
+    }
+
+    private void CloseSignatureDialog()
+    {
+        showSignatureDialog = false;
+        signatureName = string.Empty;
+        reasonCode = string.Empty;
+        comments = string.Empty;
+        signatureError = null;
+    }
+
+    private async Task SubmitSignature()
+    {
+        signatureError = null;
+
+        // Validate signature
+        if (string.IsNullOrWhiteSpace(signatureName))
+        {
+            signatureError = "You must enter your full name to sign.";
+            return;
+        }
+
+        if (signatureName.Length < 3)
+        {
+            signatureError = "Please enter your full name (at least 3 characters).";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(reasonCode))
+        {
+            signatureError = "You must select a reason code.";
+            return;
+        }
+
+        isSigning = true;
+        StateHasChanged();
+
+        await Task.Delay(1000); // Simulate processing
+
+        // In production:
+        // 1. Verify user has Manager role
+        // 2. Generate signature hash (SHA256 of: name + timestamp + reason + approvalId)
+        // 3. Store approval record with signature in database
+        // 4. Update qualification status to Approved/Rejected
+        // 5. Create audit log entry
+
+        // Remove from pending list
+        pendingApprovals = pendingApprovals?.Where(a => a.Id != selectedApprovalId).ToList();
+
+        isSigning = false;
+        CloseSignatureDialog();
+        StateHasChanged();
+    }
+
+    private string GetExpiryClass(int daysUntilExpiry)
+    {
+        if (daysUntilExpiry < 0)
+            return "text-danger fw-bold";
+        if (daysUntilExpiry < 30)
+            return "text-warning fw-bold";
+        return "text-success";
+    }
+
+    private class PendingApprovalViewModel
+    {
+        public Guid Id { get; set; }
+        public string WorkerName { get; set; } = string.Empty;
+        public string WorkerEmail { get; set; } = string.Empty;
+        public string SkillName { get; set; } = string.Empty;
+        public DateTime? DateAcquired { get; set; }
+        public DateTime? ExpirationDate { get; set; }
+        public string? IssuingAuthority { get; set; }
+        public string? CertificateNumber { get; set; }
+        public double ConfidenceScore { get; set; }
+    }
+}
