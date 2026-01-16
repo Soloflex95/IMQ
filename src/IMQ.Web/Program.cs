@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<IQualificationService, InMemoryQualificationService>();
 
 // Document parsing service
+builder.Services.AddScoped<IComplianceCalculationService, ComplianceCalculationService>();
 builder.Services.AddHttpClient<IDocumentParsingService, AzureOpenAIDocumentParsingService>();
 
 builder.Services.AddRazorComponents()
