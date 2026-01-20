@@ -2,6 +2,7 @@
 @using IMQ.Core.Interfaces
 @inject IDocumentParsingService DocumentParsingService
 @inject NavigationManager Navigation
+@inject IConfiguration Configuration
 @rendermode InteractiveServer
 
 <PageTitle>Upload Qualifications - IMQ</PageTitle>
@@ -10,6 +11,25 @@
     <i class="bi bi-cloud-upload"></i> Upload Qualifications
 </h1>
 <p class="lead">Upload your CV or training certificates to automatically extract qualifications</p>
+
+@{
+    var apiKey = Configuration["OpenAI:ApiKey"];
+    var hasApiKey = !string.IsNullOrWhiteSpace(apiKey);
+}
+
+@if (!hasApiKey)
+{
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle"></i> <strong>Debug Mode:</strong> OpenAI API key not configured. Using mock data. 
+        <br/><small>Configuration check: OpenAI:ApiKey = @(string.IsNullOrWhiteSpace(apiKey) ? "NOT FOUND" : "FOUND (length: " + apiKey.Length + ")")</small>
+    </div>
+}
+else
+{
+    <div class="alert alert-success">
+        <i class="bi bi-check-circle"></i> <strong>AI Enabled:</strong> OpenAI API configured (key length: @apiKey.Length characters)
+    </div>
+}
 
 <div class="row mt-4">
     <div class="col-md-8">
