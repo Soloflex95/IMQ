@@ -7,9 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddSingleton<IQualificationService, InMemoryQualificationService>();
 
-// Document parsing service
+// Document parsing service (OpenAI)
 builder.Services.AddScoped<IComplianceCalculationService, ComplianceCalculationService>();
-builder.Services.AddHttpClient<IDocumentParsingService, AzureOpenAIDocumentParsingService>();
+builder.Services.AddHttpClient<IDocumentParsingService, OpenAIDocumentParsingService>();
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

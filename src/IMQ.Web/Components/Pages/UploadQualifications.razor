@@ -38,6 +38,20 @@
                             <i class="bi bi-check-circle"></i> Successfully extracted @parseResult.Qualifications.Count qualification(s)
                         </div>
 
+                        @if (!string.IsNullOrWhiteSpace(parseResult.RoleSummary))
+                        {
+                            <div class="card mb-4 border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h6 class="mb-0">
+                                        <i class="bi bi-person-badge"></i> Recommended Roles in Health Sciences Studies
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-0">@parseResult.RoleSummary</p>
+                                </div>
+                            </div>
+                        }
+
                         <h5 class="mt-4 mb-3">Extracted Qualifications</h5>
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -110,13 +124,29 @@
                 }
                 else
                 {
-                    <div class="upload-zone" @ondragover:preventDefault @ondrop:preventDefault>
+                    <div class="upload-zone">
                         <div class="text-center py-5">
                             <i class="bi bi-cloud-arrow-up display-1 text-primary mb-3"></i>
                             <h5>Upload your document</h5>
                             <p class="text-muted">Supported formats: PDF, DOCX, TXT</p>
                             
-                            <InputFile OnChange="HandleFileSelected" class="form-control mt-3" accept=".pdf,.docx,.doc,.txt" />
+                            <div class="mt-3">
+                                <label for="fileInput" class="btn btn-primary">
+                                    <i class="bi bi-upload"></i> Choose File
+                                </label>
+                                <InputFile id="fileInput" OnChange="@LoadFile" class="d-none" accept=".txt,.pdf,.docx,.doc" />
+                            </div>
+                            
+                            @if (!string.IsNullOrEmpty(selectedFileName))
+                            {
+                                <div class="mt-3 alert alert-info">
+                                    <i class="bi bi-file-text"></i> Selected: <strong>@selectedFileName</strong>
+                                    <br/>
+                                    <button class="btn btn-success mt-2" @onclick="ProcessSelectedFile">
+                                        <i class="bi bi-magic"></i> Extract Qualifications
+                                    </button>
+                                </div>
+                            }
                             
                             <div class="mt-3">
                                 <small class="text-muted">
@@ -185,43 +215,55 @@
     private string? errorMessage;
     private DocumentParseResult? parseResult;
     private const long MaxFileSize = 10 * 1024 * 1024; // 10 MB
+    private IBrowserFile? selectedFile;
+    private string? selectedFileName;
+    private byte[]? fileContent;
 
-    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    private void LoadFile(InputFileChangeEventArgs e)
     {
+        selectedFile = e.File;
+        selectedFileName = e.File?.Name;
         errorMessage = null;
-        var file = e.File;
+    }
 
-        if (file == null)
+    private async Task ProcessSelectedFile()
+    {
+        if (selectedFile == null)
         {
+            errorMessage = "Please select a file first";
             return;
         }
 
         // Validate file size
-        if (file.Size > MaxFileSize)
+        if (selectedFile.Size > MaxFileSize)
         {
             errorMessage = $"File size exceeds maximum allowed size of {MaxFileSize / (1024 * 1024)} MB";
             return;
         }
 
         // Validate file type
-        var allowedExtensions = new[] { ".pdf", ".docx", ".doc", ".txt" };
-        var extension = Path.GetExtension(file.Name).ToLowerInvariant();
+        var allowedExtensions = new[] { ".txt", ".pdf", ".docx", ".doc" };
+        var extension = Path.GetExtension(selectedFile.Name).ToLowerInvariant();
         if (!allowedExtensions.Contains(extension))
         {
-            errorMessage = "Invalid file type. Please upload a PDF, DOCX, or TXT file.";
+            errorMessage = "Only TXT, PDF, and DOCX files are supported";
             return;
         }
 
         isProcessing = true;
-        StateHasChanged();
+        errorMessage = null;
 
         try
         {
-            // Read file content
-            using var stream = file.OpenReadStream(MaxFileSize);
+            // Read file into byte array first
+            using var ms = new MemoryStream();
+            using var stream = selectedFile.OpenReadStream(MaxFileSize);
+            await stream.CopyToAsync(ms);
+            fileContent = ms.ToArray();
             
-            // Parse document
-            parseResult = await DocumentParsingService.ParseDocumentAsync(stream, file.Name);
+            // Now process from byte array
+            using var contentStream = new MemoryStream(fileContent);
+            parseResult = await DocumentParsingService.ParseDocumentAsync(contentStream, selectedFile.Name);
         }
         catch (Exception ex)
         {
@@ -231,7 +273,6 @@
         finally
         {
             isProcessing = false;
-            StateHasChanged();
         }
     }
 

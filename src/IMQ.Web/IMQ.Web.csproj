@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
     <ProjectReference Include="..\IMQ.Core\IMQ.Core.csproj" />
@@ -7,6 +7,8 @@
 
   <ItemGroup>
     <PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.5.1" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.4.1" />
+    <PackageReference Include="PdfPig" Version="0.1.13" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -14,6 +16,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+    <UserSecretsId>8b37e8b6-bd4c-4523-b2fa-e445adef4a26</UserSecretsId>
   </PropertyGroup>
 
 </Project>

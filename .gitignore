@@ -80,3 +80,7 @@ secrets.json
 .env
 *.pfx
 *.cer
+
+## User Secrets
+secrets/
+**/secrets.json
