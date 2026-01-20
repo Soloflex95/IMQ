@@ -1,10 +1,15 @@
 using IMQ.Web.Components;
 using IMQ.Web.Services;
+using IMQ.Core.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<IQualificationService, InMemoryQualificationService>();
+
+// Document parsing service
+builder.Services.AddScoped<IComplianceCalculationService, ComplianceCalculationService>();
+builder.Services.AddHttpClient<IDocumentParsingService, AzureOpenAIDocumentParsingService>();
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

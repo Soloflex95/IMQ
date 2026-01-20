@@ -1,0 +1,77 @@
+﻿{
+    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/10",
+    "repository_url":  "https://api.github.com/repos/Soloflex95/IMQ",
+    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/10/labels{/name}",
+    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/10/comments",
+    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/10/events",
+    "html_url":  "https://github.com/Soloflex95/IMQ/issues/10",
+    "id":  3830141316,
+    "node_id":  "I_kwDOQh91ws7kS1GE",
+    "number":  10,
+    "title":  "Add Executive Summary to top of README,md page",
+    "user":  {
+                 "login":  "seanwinz2030",
+                 "id":  248097794,
+                 "node_id":  "U_kgDODsmsAg",
+                 "avatar_url":  "https://avatars.githubusercontent.com/u/248097794?v=4",
+                 "gravatar_id":  "",
+                 "url":  "https://api.github.com/users/seanwinz2030",
+                 "html_url":  "https://github.com/seanwinz2030",
+                 "followers_url":  "https://api.github.com/users/seanwinz2030/followers",
+                 "following_url":  "https://api.github.com/users/seanwinz2030/following{/other_user}",
+                 "gists_url":  "https://api.github.com/users/seanwinz2030/gists{/gist_id}",
+                 "starred_url":  "https://api.github.com/users/seanwinz2030/starred{/owner}{/repo}",
+                 "subscriptions_url":  "https://api.github.com/users/seanwinz2030/subscriptions",
+                 "organizations_url":  "https://api.github.com/users/seanwinz2030/orgs",
+                 "repos_url":  "https://api.github.com/users/seanwinz2030/repos",
+                 "events_url":  "https://api.github.com/users/seanwinz2030/events{/privacy}",
+                 "received_events_url":  "https://api.github.com/users/seanwinz2030/received_events",
+                 "type":  "User",
+                 "user_view_type":  "public",
+                 "site_admin":  false
+             },
+    "labels":  [
+
+               ],
+    "state":  "open",
+    "locked":  false,
+    "assignee":  null,
+    "assignees":  [
+
+                  ],
+    "milestone":  null,
+    "comments":  0,
+    "created_at":  "2026-01-19T15:10:47Z",
+    "updated_at":  "2026-01-19T15:10:47Z",
+    "closed_at":  null,
+    "author_association":  "COLLABORATOR",
+    "active_lock_reason":  null,
+    "sub_issues_summary":  {
+                               "total":  0,
+                               "completed":  0,
+                               "percent_completed":  0
+                           },
+    "issue_dependencies_summary":  {
+                                       "blocked_by":  0,
+                                       "total_blocked_by":  0,
+                                       "blocking":  0,
+                                       "total_blocking":  0
+                                   },
+    "body":  "Add Executive Summary to top of README,md page as follows, with the existing readme text below it:\n\n**Executive Overview (Purpose \u0026 Context)**\n\nIMQ (I aM Qualified) is a working proof of concept created to explore how AI can be responsibly embedded into qualification and role-readiness decisions in GxP-regulated environments.\n\nThe project was sponsored and product-led by Sean Winslow to examine a common enterprise challenge: qualification processes that are manual, subjective, difficult to audit, and slow to adapt as roles and requirements change. IMQ is designed around a decision-centric operating model, where AI supports assessment consistency and speed while preserving human judgment, traceability, and inspection readiness.\n\nIMQ is not a commercial product and not production-deployed. It is an exploration of architecture, governance, and workflow design—intended to demonstrate how AI-assisted decision support can operate within the constraints of regulated quality systems.\n\nFrom a delivery standpoint:\n\n- Sean Winslow served as project sponsor and product owner, defining requirements, decision logic, and compliance principles.\n-\n- Michael Winslow served as technical lead, designing and implementing the system architecture and core services.\n\nThe section below describe the technical architecture and implementation details supporting this proof of concept.",
+    "closed_by":  null,
+    "reactions":  {
+                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/10/reactions",
+                      "total_count":  0,
+                      "+1":  0,
+                      "-1":  0,
+                      "laugh":  0,
+                      "hooray":  0,
+                      "confused":  0,
+                      "heart":  0,
+                      "rocket":  0,
+                      "eyes":  0
+                  },
+    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/10/timeline",
+    "performed_via_github_app":  null,
+    "state_reason":  null
+}

@@ -1,0 +1,261 @@
+@page "/upload-qualifications"
+@using IMQ.Core.Interfaces
+@inject IDocumentParsingService DocumentParsingService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<PageTitle>Upload Qualifications - IMQ</PageTitle>
+
+<h1>
+    <i class="bi bi-cloud-upload"></i> Upload Qualifications
+</h1>
+<p class="lead">Upload your CV or training certificates to automatically extract qualifications</p>
+
+<div class="row mt-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-file-earmark-pdf"></i> Document Upload
+                </h5>
+            </div>
+            <div class="card-body">
+                @if (isProcessing)
+                {
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                            <span class="visually-hidden">Processing...</span>
+                        </div>
+                        <h5>Processing your document...</h5>
+                        <p class="text-muted">Extracting qualifications using AI</p>
+                    </div>
+                }
+                else if (parseResult != null)
+                {
+                    @if (parseResult.Success)
+                    {
+                        <div class="alert alert-success">
+                            <i class="bi bi-check-circle"></i> Successfully extracted @parseResult.Qualifications.Count qualification(s)
+                        </div>
+
+                        <h5 class="mt-4 mb-3">Extracted Qualifications</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Skill/Certification</th>
+                                        <th>Date Acquired</th>
+                                        <th>Expiration</th>
+                                        <th>Issuing Authority</th>
+                                        <th>Confidence</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var qual in parseResult.Qualifications)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@qual.SkillName</strong>
+                                                @if (!string.IsNullOrWhiteSpace(qual.CertificateNumber))
+                                                {
+                                                    <br />
+                                                    <small class="text-muted">Cert #: @qual.CertificateNumber</small>
+                                                }
+                                            </td>
+                                            <td>@(qual.DateAcquired?.ToString("MMM dd, yyyy") ?? "N/A")</td>
+                                            <td>
+                                                @if (qual.ExpirationDate.HasValue)
+                                                {
+                                                    var daysUntilExpiry = (qual.ExpirationDate.Value - DateTime.UtcNow).Days;
+                                                    <span class="@GetExpiryClass(daysUntilExpiry)">
+                                                        @qual.ExpirationDate.Value.ToString("MMM dd, yyyy")
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">No expiration</span>
+                                                }
+                                            </td>
+                                            <td>@(qual.IssuingAuthority ?? "N/A")</td>
+                                            <td>
+                                                <span class="badge bg-info">@((qual.ConfidenceScore * 100).ToString("F0"))%</span>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-success" @onclick="() => SaveQualification(qual)">
+                                                    <i class="bi bi-check"></i> Save
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mt-3">
+                            <button class="btn btn-primary" @onclick="ResetUpload">
+                                <i class="bi bi-arrow-repeat"></i> Upload Another Document
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle"></i> @parseResult.ErrorMessage
+                        </div>
+                        <button class="btn btn-secondary" @onclick="ResetUpload">
+                            <i class="bi bi-arrow-repeat"></i> Try Again
+                        </button>
+                    }
+                }
+                else
+                {
+                    <div class="upload-zone" @ondragover:preventDefault @ondrop:preventDefault>
+                        <div class="text-center py-5">
+                            <i class="bi bi-cloud-arrow-up display-1 text-primary mb-3"></i>
+                            <h5>Upload your document</h5>
+                            <p class="text-muted">Supported formats: PDF, DOCX, TXT</p>
+                            
+                            <InputFile OnChange="HandleFileSelected" class="form-control mt-3" accept=".pdf,.docx,.doc,.txt" />
+                            
+                            <div class="mt-3">
+                                <small class="text-muted">
+                                    Maximum file size: 10 MB<br />
+                                    Your data is processed securely and not stored permanently
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(errorMessage))
+                {
+                    <div class="alert alert-warning mt-3">
+                        <i class="bi bi-exclamation-circle"></i> @errorMessage
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-info-circle"></i> How It Works
+                </h5>
+            </div>
+            <div class="card-body">
+                <ol class="ps-3">
+                    <li class="mb-2">Upload your CV or training certificate</li>
+                    <li class="mb-2">AI extracts qualifications automatically</li>
+                    <li class="mb-2">Review and edit extracted data</li>
+                    <li class="mb-2">Save to your qualification profile</li>
+                </ol>
+
+                <div class="alert alert-info mt-3">
+                    <small>
+                        <strong>Privacy:</strong> Documents are processed in real-time and not permanently stored. 
+                        Only the extracted qualification data is saved to your profile.
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-lightbulb"></i> Tips
+                </h5>
+            </div>
+            <div class="card-body">
+                <ul class="ps-3 mb-0">
+                    <li class="mb-2">Ensure text is clearly readable</li>
+                    <li class="mb-2">Include certificate numbers when available</li>
+                    <li class="mb-2">Use high-quality scans</li>
+                    <li class="mb-2">One document at a time for best results</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool isProcessing = false;
+    private string? errorMessage;
+    private DocumentParseResult? parseResult;
+    private const long MaxFileSize = 10 * 1024 * 1024; // 10 MB
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        errorMessage = null;
+        var file = e.File;
+
+        if (file == null)
+        {
+            return;
+        }
+
+        // Validate file size
+        if (file.Size > MaxFileSize)
+        {
+            errorMessage = $"File size exceeds maximum allowed size of {MaxFileSize / (1024 * 1024)} MB";
+            return;
+        }
+
+        // Validate file type
+        var allowedExtensions = new[] { ".pdf", ".docx", ".doc", ".txt" };
+        var extension = Path.GetExtension(file.Name).ToLowerInvariant();
+        if (!allowedExtensions.Contains(extension))
+        {
+            errorMessage = "Invalid file type. Please upload a PDF, DOCX, or TXT file.";
+            return;
+        }
+
+        isProcessing = true;
+        StateHasChanged();
+
+        try
+        {
+            // Read file content
+            using var stream = file.OpenReadStream(MaxFileSize);
+            
+            // Parse document
+            parseResult = await DocumentParsingService.ParseDocumentAsync(stream, file.Name);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error processing file: {ex.Message}";
+            parseResult = null;
+        }
+        finally
+        {
+            isProcessing = false;
+            StateHasChanged();
+        }
+    }
+
+    private void ResetUpload()
+    {
+        parseResult = null;
+        errorMessage = null;
+        StateHasChanged();
+    }
+
+    private string GetExpiryClass(int daysUntilExpiry)
+    {
+        if (daysUntilExpiry < 0)
+            return "text-danger fw-bold";
+        if (daysUntilExpiry < 30)
+            return "text-warning fw-bold";
+        return "text-success";
+    }
+
+    private void SaveQualification(ExtractedQualification qualification)
+    {
+        // TODO: Implement saving to database
+        // For now, just show a success message
+        errorMessage = $"Qualification '{qualification.SkillName}' will be saved (database integration pending)";
+        StateHasChanged();
+    }
+}
