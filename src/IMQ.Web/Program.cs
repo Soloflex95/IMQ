@@ -4,6 +4,9 @@ using IMQ.Core.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Load environment variables (required for Azure App Service container deployment)
+builder.Configuration.AddEnvironmentVariables();
+
 // Add services to the container.
 builder.Services.AddSingleton<IQualificationService, InMemoryQualificationService>();
 
