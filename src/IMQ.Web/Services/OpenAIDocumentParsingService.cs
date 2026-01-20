@@ -39,6 +39,9 @@ public class OpenAIDocumentParsingService : IDocumentParsingService
             var apiKey = _configuration["OpenAI:ApiKey"];
             var model = _configuration["OpenAI:Model"] ?? "gpt-4o-mini";
 
+            _logger.LogInformation("API Key configured: {HasKey}, Model: {Model}", 
+                !string.IsNullOrWhiteSpace(apiKey), model);
+
             if (string.IsNullOrWhiteSpace(apiKey))
             {
                 _logger.LogWarning("OpenAI API key not configured, using mock data");
