@@ -14,6 +14,10 @@
 
 @{
     var apiKey = Configuration["OpenAI:ApiKey"];
+    var apiKeyAlt = Configuration["OpenAI__ApiKey"];
+    var allKeys = Configuration.AsEnumerable()
+        .Where(k => k.Key.Contains("OpenAI", StringComparison.OrdinalIgnoreCase))
+        .ToList();
     var hasApiKey = !string.IsNullOrWhiteSpace(apiKey);
 }
 
@@ -21,7 +25,16 @@
 {
     <div class="alert alert-warning">
         <i class="bi bi-exclamation-triangle"></i> <strong>Debug Mode:</strong> OpenAI API key not configured. Using mock data. 
-        <br/><small>Configuration check: OpenAI:ApiKey = @(string.IsNullOrWhiteSpace(apiKey) ? "NOT FOUND" : "FOUND (length: " + apiKey.Length + ")")</small>
+        <br/><small>Configuration check:</small>
+        <ul class="mb-0 mt-2">
+            <li><code>OpenAI:ApiKey</code> = @(string.IsNullOrWhiteSpace(apiKey) ? "NOT FOUND" : $"FOUND ({apiKey.Length} chars)")</li>
+            <li><code>OpenAI__ApiKey</code> = @(string.IsNullOrWhiteSpace(apiKeyAlt) ? "NOT FOUND" : $"FOUND ({apiKeyAlt.Length} chars)")</li>
+            <li>All OpenAI config keys found: @allKeys.Count</li>
+            @foreach (var key in allKeys)
+            {
+                <li><code>@key.Key</code> = @(string.IsNullOrWhiteSpace(key.Value) ? "empty" : $"{key.Value.Length} chars")</li>
+            }
+        </ul>
     </div>
 }
 else
