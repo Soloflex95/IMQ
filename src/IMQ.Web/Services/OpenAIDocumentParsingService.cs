@@ -8,6 +8,9 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace IMQ.Web.Services;
 
+/// <summary>
+/// OpenAI-powered document parsing service - v1.0.1
+/// </summary>
 public class OpenAIDocumentParsingService : IDocumentParsingService
 {
     private readonly HttpClient _httpClient;
