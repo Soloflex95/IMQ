@@ -1,0 +1,213 @@
+@using IMQ.Core.Interfaces
+@inject IQualificationMatchingService MatchingService
+
+<div class="qualification-autocomplete">
+    <div class="mb-3">
+        <label for="@InputId" class="form-label">@Label</label>
+        <input 
+            type="text" 
+            class="form-control @(IsInvalid ? "is-invalid" : "")"
+            id="@InputId"
+            placeholder="@Placeholder"
+            value="@InputValue"
+            @oninput="OnInputChanged"
+            @onfocus="OnFocusChanged"
+            @onblur="OnBlurChanged"
+            autocomplete="off" />
+        
+        @if (showSuggestions && suggestions.Count > 0)
+        {
+            <div class="autocomplete-suggestions">
+                @foreach (var suggestion in suggestions)
+                {
+                    <div class="suggestion-item" @onclick="() => SelectSuggestion(suggestion.Title)">
+                        <div class="suggestion-title">@suggestion.Title</div>
+                        <div class="suggestion-score">
+                            <span class="badge bg-info">@((suggestion.SimilarityScore * 100).ToString("F0"))% match</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        
+        @if (IsInvalid && !string.IsNullOrWhiteSpace(ValidationMessage))
+        {
+            <div class="invalid-feedback d-block">@ValidationMessage</div>
+        }
+        
+        @if (!string.IsNullOrWhiteSpace(HelpText))
+        {
+            <div class="form-text">@HelpText</div>
+        }
+    </div>
+</div>
+
+<style>
+    .qualification-autocomplete {
+        position: relative;
+    }
+    
+    .autocomplete-suggestions {
+        position: absolute;
+        z-index: 1000;
+        background: white;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+        max-height: 300px;
+        overflow-y: auto;
+        width: 100%;
+        margin-top: 0.25rem;
+    }
+    
+    .suggestion-item {
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        border-bottom: 1px solid #f8f9fa;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .suggestion-item:last-child {
+        border-bottom: none;
+    }
+    
+    .suggestion-item:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .suggestion-title {
+        font-weight: 500;
+        color: #212529;
+    }
+    
+    .suggestion-score {
+        margin-left: 1rem;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Qualification Title";
+    
+    [Parameter]
+    public string Placeholder { get; set; } = "Start typing to see suggestions...";
+    
+    [Parameter]
+    public string? HelpText { get; set; }
+    
+    [Parameter]
+    public string? ValidationMessage { get; set; }
+    
+    [Parameter]
+    public bool IsInvalid { get; set; }
+    
+    [Parameter]
+    public string Value { get; set; } = string.Empty;
+    
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+    
+    [Parameter]
+    public EventCallback<string> OnStandardTitleSelected { get; set; }
+    
+    private string InputId = $"qualification-input-{Guid.NewGuid()}";
+    private string InputValue { get; set; } = string.Empty;
+    private List<QualificationMatch> suggestions = new();
+    private bool showSuggestions = false;
+    private bool isLoading = false;
+    private System.Threading.Timer? debounceTimer;
+    
+    protected override void OnInitialized()
+    {
+        InputValue = Value;
+    }
+    
+    protected override void OnParametersSet()
+    {
+        if (InputValue != Value)
+        {
+            InputValue = Value;
+        }
+    }
+    
+    private async Task OnInputChanged(ChangeEventArgs e)
+    {
+        var newValue = e.Value?.ToString() ?? string.Empty;
+        InputValue = newValue;
+        
+        // Notify parent of raw value change
+        await ValueChanged.InvokeAsync(InputValue);
+        
+        // Debounce API calls
+        debounceTimer?.Dispose();
+        debounceTimer = new System.Threading.Timer(async _ =>
+        {
+            await InvokeAsync(async () =>
+            {
+                await FetchSuggestionsAsync();
+            });
+        }, null, 300, Timeout.Infinite);
+    }
+    
+    private void OnFocusChanged()
+    {
+        if (!string.IsNullOrWhiteSpace(InputValue) && suggestions.Count > 0)
+        {
+            showSuggestions = true;
+        }
+    }
+    
+    private async Task OnBlurChanged()
+    {
+        // Delay to allow click on suggestion
+        await Task.Delay(200);
+        showSuggestions = false;
+    }
+    
+    private async Task FetchSuggestionsAsync()
+    {
+        if (string.IsNullOrWhiteSpace(InputValue) || InputValue.Length < 2)
+        {
+            suggestions.Clear();
+            showSuggestions = false;
+            StateHasChanged();
+            return;
+        }
+        
+        try
+        {
+            isLoading = true;
+            suggestions = await MatchingService.FindMatchesAsync(InputValue, topK: 5);
+            showSuggestions = suggestions.Count > 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching suggestions: {ex.Message}");
+            suggestions.Clear();
+            showSuggestions = false;
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+    
+    private async Task SelectSuggestion(string title)
+    {
+        InputValue = title;
+        await ValueChanged.InvokeAsync(InputValue);
+        await OnStandardTitleSelected.InvokeAsync(title);
+        
+        suggestions.Clear();
+        showSuggestions = false;
+        StateHasChanged();
+    }
+    
+    public void Dispose()
+    {
+        debounceTimer?.Dispose();
+    }
+}

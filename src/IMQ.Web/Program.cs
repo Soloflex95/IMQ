@@ -15,6 +15,10 @@ builder.Services.AddSingleton<IQualificationService, InMemoryQualificationServic
 builder.Services.AddScoped<IComplianceCalculationService, ComplianceCalculationService>();
 builder.Services.AddHttpClient<IDocumentParsingService, OpenAIDocumentParsingService>();
 
+// Qualification matching service (AI-powered standardization)
+builder.Services.AddSingleton<IQualificationMatchingService, OpenAIQualificationMatchingService>();
+builder.Services.AddHttpClient<IQualificationMatchingService, OpenAIQualificationMatchingService>();
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
