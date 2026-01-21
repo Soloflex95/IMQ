@@ -36,10 +36,19 @@ public class OpenAIDocumentParsingService : IDocumentParsingService
         {
             _logger.LogInformation("Processing document: {FileName}", fileName);
 
-            var apiKey = _configuration["OpenAI:ApiKey"];
-            var model = _configuration["OpenAI:Model"] ?? "gpt-4o-mini";
+            // Try multiple configuration sources for Azure compatibility
+            var apiKey = _configuration["OpenAI:ApiKey"] 
+                      ?? _configuration["OpenAI__ApiKey"]
+                      ?? Environment.GetEnvironmentVariable("OpenAI__ApiKey")
+                      ?? Environment.GetEnvironmentVariable("OpenAI:ApiKey");
+            
+            var model = _configuration["OpenAI:Model"] 
+                     ?? _configuration["OpenAI__Model"]
+                     ?? Environment.GetEnvironmentVariable("OpenAI__Model")
+                     ?? Environment.GetEnvironmentVariable("OpenAI:Model")
+                     ?? "gpt-4o-mini";
 
-            _logger.LogInformation("API Key configured: {HasKey}, Model: {Model}", 
+            _logger.LogInformation("API Key configured: {HasKey}, Model: {Model}, Config sources checked: 4", 
                 !string.IsNullOrWhiteSpace(apiKey), model);
 
             if (string.IsNullOrWhiteSpace(apiKey))

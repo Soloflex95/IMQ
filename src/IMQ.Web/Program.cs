@@ -5,6 +5,7 @@ using IMQ.Core.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 // Load environment variables (required for Azure App Service container deployment)
+// This ensures OpenAI__ApiKey from Azure App Settings is available as OpenAI:ApiKey
 builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
