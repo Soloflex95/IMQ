@@ -62,11 +62,10 @@
 
 .bi {
     display: inline-block;
-    position: relative;
     width: 1.25rem;
     height: 1.25rem;
     margin-right: 0.75rem;
-    top: -1px;
+    vertical-align: middle;
     background-size: cover;
 }
 
@@ -103,8 +102,16 @@
         height: 3rem;
         display: flex;
         align-items: center;
-        line-height: 3rem;
+        line-height: normal;
         width: 100%;
+    }
+
+    .nav-item ::deep .nav-link .bi {
+        font-size: 1.25rem;
+        margin-right: 0.75rem;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
     }
 
 .nav-item ::deep a.active {
