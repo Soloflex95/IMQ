@@ -13,8 +13,8 @@ public interface IDocumentParsingService
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>List of extracted qualifications</returns>
     Task<DocumentParseResult> ParseDocumentAsync(
-        Stream fileStream, 
-        string fileName, 
+        Stream fileStream,
+        string fileName,
         CancellationToken cancellationToken = default);
 }
 
@@ -26,6 +26,7 @@ public class DocumentParseResult
     public bool Success { get; set; }
     public string? ErrorMessage { get; set; }
     public List<ExtractedQualification> Qualifications { get; set; } = new();
+    public string? RoleSummary { get; set; }
 }
 
 /// <summary>

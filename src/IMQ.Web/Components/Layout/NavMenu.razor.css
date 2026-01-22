@@ -1,18 +1,54 @@
 .navbar-toggler {
-    appearance: none;
-    cursor: pointer;
-    width: 3.5rem;
-    height: 2.5rem;
-    color: white;
-    position: absolute;
-    top: 0.5rem;
-    right: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") no-repeat center/1.75rem rgba(255, 255, 255, 0.1);
+    display: none;
 }
 
-.navbar-toggler:checked {
-    background-color: rgba(255, 255, 255, 0.5);
+.navbar-toggler-label {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    width: 3.5rem;
+    height: 3rem;
+    cursor: pointer;
+    z-index: 1002;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.375rem;
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: none;
+}
+
+.navbar-toggler-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2840, 40, 40, 0.85%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") no-repeat center/1.75rem;
+}
+
+.navbar-toggler:checked ~ .navbar-toggler-label {
+    background-color: rgba(240, 240, 240, 0.95);
+}
+
+@media (max-width: 640.98px) {
+    .navbar-toggler-label {
+        display: block;
+    }
+    
+    .top-row {
+        padding-left: 4.5rem;
+    }
+
+    .navbar-toggler:checked ~ .nav-scrollable {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 250px;
+        height: 100vh;
+        background: linear-gradient(135deg, #2d1b4e 0%, #1a0f2e 100%);
+        z-index: 99;
+        overflow-y: auto;
+        display: block;
+        padding-top: 4.5rem;
+    }
 }
 
 .top-row {
@@ -85,6 +121,21 @@
     display: none;
 }
 
+.nav-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 98;
+}
+
+.navbar-toggler:checked ~ .nav-backdrop {
+    display: block;
+}
+
 .navbar-toggler:checked ~ .nav-scrollable {
     display: block;
 }
@@ -95,10 +146,7 @@
     }
 
     .nav-scrollable {
-        /* Never collapse the sidebar for wide screens */
         display: block;
-
-        /* Allow sidebar to scroll for tall menus */
         height: calc(100vh - 3.5rem);
         overflow-y: auto;
     }

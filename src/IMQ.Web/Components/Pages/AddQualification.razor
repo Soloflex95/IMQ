@@ -1,5 +1,6 @@
 @using IMQ.Web.Models
 @using IMQ.Web.Services
+@using IMQ.Web.Components.Shared
 @page "/qualifications/add"
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
@@ -37,15 +38,13 @@
                             </div>
                         }
 
-                        <!-- Qualification Title -->
-                        <div class="mb-3">
-                            <label for="title" class="form-label">
-                                Qualification Title <span class="text-danger">*</span>
-                            </label>
-                            <InputText id="title" class="form-control" @bind-Value="model.Title" 
-                                       placeholder="e.g., Aseptic Technique" />
-                            <ValidationMessage For="@(() => model.Title)" />
-                        </div>
+                        <!-- Qualification Title with AI Autocomplete -->
+                        <QualificationAutocomplete 
+                            Label="Qualification Title"
+                            Placeholder="Start typing (e.g., Aseptic Technique, GMP Compliance)..."
+                            HelpText="AI-powered suggestions will help standardize your entry"
+                            @bind-Value="model.Title"
+                            OnStandardTitleSelected="OnTitleSelected" />
 
                         <!-- Qualification Type -->
                         <div class="mb-3">
@@ -179,6 +178,12 @@
     private AddQualificationModel model = new();
     private bool isSaving = false;
     private string? errorMessage;
+
+    private void OnTitleSelected(string standardTitle)
+    {
+        // User selected a standardized title from AI suggestions
+        Console.WriteLine($"Standardized title selected: {standardTitle}");
+    }
 
     protected override void OnInitialized()
     {

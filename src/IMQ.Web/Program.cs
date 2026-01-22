@@ -4,12 +4,20 @@ using IMQ.Core.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Load environment variables (required for Azure App Service container deployment)
+// This ensures OpenAI__ApiKey from Azure App Settings is available as OpenAI:ApiKey
+builder.Configuration.AddEnvironmentVariables();
+
 // Add services to the container.
 builder.Services.AddSingleton<IQualificationService, InMemoryQualificationService>();
 
-// Document parsing service
+// Document parsing service (OpenAI)
 builder.Services.AddScoped<IComplianceCalculationService, ComplianceCalculationService>();
-builder.Services.AddHttpClient<IDocumentParsingService, AzureOpenAIDocumentParsingService>();
+builder.Services.AddHttpClient<IDocumentParsingService, OpenAIDocumentParsingService>();
+
+// Qualification matching service (AI-powered standardization)
+builder.Services.AddSingleton<IQualificationMatchingService, OpenAIQualificationMatchingService>();
+builder.Services.AddHttpClient<IQualificationMatchingService, OpenAIQualificationMatchingService>();
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
