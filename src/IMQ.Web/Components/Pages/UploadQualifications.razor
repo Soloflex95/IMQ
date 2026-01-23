@@ -11,38 +11,7 @@
     <i class="bi bi-cloud-upload"></i> Upload Qualifications
 </h1>
 <p class="lead">Upload your CV or training certificates to automatically extract qualifications</p>
-
-@{
-    var apiKey = Configuration["OpenAI:ApiKey"];
-    var apiKeyAlt = Configuration["OpenAI__ApiKey"];
-    var allKeys = Configuration.AsEnumerable()
-        .Where(k => k.Key.Contains("OpenAI", StringComparison.OrdinalIgnoreCase))
-        .ToList();
-    var hasApiKey = !string.IsNullOrWhiteSpace(apiKey);
-}
-
-@if (!hasApiKey)
-{
-    <div class="alert alert-warning">
-        <i class="bi bi-exclamation-triangle"></i> <strong>Debug Mode:</strong> OpenAI API key not configured. Using mock data. 
-        <br/><small>Configuration check:</small>
-        <ul class="mb-0 mt-2">
-            <li><code>OpenAI:ApiKey</code> = @(string.IsNullOrWhiteSpace(apiKey) ? "NOT FOUND" : $"FOUND ({apiKey.Length} chars)")</li>
-            <li><code>OpenAI__ApiKey</code> = @(string.IsNullOrWhiteSpace(apiKeyAlt) ? "NOT FOUND" : $"FOUND ({apiKeyAlt.Length} chars)")</li>
-            <li>All OpenAI config keys found: @allKeys.Count</li>
-            @foreach (var key in allKeys)
-            {
-                <li><code>@key.Key</code> = @(string.IsNullOrWhiteSpace(key.Value) ? "empty" : $"{key.Value.Length} chars")</li>
-            }
-        </ul>
-    </div>
-}
-else
-{
-    <div class="alert alert-success">
-        <i class="bi bi-check-circle"></i> <strong>AI Enabled:</strong> OpenAI API configured (key length: @apiKey.Length characters)
-    </div>
-}
+<p class="text-muted mb-4">Save time, reduce manual entry, and keep your qualifications profile audit-ready.</p>
 
 <!-- How It Works Section - Moved to top for better hierarchy -->
 <div class="row mb-4">
@@ -110,8 +79,14 @@ else
                         <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
                             <span class="visually-hidden">Processing...</span>
                         </div>
-                        <h5>Processing your document...</h5>
-                        <p class="text-muted">Extracting qualifications using AI</p>
+                        <h5 class="mb-2">@processingMessage</h5>
+                        <div class="progress mx-auto mb-3" style="width: 60%; height: 8px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
+                                 role="progressbar" 
+                                 style="width: @(processingProgress)%">
+                            </div>
+                        </div>
+                        <p class="text-muted small">@processingSubMessage</p>
                     </div>
                 }
                 else if (parseResult != null)
@@ -119,7 +94,7 @@ else
                     @if (parseResult.Success)
                     {
                         <div class="alert alert-success">
-                            <i class="bi bi-check-circle"></i> Successfully extracted @parseResult.Qualifications.Count qualification(s)
+                            <i class="bi bi-check-circle-fill"></i> <strong>Qualifications extracted successfully!</strong> Ready to review and save.
                         </div>
 
                         @if (!string.IsNullOrWhiteSpace(parseResult.RoleSummary))
@@ -244,8 +219,9 @@ else
 
                 @if (!string.IsNullOrWhiteSpace(errorMessage))
                 {
-                    <div class="alert alert-warning mt-3">
-                        <i class="bi bi-exclamation-circle"></i> @errorMessage
+                    <div class="alert alert-danger mt-3">
+                        <i class="bi bi-x-circle-fill"></i> <strong>Something went wrong while processing.</strong> @errorMessage
+                        <br /><small>Please try again or <a href="/qualifications/add" class="alert-link">enter qualifications manually</a>.</small>
                     </div>
                 }
             </div>
@@ -288,6 +264,11 @@ else
     private IBrowserFile? selectedFile;
     private string? selectedFileName;
     private byte[]? fileContent;
+    
+    // Progressive messaging state
+    private string processingMessage = "Analyzing Document";
+    private string processingSubMessage = "Preparing to process...";
+    private int processingProgress = 0;
 
     private void LoadFile(InputFileChangeEventArgs e)
     {
@@ -323,17 +304,23 @@ else
         isProcessing = true;
         errorMessage = null;
 
+        // Start visual progress updates in background
+        var progressTask = UpdateProgressMessages();
+
         try
         {
-            // Read file into byte array first
+            // Read file into memory
             using var ms = new MemoryStream();
             using var stream = selectedFile.OpenReadStream(MaxFileSize);
             await stream.CopyToAsync(ms);
             fileContent = ms.ToArray();
             
-            // Now process from byte array
+            // Process from byte array
             using var contentStream = new MemoryStream(fileContent);
             parseResult = await DocumentParsingService.ParseDocumentAsync(contentStream, selectedFile.Name);
+            
+            // Wait for progress animation to complete
+            await progressTask;
         }
         catch (Exception ex)
         {
@@ -351,6 +338,30 @@ else
         parseResult = null;
         errorMessage = null;
         StateHasChanged();
+    }
+
+    private async Task UpdateProgressMessages()
+    {
+        // Stage 1: Analyzing Document
+        processingProgress = 33;
+        processingMessage = "Analyzing Document";
+        processingSubMessage = "Identifying document type and structure";
+        StateHasChanged();
+        await Task.Delay(1500);
+        
+        // Stage 2: Extracting Qualifications
+        processingProgress = 66;
+        processingMessage = "Extracting Qualifications";
+        processingSubMessage = "Parsing skills, certifications, and training records";
+        StateHasChanged();
+        await Task.Delay(1500);
+        
+        // Stage 3: Verifying Results
+        processingProgress = 100;
+        processingMessage = "Verifying Results";
+        processingSubMessage = "Finalizing extracted data";
+        StateHasChanged();
+        await Task.Delay(800);
     }
 
     private string GetExpiryClass(int daysUntilExpiry)
