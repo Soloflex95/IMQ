@@ -150,15 +150,24 @@
             <div class="card-body">
                 <div class="list-group">
                     <div class="list-group-item">
-                        <small class="text-muted"><i class="bi bi-clipboard-check"></i> 2h ago</small>
+                        <small class="text-muted">
+                            <i class="bi bi-clipboard-check"></i> 2h ago 
+                            <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DateTime.UtcNow.AddHours(-2))</span>
+                        </small>
                         <p class="mb-0">Jane Doe assessed for Quality Specialist - Qualified</p>
                     </div>
                     <div class="list-group-item">
-                        <small class="text-muted"><i class="bi bi-check-circle"></i> 5h ago</small>
+                        <small class="text-muted">
+                            <i class="bi bi-check-circle"></i> 5h ago 
+                            <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DateTime.UtcNow.AddHours(-5))</span>
+                        </small>
                         <p class="mb-0">Override approved for Mike Johnson - QA Lead</p>
                     </div>
                     <div class="list-group-item">
-                        <small class="text-muted"><i class="bi bi-file-earmark-arrow-up"></i> 1d ago</small>
+                        <small class="text-muted">
+                            <i class="bi bi-file-earmark-arrow-up"></i> 1d ago 
+                            <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DateTime.UtcNow.AddDays(-1))</span>
+                        </small>
                         <p class="mb-0">New CV uploaded and parsed successfully</p>
                     </div>
                 </div>
@@ -189,5 +198,43 @@
     private void ShowComplianceCheckPlaceholder()
     {
         Navigation.NavigateTo("/compliance-check");
+    }
+
+    private string GetAbsoluteTimestamp(DateTime utcTime)
+    {
+        // Convert UTC to local time
+        var localTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, TimeZoneInfo.Local);
+        
+        // Get time zone abbreviation
+        var timeZone = TimeZoneInfo.Local;
+        var isDaylightSaving = timeZone.IsDaylightSavingTime(localTime);
+        var tzAbbreviation = isDaylightSaving ? timeZone.DaylightName : timeZone.StandardName;
+        
+        // Simplify common time zones
+        if (tzAbbreviation.Contains("Eastern"))
+            tzAbbreviation = isDaylightSaving ? "EDT" : "EST";
+        else if (tzAbbreviation.Contains("Central"))
+            tzAbbreviation = isDaylightSaving ? "CDT" : "CST";
+        else if (tzAbbreviation.Contains("Mountain"))
+            tzAbbreviation = isDaylightSaving ? "MDT" : "MST";
+        else if (tzAbbreviation.Contains("Pacific"))
+            tzAbbreviation = isDaylightSaving ? "PDT" : "PST";
+        else if (timeZone.Id == "UTC")
+            tzAbbreviation = "UTC";
+        else
+            tzAbbreviation = timeZone.GetUtcOffset(localTime).ToString(@"'UTC'zzz");
+        
+        // Format: "3:45 PM EDT" or "Jul 23, 9:12 AM UTC"
+        var today = DateTime.Today;
+        if (localTime.Date == today)
+        {
+            // Same day: show time only
+            return $"{localTime:h:mm tt} {tzAbbreviation}";
+        }
+        else
+        {
+            // Different day: show date and time
+            return $"{localTime:MMM d, h:mm tt} {tzAbbreviation}";
+        }
     }
 }

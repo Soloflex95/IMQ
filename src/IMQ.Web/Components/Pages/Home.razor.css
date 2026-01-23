@@ -30,3 +30,9 @@
     background-color: #fff3cd;
     box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
 }
+
+.timestamp-absolute {
+    font-size: 0.85em;
+    color: #6c757d;
+    opacity: 0.8;
+}
