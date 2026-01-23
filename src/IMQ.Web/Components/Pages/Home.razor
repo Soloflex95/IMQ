@@ -145,30 +145,65 @@
     <div class="col-md-6 mb-3">
         <div class="card h-100">
             <div class="card-header bg-secondary text-white">
-                <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Activity</h5>
+                <h5 class="mb-0"><i class="bi bi-lightning-charge-fill"></i> System Updates (AI + Activity)</h5>
             </div>
             <div class="card-body">
-                <div class="list-group">
-                    <div class="list-group-item">
-                        <small class="text-muted">
-                            <i class="bi bi-clipboard-check"></i> 2h ago 
-                            <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DateTime.UtcNow.AddHours(-2))</span>
-                        </small>
-                        <p class="mb-0">Jane Doe assessed for Quality Specialist - Qualified</p>
+                <!-- AI-Generated Recommendations Section -->
+                <div class="ai-recommendations mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0">
+                            <i class="bi bi-brain"></i> Recommended Actions (AI)
+                        </h6>
+                        <button class="btn btn-sm btn-outline-secondary" disabled title="Placeholder - not yet functional">
+                            <i class="bi bi-arrow-clockwise"></i> Refresh
+                        </button>
                     </div>
-                    <div class="list-group-item">
-                        <small class="text-muted">
-                            <i class="bi bi-check-circle"></i> 5h ago 
-                            <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DateTime.UtcNow.AddHours(-5))</span>
-                        </small>
-                        <p class="mb-0">Override approved for Mike Johnson - QA Lead</p>
-                    </div>
-                    <div class="list-group-item">
-                        <small class="text-muted">
-                            <i class="bi bi-file-earmark-arrow-up"></i> 1d ago 
-                            <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DateTime.UtcNow.AddDays(-1))</span>
-                        </small>
-                        <p class="mb-0">New CV uploaded and parsed successfully</p>
+                    <small class="text-muted d-block mb-2" title="These recommendations are based on recent user activity and qualification data.">
+                        <i class="bi bi-brain"></i> AI-Generated | Last Updated: @DateTime.Now.ToString("h:mm tt")
+                    </small>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="bi bi-exclamation-triangle-fill text-warning"></i> 
+                            <strong>3</strong> workers lack current job assignments
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-flag-fill text-info"></i> 
+                            <strong>2</strong> assessments flagged for override review
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-calendar-x-fill text-danger"></i> 
+                            <strong>1</strong> cert expiring in next 7 days (Mike J.)
+                        </li>
+                    </ul>
+                </div>
+
+                <hr class="my-3" />
+
+                <!-- Recent Activity Section -->
+                <div class="recent-activity">
+                    <h6 class="mb-3"><i class="bi bi-clock-history"></i> Recent Activity</h6>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item px-0">
+                            <small class="text-muted">
+                                <i class="bi bi-clipboard-check"></i> 2h ago 
+                                <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DateTime.UtcNow.AddHours(-2))</span>
+                            </small>
+                            <p class="mb-0">Jane Doe assessed for Quality Specialist - Qualified</p>
+                        </div>
+                        <div class="list-group-item px-0">
+                            <small class="text-muted">
+                                <i class="bi bi-check-circle"></i> 5h ago 
+                                <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DateTime.UtcNow.AddHours(-5))</span>
+                            </small>
+                            <p class="mb-0">Override approved for Mike Johnson - QA Lead</p>
+                        </div>
+                        <div class="list-group-item px-0">
+                            <small class="text-muted">
+                                <i class="bi bi-file-earmark-arrow-up"></i> 1d ago 
+                                <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DateTime.UtcNow.AddDays(-1))</span>
+                            </small>
+                            <p class="mb-0">New CV uploaded and parsed successfully</p>
+                        </div>
                     </div>
                 </div>
             </div>
