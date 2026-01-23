@@ -257,7 +257,13 @@
         else if (timeZone.Id == "UTC")
             tzAbbreviation = "UTC";
         else
-            tzAbbreviation = timeZone.GetUtcOffset(localTime).ToString(@"'UTC'zzz");
+        {
+            // Format UTC offset for other time zones
+            var offset = timeZone.GetUtcOffset(localTime);
+            var sign = offset >= TimeSpan.Zero ? "+" : "-";
+            var hours = Math.Abs(offset.Hours);
+            tzAbbreviation = $"UTC{sign}{hours}";
+        }
         
         // Format: "3:45 PM EDT" or "Jul 23, 9:12 AM UTC"
         var today = DateTime.Today;
