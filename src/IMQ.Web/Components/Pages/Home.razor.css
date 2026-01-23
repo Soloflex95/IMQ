@@ -18,3 +18,15 @@
     transform: translateY(-5px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
+
+.compliance-alert {
+    max-height: 40px;
+    padding: 0.5rem 1rem;
+    border-left: 4px solid #ffc107;
+    transition: all 0.2s ease;
+}
+
+.compliance-alert:hover {
+    background-color: #fff3cd;
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
