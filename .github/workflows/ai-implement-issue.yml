@@ -133,9 +133,7 @@ jobs:
         if: env.HAS_CHANGES == 'true'
         run: |
           if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "AI: ${{ env.COMMIT_MESSAGE }}
-
-Fixes #${{ github.event.issue.number }}"
+            git commit -m "AI: ${{ env.COMMIT_MESSAGE }} - Fixes #${{ github.event.issue.number }}"
             git push origin ${{ env.BRANCH_NAME }}
             echo "CHANGES_COMMITTED=true" >> $GITHUB_ENV
           fi
