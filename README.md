@@ -238,3 +238,5 @@ Proprietary -  2025 2030 Software Solutions. All rights reserved.
 **Need Help?** See `.github/copilot-instructions.md` for detailed development guidance.
 
 *Last updated: January 20, 2026*
+
+<!-- Test commit to verify single workflow execution -->
