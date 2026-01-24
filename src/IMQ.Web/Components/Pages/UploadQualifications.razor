@@ -286,13 +286,6 @@
                 new object[] { "uploadZone", "fileInput" });
         }
     }
-    private string? selectedFileName;
-    private byte[]? fileContent;
-    
-    // Progressive messaging state
-    private string processingMessage = "Analyzing Document";
-    private string processingSubMessage = "Preparing to process...";
-    private int processingProgress = 0;
 
     private void LoadFile(InputFileChangeEventArgs e)
     {
