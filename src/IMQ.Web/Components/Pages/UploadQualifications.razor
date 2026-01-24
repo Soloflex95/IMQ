@@ -221,6 +221,13 @@
                                     Your data is processed securely and not stored permanently
                                 </small>
                             </div>
+                            
+                            <!-- LinkedIn Import Button (Mock) -->
+                            <div class="mt-4 pt-3 border-top">
+                                <button class="btn btn-outline-primary" @onclick="ShowLinkedInModal" title="Pre-populate qualifications from your LinkedIn profile — future feature">
+                                    <i class="bi bi-linkedin"></i> Import from LinkedIn <span class="badge bg-secondary ms-1">Coming Soon</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 }
@@ -264,6 +271,42 @@
     </div>
 </div>
 
+<!-- LinkedIn Import Modal -->
+@if (showLinkedInModal)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-linkedin text-primary"></i> LinkedIn Integration
+                    </h5>
+                    <button type="button" class="btn-close" @onclick="CloseLinkedInModal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info mb-3">
+                        <i class="bi bi-info-circle"></i> <strong>Prototype Feature</strong>
+                    </div>
+                    <p>
+                        This feature is not yet available in the prototype. In a future release, IMQ will support linking to your LinkedIn profile to intelligently extract qualifications.
+                    </p>
+                    <p class="mb-0">
+                        <strong>Future capabilities will include:</strong>
+                    </p>
+                    <ul class="mt-2">
+                        <li>OAuth-based authentication with user consent</li>
+                        <li>AI-powered extraction of experience, certifications, and education</li>
+                        <li>Smart validation to ensure data accuracy and relevance</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseLinkedInModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 @code {
     private bool isProcessing = false;
     private string? errorMessage;
@@ -277,6 +320,9 @@
     private string processingMessage = "Analyzing Document";
     private string processingSubMessage = "Preparing to process...";
     private int processingProgress = 0;
+    
+    // LinkedIn modal state
+    private bool showLinkedInModal = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -292,6 +338,16 @@
         selectedFile = e.File;
         selectedFileName = e.File?.Name;
         errorMessage = null;
+    }
+
+    private void ShowLinkedInModal()
+    {
+        showLinkedInModal = true;
+    }
+
+    private void CloseLinkedInModal()
+    {
+        showLinkedInModal = false;
     }
 
     private async Task ProcessSelectedFile()
