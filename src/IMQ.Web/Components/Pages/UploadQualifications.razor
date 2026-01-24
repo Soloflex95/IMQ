@@ -11,38 +11,58 @@
     <i class="bi bi-cloud-upload"></i> Upload Qualifications
 </h1>
 <p class="lead">Upload your CV or training certificates to automatically extract qualifications</p>
+<p class="text-muted mb-4">Save time, reduce manual entry, and keep your qualifications profile audit-ready.</p>
 
-@{
-    var apiKey = Configuration["OpenAI:ApiKey"];
-    var apiKeyAlt = Configuration["OpenAI__ApiKey"];
-    var allKeys = Configuration.AsEnumerable()
-        .Where(k => k.Key.Contains("OpenAI", StringComparison.OrdinalIgnoreCase))
-        .ToList();
-    var hasApiKey = !string.IsNullOrWhiteSpace(apiKey);
-}
-
-@if (!hasApiKey)
-{
-    <div class="alert alert-warning">
-        <i class="bi bi-exclamation-triangle"></i> <strong>Debug Mode:</strong> OpenAI API key not configured. Using mock data. 
-        <br/><small>Configuration check:</small>
-        <ul class="mb-0 mt-2">
-            <li><code>OpenAI:ApiKey</code> = @(string.IsNullOrWhiteSpace(apiKey) ? "NOT FOUND" : $"FOUND ({apiKey.Length} chars)")</li>
-            <li><code>OpenAI__ApiKey</code> = @(string.IsNullOrWhiteSpace(apiKeyAlt) ? "NOT FOUND" : $"FOUND ({apiKeyAlt.Length} chars)")</li>
-            <li>All OpenAI config keys found: @allKeys.Count</li>
-            @foreach (var key in allKeys)
-            {
-                <li><code>@key.Key</code> = @(string.IsNullOrWhiteSpace(key.Value) ? "empty" : $"{key.Value.Length} chars")</li>
-            }
-        </ul>
+<!-- How It Works Section - Moved to top for better hierarchy -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card how-it-works-card border-primary shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0 fw-bold">
+                    <i class="bi bi-info-circle-fill"></i> How It Works
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 mb-3 text-center">
+                        <div class="step-icon mb-2">
+                            <i class="bi bi-file-earmark-arrow-up display-4 text-primary"></i>
+                        </div>
+                        <h6 class="fw-bold">1. Upload</h6>
+                        <small class="text-muted">Upload your CV or certificate</small>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3 text-center">
+                        <div class="step-icon mb-2">
+                            <i class="bi bi-robot display-4 text-primary"></i>
+                        </div>
+                        <h6 class="fw-bold">2. AI Parse</h6>
+                        <small class="text-muted">AI extracts qualifications automatically</small>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3 text-center">
+                        <div class="step-icon mb-2">
+                            <i class="bi bi-pencil-square display-4 text-primary"></i>
+                        </div>
+                        <h6 class="fw-bold">3. Review</h6>
+                        <small class="text-muted">Review and edit extracted data</small>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3 text-center">
+                        <div class="step-icon mb-2">
+                            <i class="bi bi-check-circle-fill display-4 text-success"></i>
+                        </div>
+                        <h6 class="fw-bold">4. Save</h6>
+                        <small class="text-muted">Save to your profile</small>
+                    </div>
+                </div>
+                <div class="alert alert-info mb-0 mt-3">
+                    <small>
+                        <i class="bi bi-shield-lock-fill"></i> <strong>Privacy:</strong> Documents are processed in real-time and not permanently stored. 
+                        Only the extracted qualification data is saved to your profile.
+                    </small>
+                </div>
+            </div>
+        </div>
     </div>
-}
-else
-{
-    <div class="alert alert-success">
-        <i class="bi bi-check-circle"></i> <strong>AI Enabled:</strong> OpenAI API configured (key length: @apiKey.Length characters)
-    </div>
-}
+</div>
 
 <div class="row mt-4">
     <div class="col-md-8">
@@ -59,8 +79,14 @@ else
                         <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
                             <span class="visually-hidden">Processing...</span>
                         </div>
-                        <h5>Processing your document...</h5>
-                        <p class="text-muted">Extracting qualifications using AI</p>
+                        <h5 class="mb-2">@processingMessage</h5>
+                        <div class="progress mx-auto mb-3" style="width: 60%; height: 8px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
+                                 role="progressbar" 
+                                 style="width: @(processingProgress)%">
+                            </div>
+                        </div>
+                        <p class="text-muted small">@processingSubMessage</p>
                     </div>
                 }
                 else if (parseResult != null)
@@ -68,7 +94,7 @@ else
                     @if (parseResult.Success)
                     {
                         <div class="alert alert-success">
-                            <i class="bi bi-check-circle"></i> Successfully extracted @parseResult.Qualifications.Count qualification(s)
+                            <i class="bi bi-check-circle-fill"></i> <strong>Qualifications extracted successfully!</strong> Ready to review and save.
                         </div>
 
                         @if (!string.IsNullOrWhiteSpace(parseResult.RoleSummary))
@@ -193,8 +219,9 @@ else
 
                 @if (!string.IsNullOrWhiteSpace(errorMessage))
                 {
-                    <div class="alert alert-warning mt-3">
-                        <i class="bi bi-exclamation-circle"></i> @errorMessage
+                    <div class="alert alert-danger mt-3">
+                        <i class="bi bi-x-circle-fill"></i> <strong>Something went wrong while processing.</strong> @errorMessage
+                        <br /><small>Please try again or <a href="/qualifications/add" class="alert-link">enter qualifications manually</a>.</small>
                     </div>
                 }
             </div>
@@ -202,41 +229,27 @@ else
     </div>
 
     <div class="col-md-4">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-info-circle"></i> How It Works
-                </h5>
+        <!-- Tips Section - Lighter, optional guidance -->
+        <div class="card tips-card border-0 shadow-sm">
+            <div class="card-header bg-light border-0">
+                <h6 class="mb-0 text-muted">
+                    <i class="bi bi-lightbulb text-warning"></i> Tips for Best Results
+                </h6>
             </div>
-            <div class="card-body">
-                <ol class="ps-3">
-                    <li class="mb-2">Upload your CV or training certificate</li>
-                    <li class="mb-2">AI extracts qualifications automatically</li>
-                    <li class="mb-2">Review and edit extracted data</li>
-                    <li class="mb-2">Save to your qualification profile</li>
-                </ol>
-
-                <div class="alert alert-info mt-3">
-                    <small>
-                        <strong>Privacy:</strong> Documents are processed in real-time and not permanently stored. 
-                        Only the extracted qualification data is saved to your profile.
-                    </small>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mt-3">
-            <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-lightbulb"></i> Tips
-                </h5>
-            </div>
-            <div class="card-body">
-                <ul class="ps-3 mb-0">
-                    <li class="mb-2">Ensure text is clearly readable</li>
-                    <li class="mb-2">Include certificate numbers when available</li>
-                    <li class="mb-2">Use high-quality scans</li>
-                    <li class="mb-2">One document at a time for best results</li>
+            <div class="card-body bg-light">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="bi bi-check2 text-success"></i> Ensure text is clearly readable
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check2 text-success"></i> Include certificate numbers when available
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check2 text-success"></i> Use high-quality scans
+                    </li>
+                    <li class="mb-0">
+                        <i class="bi bi-check2 text-success"></i> One document at a time for best results
+                    </li>
                 </ul>
             </div>
         </div>
@@ -251,6 +264,11 @@ else
     private IBrowserFile? selectedFile;
     private string? selectedFileName;
     private byte[]? fileContent;
+    
+    // Progressive messaging state
+    private string processingMessage = "Analyzing Document";
+    private string processingSubMessage = "Preparing to process...";
+    private int processingProgress = 0;
 
     private void LoadFile(InputFileChangeEventArgs e)
     {
@@ -286,17 +304,23 @@ else
         isProcessing = true;
         errorMessage = null;
 
+        // Start visual progress updates in background
+        var progressTask = UpdateProgressMessages();
+
         try
         {
-            // Read file into byte array first
+            // Read file into memory
             using var ms = new MemoryStream();
             using var stream = selectedFile.OpenReadStream(MaxFileSize);
             await stream.CopyToAsync(ms);
             fileContent = ms.ToArray();
             
-            // Now process from byte array
+            // Process from byte array
             using var contentStream = new MemoryStream(fileContent);
             parseResult = await DocumentParsingService.ParseDocumentAsync(contentStream, selectedFile.Name);
+            
+            // Wait for progress animation to complete
+            await progressTask;
         }
         catch (Exception ex)
         {
@@ -314,6 +338,30 @@ else
         parseResult = null;
         errorMessage = null;
         StateHasChanged();
+    }
+
+    private async Task UpdateProgressMessages()
+    {
+        // Stage 1: Analyzing Document
+        processingProgress = 33;
+        processingMessage = "Analyzing Document";
+        processingSubMessage = "Identifying document type and structure";
+        StateHasChanged();
+        await Task.Delay(1500);
+        
+        // Stage 2: Extracting Qualifications
+        processingProgress = 66;
+        processingMessage = "Extracting Qualifications";
+        processingSubMessage = "Parsing skills, certifications, and training records";
+        StateHasChanged();
+        await Task.Delay(1500);
+        
+        // Stage 3: Verifying Results
+        processingProgress = 100;
+        processingMessage = "Verifying Results";
+        processingSubMessage = "Finalizing extracted data";
+        StateHasChanged();
+        await Task.Delay(800);
     }
 
     private string GetExpiryClass(int daysUntilExpiry)
