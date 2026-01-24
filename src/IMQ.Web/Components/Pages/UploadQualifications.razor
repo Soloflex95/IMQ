@@ -1,8 +1,10 @@
 @page "/upload-qualifications"
 @using IMQ.Core.Interfaces
+@using Microsoft.JSInterop
 @inject IDocumentParsingService DocumentParsingService
 @inject NavigationManager Navigation
 @inject IConfiguration Configuration
+@inject IJSRuntime JSRuntime
 @rendermode InteractiveServer
 
 <PageTitle>Upload Qualifications - IMQ</PageTitle>
@@ -186,7 +188,7 @@
                 }
                 else
                 {
-                    <div class="upload-zone" @ondrop="HandleDrop" @ondrop:preventDefault @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave" @ondragover="HandleDragOver" @ondragover:preventDefault>
+                    <div id="uploadZone" class="upload-zone">
                         <div class="text-center py-5">
                             <i class="bi bi-cloud-arrow-up display-1 text-primary mb-3 cloud-animate"></i>
                             <h5>Upload your document</h5>
@@ -276,33 +278,27 @@
     private string processingSubMessage = "Preparing to process...";
     private int processingProgress = 0;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("fileUploadHelper.initialize",
+                new object[] { "uploadZone", "fileInput" });
+        }
+    }
+    private string? selectedFileName;
+    private byte[]? fileContent;
+    
+    // Progressive messaging state
+    private string processingMessage = "Analyzing Document";
+    private string processingSubMessage = "Preparing to process...";
+    private int processingProgress = 0;
+
     private void LoadFile(InputFileChangeEventArgs e)
     {
         selectedFile = e.File;
         selectedFileName = e.File?.Name;
         errorMessage = null;
-    }
-
-    private void HandleDragEnter(DragEventArgs e)
-    {
-        // Visual feedback handled by CSS hover state
-    }
-
-    private void HandleDragLeave(DragEventArgs e)
-    {
-        // Visual feedback handled by CSS hover state
-    }
-
-    private void HandleDragOver(DragEventArgs e)
-    {
-        // Prevent default to allow drop
-    }
-
-    private void HandleDrop(DragEventArgs e)
-    {
-        // Prevent browser from opening the file
-        // Note: Blazor InputFile doesn't support direct drag-drop file handling
-        // Users must use the Choose File button to select files
     }
 
     private async Task ProcessSelectedFile()
