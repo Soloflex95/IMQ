@@ -94,55 +94,111 @@
                         <p class="text-muted small">@processingSubMessage</p>
                     </div>
                 }
-                else if (parseResult != null)
+                else if (allQualifications.Any())
                 {
-                    @if (parseResult.Success)
-                    {
-                        <div class="alert alert-success">
-                            <i class="bi bi-check-circle-fill"></i> <strong>Qualifications extracted successfully!</strong> Ready to review and save.
-                        </div>
+                    <!-- AI Summary Panel -->
+                    <div class="alert alert-primary mb-4">
+                        <h6 class="alert-heading"><i class="bi bi-robot"></i> AI Extraction Summary</h6>
+                        <p class="mb-0">
+                            <strong>@allQualifications.Count</strong> qualification(s) extracted from <strong>@processedFiles.Count</strong> document(s).
+                            @if (GetFlaggedCount() > 0)
+                            {
+                                <span class="text-warning"><i class="bi bi-exclamation-triangle-fill"></i> @GetFlaggedCount() flagged for review.</span>
+                            }
+                            @if (GetIncompleteCount() > 0)
+                            {
+                                <span class="text-muted"><i class="bi bi-info-circle-fill"></i> @GetIncompleteCount() incomplete entry(ies).</span>
+                            }
+                        </p>
+                    </div>
 
-                        @if (!string.IsNullOrWhiteSpace(parseResult.RoleSummary))
-                        {
-                            <div class="card mb-4 border-primary">
-                                <div class="card-header bg-primary text-white">
-                                    <h6 class="mb-0">
-                                        <i class="bi bi-person-badge"></i> Recommended Roles in Health Sciences Studies
-                                    </h6>
-                                </div>
-                                <div class="card-body">
-                                    <p class="mb-0">@parseResult.RoleSummary</p>
+                    <!-- Processed Files List -->
+                    @if (processedFiles.Any())
+                    {
+                        <div class="card mb-4 border-info">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="bi bi-files"></i> Processed Documents</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach (var file in processedFiles)
+                                    {
+                                        <span class="badge bg-info text-dark fs-6 p-2">
+                                            <i class="bi bi-file-earmark-check"></i> @file
+                                        </span>
+                                    }
                                 </div>
                             </div>
-                        }
+                        </div>
+                    }
 
-                        <h5 class="mt-4 mb-3">Extracted Qualifications</h5>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Skill/Certification</th>
-                                        <th>Date Acquired</th>
-                                        <th>Expiration</th>
-                                        <th>Issuing Authority</th>
-                                        <th>Confidence</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var qual in parseResult.Qualifications)
-                                    {
-                                        <tr>
-                                            <td>
+                    @if (!string.IsNullOrWhiteSpace(parseResult?.RoleSummary))
+                    {
+                        <div class="card mb-4 border-primary">
+                            <div class="card-header bg-primary text-white">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-person-badge"></i> Recommended Roles in Health Sciences Studies
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">@parseResult.RoleSummary</p>
+                            </div>
+                        </div>
+                    }
+
+                    <h5 class="mt-4 mb-3">Extracted Qualifications <span class="badge bg-secondary">@allQualifications.Count</span></h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Skill/Certification</th>
+                                    <th>Date Acquired</th>
+                                    <th>Expiration</th>
+                                    <th>Issuing Authority</th>
+                                    <th>Confidence</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var qual in allQualifications)
+                                {
+                                    <tr class="@(qual.IsFlagged ? "table-warning" : "")">
+                                        <td>
+                                            @if (editingQualId == qual.Id)
+                                            {
+                                                <input type="text" class="form-control form-control-sm" @bind="qual.SkillName" />
+                                                @if (!string.IsNullOrWhiteSpace(qual.CertificateNumber))
+                                                {
+                                                    <input type="text" class="form-control form-control-sm mt-1" placeholder="Cert #" @bind="qual.CertificateNumber" />
+                                                }
+                                            }
+                                            else
+                                            {
                                                 <strong>@qual.SkillName</strong>
                                                 @if (!string.IsNullOrWhiteSpace(qual.CertificateNumber))
                                                 {
                                                     <br />
                                                     <small class="text-muted">Cert #: @qual.CertificateNumber</small>
                                                 }
-                                            </td>
-                                            <td>@(qual.DateAcquired?.ToString("MMM dd, yyyy") ?? "N/A")</td>
-                                            <td>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (editingQualId == qual.Id)
+                                            {
+                                                <input type="date" class="form-control form-control-sm" @bind="qual.DateAcquired" />
+                                            }
+                                            else
+                                            {
+                                                @(qual.DateAcquired?.ToString("MMM dd, yyyy") ?? "N/A")
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (editingQualId == qual.Id)
+                                            {
+                                                <input type="date" class="form-control form-control-sm" @bind="qual.ExpirationDate" />
+                                            }
+                                            else
+                                            {
                                                 @if (qual.ExpirationDate.HasValue)
                                                 {
                                                     var daysUntilExpiry = (qual.ExpirationDate.Value - DateTime.UtcNow).Days;
@@ -154,37 +210,107 @@
                                                 {
                                                     <span class="text-muted">No expiration</span>
                                                 }
-                                            </td>
-                                            <td>@(qual.IssuingAuthority ?? "N/A")</td>
-                                            <td>
-                                                <span class="badge bg-info">@((qual.ConfidenceScore * 100).ToString("F0"))%</span>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-sm btn-success" @onclick="() => SaveQualification(qual)">
-                                                    <i class="bi bi-check"></i> Save
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (editingQualId == qual.Id)
+                                            {
+                                                <input type="text" class="form-control form-control-sm" @bind="qual.IssuingAuthority" placeholder="Issuing Authority" />
+                                            }
+                                            else
+                                            {
+                                                @(qual.IssuingAuthority ?? "N/A")
+                                            }
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info">@((qual.ConfidenceScore * 100).ToString("F0"))%</span>
+                                            @if (qual.IsFlagged)
+                                            {
+                                                <br /><small class="text-warning"><i class="bi bi-flag-fill"></i> Review</small>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (editingQualId == qual.Id)
+                                            {
+                                                <button class="btn btn-sm btn-success me-1" @onclick="() => SaveEdit(qual)">
+                                                    <i class="bi bi-check-lg"></i>
                                                 </button>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                                                <button class="btn btn-sm btn-secondary" @onclick="CancelEdit">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-sm btn-outline-primary me-1" @onclick="() => StartEdit(qual)" title="Edit">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-success me-1" @onclick="() => SaveSingleQualification(qual)" title="Save">
+                                                    <i class="bi bi-check"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" @onclick="() => DiscardQualification(qual)" title="Discard">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
 
-                        <div class="mt-3">
-                            <button class="btn btn-primary" @onclick="ResetUpload">
-                                <i class="bi bi-arrow-repeat"></i> Upload Another Document
-                            </button>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="alert alert-danger">
-                            <i class="bi bi-exclamation-triangle"></i> @parseResult.ErrorMessage
-                        </div>
-                        <button class="btn btn-secondary" @onclick="ResetUpload">
-                            <i class="bi bi-arrow-repeat"></i> Try Again
+                    <div class="mt-3 d-flex gap-2">
+                        <button class="btn btn-primary" @onclick="ShowUploadZone">
+                            <i class="bi bi-plus-circle"></i> Upload Another Document
                         </button>
+                        <button class="btn btn-success" @onclick="SaveAllQualifications">
+                            <i class="bi bi-save"></i> Save All (@allQualifications.Count)
+                        </button>
+                        <button class="btn btn-outline-secondary" @onclick="ResetAll">
+                            <i class="bi bi-x-circle"></i> Reset All
+                        </button>
+                    </div>
+
+                    <!-- Show upload zone for adding another file -->
+                    @if (showUploadZone)
+                    {
+                        <div class="mt-4 border-top pt-4">
+                            <h6 class="mb-3"><i class="bi bi-plus-circle"></i> Add Another Document</h6>
+                            <div id="uploadZone2" class="upload-zone">
+                                <div class="text-center py-4">
+                                    <i class="bi bi-cloud-arrow-up display-4 text-primary mb-3"></i>
+                                    <p class="text-muted">Supported formats: PDF, DOCX, TXT</p>
+                                    
+                                    <div class="mt-3">
+                                        <label for="fileInput2" class="btn btn-primary btn-sm">
+                                            <i class="bi bi-upload"></i> Choose File
+                                        </label>
+                                        <InputFile id="fileInput2" OnChange="@LoadFile" class="d-none" accept=".txt,.pdf,.docx,.doc" />
+                                    </div>
+                                    <p class="text-muted mt-2 mb-0 small">Or drag your file here</p>
+                                    
+                                    @if (!string.IsNullOrEmpty(selectedFileName))
+                                    {
+                                        <div class="mt-3 alert alert-info">
+                                            <i class="bi bi-file-text"></i> Selected: <strong>@selectedFileName</strong>
+                                            <br/>
+                                            <button class="btn btn-success btn-sm mt-2" @onclick="ProcessSelectedFile">
+                                                <i class="bi bi-magic"></i> Extract Qualifications
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     }
+                }
+                else if (parseResult != null && !parseResult.Success)
+                {
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle"></i> @parseResult.ErrorMessage
+                    </div>
+                    <button class="btn btn-secondary" @onclick="ResetAll">
+                        <i class="bi bi-arrow-repeat"></i> Try Again
+                    </button>
                 }
                 else
                 {
@@ -316,6 +442,13 @@
     private string? selectedFileName;
     private byte[]? fileContent;
     
+    // Multi-file support
+    private List<EditableQualification> allQualifications = new();
+    private List<string> processedFiles = new();
+    private Guid? editingQualId = null;
+    private EditableQualification? editingQualBackup = null;
+    private bool showUploadZone = false;
+    
     // Progressive messaging state
     private string processingMessage = "Analyzing Document";
     private string processingSubMessage = "Preparing to process...";
@@ -323,6 +456,53 @@
     
     // LinkedIn modal state
     private bool showLinkedInModal = false;
+
+    // Editable qualification wrapper
+    public class EditableQualification
+    {
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public string SkillName { get; set; } = string.Empty;
+        public string? CertificateNumber { get; set; }
+        public DateTime? DateAcquired { get; set; }
+        public DateTime? ExpirationDate { get; set; }
+        public string? IssuingAuthority { get; set; }
+        public double ConfidenceScore { get; set; }
+        public bool IsFlagged { get; set; }
+
+        public static EditableQualification FromExtracted(ExtractedQualification extracted)
+        {
+            var editable = new EditableQualification
+            {
+                SkillName = extracted.SkillName,
+                CertificateNumber = extracted.CertificateNumber,
+                DateAcquired = extracted.DateAcquired,
+                ExpirationDate = extracted.ExpirationDate,
+                IssuingAuthority = extracted.IssuingAuthority,
+                ConfidenceScore = extracted.ConfidenceScore
+            };
+
+            // Flag for review if low confidence or missing key data
+            editable.IsFlagged = extracted.ConfidenceScore < 0.7 || 
+                                string.IsNullOrWhiteSpace(extracted.IssuingAuthority);
+
+            return editable;
+        }
+
+        public EditableQualification Clone()
+        {
+            return new EditableQualification
+            {
+                Id = this.Id,
+                SkillName = this.SkillName,
+                CertificateNumber = this.CertificateNumber,
+                DateAcquired = this.DateAcquired,
+                ExpirationDate = this.ExpirationDate,
+                IssuingAuthority = this.IssuingAuthority,
+                ConfidenceScore = this.ConfidenceScore,
+                IsFlagged = this.IsFlagged
+            };
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -394,6 +574,36 @@
             
             // Wait for progress animation to complete
             await progressTask;
+
+            // Add to accumulated qualifications (multi-file support)
+            if (parseResult != null && parseResult.Success && parseResult.Qualifications.Any())
+            {
+                var newQualifications = parseResult.Qualifications
+                    .Select(EditableQualification.FromExtracted)
+                    .ToList();
+
+                // Simple de-duplication: check for exact skill name matches
+                foreach (var newQual in newQualifications)
+                {
+                    var isDuplicate = allQualifications.Any(existing => 
+                        existing.SkillName.Equals(newQual.SkillName, StringComparison.OrdinalIgnoreCase));
+                    
+                    if (!isDuplicate)
+                    {
+                        allQualifications.Add(newQual);
+                    }
+                }
+
+                // Track processed file
+                if (!processedFiles.Contains(selectedFile.Name))
+                {
+                    processedFiles.Add(selectedFile.Name);
+                }
+
+                // Reset upload for next file
+                selectedFile = null;
+                selectedFileName = null;
+            }
         }
         catch (Exception ex)
         {
@@ -406,11 +616,79 @@
         }
     }
 
-    private void ResetUpload()
+    private void ShowUploadZone()
     {
-        parseResult = null;
+        showUploadZone = !showUploadZone; // Toggle
+        selectedFile = null;
+        selectedFileName = null;
         errorMessage = null;
         StateHasChanged();
+    }
+
+    private void ResetAll()
+    {
+        parseResult = null;
+        allQualifications.Clear();
+        processedFiles.Clear();
+        selectedFile = null;
+        selectedFileName = null;
+        errorMessage = null;
+        StateHasChanged();
+    }
+
+    private void StartEdit(EditableQualification qual)
+    {
+        editingQualId = qual.Id;
+        editingQualBackup = qual.Clone();
+    }
+
+    private void SaveEdit(EditableQualification qual)
+    {
+        editingQualId = null;
+        editingQualBackup = null;
+    }
+
+    private void CancelEdit()
+    {
+        if (editingQualId.HasValue && editingQualBackup != null)
+        {
+            var qual = allQualifications.FirstOrDefault(q => q.Id == editingQualId.Value);
+            if (qual != null)
+            {
+                var index = allQualifications.IndexOf(qual);
+                allQualifications[index] = editingQualBackup;
+            }
+        }
+        editingQualId = null;
+        editingQualBackup = null;
+    }
+
+    private void DiscardQualification(EditableQualification qual)
+    {
+        allQualifications.Remove(qual);
+    }
+
+    private void SaveAllQualifications()
+    {
+        errorMessage = $"Saving {allQualifications.Count} qualification(s) (database integration pending)";
+        StateHasChanged();
+    }
+
+    private void SaveSingleQualification(EditableQualification qual)
+    {
+        errorMessage = $"Qualification '{qual.SkillName}' will be saved (database integration pending)";
+        StateHasChanged();
+    }
+
+    private int GetFlaggedCount()
+    {
+        return allQualifications.Count(q => q.IsFlagged);
+    }
+
+    private int GetIncompleteCount()
+    {
+        return allQualifications.Count(q => string.IsNullOrWhiteSpace(q.IssuingAuthority) || 
+                                           (!q.DateAcquired.HasValue && !q.ExpirationDate.HasValue));
     }
 
     private async Task UpdateProgressMessages()
