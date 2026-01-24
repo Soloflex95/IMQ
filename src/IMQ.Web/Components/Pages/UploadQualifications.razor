@@ -186,7 +186,7 @@
                 }
                 else
                 {
-                    <div class="upload-zone" @ondrop="HandleDrop" @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave" @ondragover:preventDefault>
+                    <div class="upload-zone" @ondrop="HandleDrop" @ondrop:preventDefault @ondragenter="HandleDragEnter" @ondragleave="HandleDragLeave" @ondragover="HandleDragOver" @ondragover:preventDefault>
                         <div class="text-center py-5">
                             <i class="bi bi-cloud-arrow-up display-1 text-primary mb-3 cloud-animate"></i>
                             <h5>Upload your document</h5>
@@ -283,21 +283,26 @@
         errorMessage = null;
     }
 
-    private void HandleDragEnter()
+    private void HandleDragEnter(DragEventArgs e)
     {
         // Visual feedback handled by CSS hover state
     }
 
-    private void HandleDragLeave()
+    private void HandleDragLeave(DragEventArgs e)
     {
         // Visual feedback handled by CSS hover state
     }
 
-    private async Task HandleDrop(Microsoft.AspNetCore.Components.Web.DragEventArgs e)
+    private void HandleDragOver(DragEventArgs e)
     {
-        // Note: Blazor InputFile doesn't support direct drag-drop file handling in the same way
-        // as standard HTML. This provides the event hooks for future enhancement.
-        // For now, users must use the Choose File button.
+        // Prevent default to allow drop
+    }
+
+    private void HandleDrop(DragEventArgs e)
+    {
+        // Prevent browser from opening the file
+        // Note: Blazor InputFile doesn't support direct drag-drop file handling
+        // Users must use the Choose File button to select files
     }
 
     private async Task ProcessSelectedFile()
