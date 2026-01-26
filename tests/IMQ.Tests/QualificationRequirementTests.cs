@@ -18,7 +18,7 @@ public class QualificationRequirementTests
             RequirementType = RequirementType.Education,
             RequirementLevel = RequirementLevel.Required,
             Source = "Test Source",
-            ApprovalStatus = RequirementApprovalStatus.Draft,
+            RequirementApprovalStatus = RequirementApprovalStatus.Draft,
             ApprovedBy = "Test Approver",
             ApprovedAt = DateTime.UtcNow,
             LastReviewed = DateTime.UtcNow,
@@ -31,7 +31,7 @@ public class QualificationRequirementTests
         Assert.Equal("Test Requirement", req.Name);
         Assert.Equal(RequirementType.Education, req.RequirementType);
         Assert.Equal(RequirementLevel.Required, req.RequirementLevel);
-        Assert.Equal(RequirementApprovalStatus.Draft, req.ApprovalStatus);
+        Assert.Equal(RequirementApprovalStatus.Draft, req.RequirementApprovalStatus);
     }
 
     [Fact]

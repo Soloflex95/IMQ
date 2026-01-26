@@ -12,7 +12,7 @@ public class QualificationRequirement : BaseEntity
     public RequirementType RequirementType { get; set; }
     public RequirementLevel RequirementLevel { get; set; }
     public string Source { get; set; } = string.Empty;
-    public  RequirementApprovalStatus ApprovalStatus { get; set; }
+    public RequirementApprovalStatus RequirementApprovalStatus { get; set; }
     public string ApprovedBy { get; set; } = string.Empty;
     public DateTime ApprovedAt { get; set; }
     public DateTime? LastReviewed { get; set; }
