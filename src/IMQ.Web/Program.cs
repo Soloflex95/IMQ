@@ -1,8 +1,19 @@
 using IMQ.Web.Components;
 using IMQ.Web.Services;
 using IMQ.Core.Interfaces;
+using Microsoft.AspNetCore.Components;
+
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped(sp =>
+{
+    var navigationManager = sp.GetRequiredService<NavigationManager>();
+    return new HttpClient
+    {
+        BaseAddress = new Uri(navigationManager.BaseUri)
+    };
+});
+
 
 // Load environment variables (required for Azure App Service container deployment)
 // This ensures OpenAI__ApiKey from Azure App Settings is available as OpenAI:ApiKey
@@ -16,11 +27,28 @@ builder.Services.AddScoped<IComplianceCalculationService, ComplianceCalculationS
 builder.Services.AddHttpClient<IDocumentParsingService, OpenAIDocumentParsingService>();
 
 // Qualification matching service (AI-powered standardization)
-builder.Services.AddSingleton<IQualificationMatchingService, OpenAIQualificationMatchingService>();
 builder.Services.AddHttpClient<IQualificationMatchingService, OpenAIQualificationMatchingService>();
+builder.Services.AddHttpClient("IMQ.Api", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:5118/");
+});
+
+builder.Services.AddHttpClient("IMQApi", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5118/");
+});
+builder.Services.AddHttpClient("IMQApi", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5091");
+});
+
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddHttpClient("ApiClient", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:5118/");
+});
 
 var app = builder.Build();
 

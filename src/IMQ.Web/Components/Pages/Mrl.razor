@@ -1,0 +1,77 @@
+@using IMQ.Core.Entities
+@inject IHttpClientFactory HttpClientFactory
+
+
+@page "/mrl"
+@code {
+    private IReadOnlyCollection<QualificationRequirement>? _requirements;
+    private bool _isLoading = true;
+    private string? _error;
+    protected override async Task OnInitializedAsync()
+{
+    try
+    {
+        var client = HttpClientFactory.CreateClient("IMQApi");
+
+_requirements = await client.GetFromJsonAsync<IReadOnlyCollection<QualificationRequirement>>(
+    "/api/mrl"
+);
+
+    }
+    catch (Exception ex)
+    {
+        _error = ex.Message;
+    }
+    finally
+    {
+        _isLoading = false;
+    }
+}
+
+
+
+}
+
+<h3>Master Requirements List</h3>
+
+<p>
+    <em>Read-only demo view of the Master Requirements List.</em>
+</p>
+
+<hr />
+
+@if (_isLoading)
+{
+    <p><em>Loading Master Requirements…</em></p>
+}
+else if (!string.IsNullOrEmpty(_error))
+{
+    <p class="text-danger">
+        Error loading requirements: @_error
+    </p>
+}
+else if (_requirements == null || !_requirements.Any())
+{
+    <p><em>No requirements found.</em></p>
+}
+else
+{
+    <p>
+        <strong>@_requirements.Count()</strong> requirements loaded.
+    </p>
+
+    <ul>
+        @foreach (var req in _requirements)
+        {
+            <li>
+                <strong>@req.Name</strong>
+                <br />
+                <small>
+                    @req.RequirementType —
+                    @req.RequirementLevel —
+                    @req.RequirementApprovalStatus
+                </small>
+            </li>
+        }
+    </ul>
+}
