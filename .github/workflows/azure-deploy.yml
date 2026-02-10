@@ -38,14 +38,23 @@ jobs:
     - name: Run tests
       run: dotnet test --no-build --verbosity normal --configuration Release
       
-    - name: Publish application
+    - name: Publish Web application
       run: dotnet publish src/IMQ.Web/IMQ.Web.csproj -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-      
-    - name: Upload artifact for deployment
+
+    - name: Publish API application
+      run: dotnet publish src/IMQ.Api/IMQ.Api.csproj -c Release -o ./publish-api
+
+    - name: Upload web artifact for deployment
       uses: actions/upload-artifact@v4
       with:
         name: imq-webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+    - name: Upload api artifact for deployment
+      uses: actions/upload-artifact@v4
+      with:
+        name: imq-api
+        path: ./publish-api
 
   deploy-to-dev:
     runs-on: ubuntu-latest
@@ -56,18 +65,31 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     
     steps:
-    - name: Download artifact
+    - name: Download web artifact
       uses: actions/download-artifact@v4
       with:
         name: imq-webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-        
+
+    - name: Download api artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: imq-api
+        path: ./publish-api
+
     - name: Deploy to Azure Web App (Dev)
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+    - name: Deploy API to Azure App Service (Dev)
+      id: deploy-to-api
+      uses: azure/webapps-deploy@v2
+      with:
+        publish-profile: ${{ secrets.AZURE_API_PUBLISH_PROFILE_DEV }}
+        package: ./publish-api
 
   deploy-to-production:
     runs-on: ubuntu-latest

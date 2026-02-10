@@ -9,6 +9,18 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IMasterRequirementsReadService, InMemoryMasterRequirementsReadService>();
 
+// CORS: allow the Web app origin (configurable via ApiSettings:AllowedWebAppOrigin)
+var allowedWebAppOrigin = builder.Configuration["ApiSettings:AllowedWebAppOrigin"] ?? "https://imq-poc-webapp-dev.azurewebsites.net";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowWebApp", policy =>
+    {
+        policy.WithOrigins(allowedWebAppOrigin)
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 
 var app = builder.Build();
 
@@ -19,6 +31,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowWebApp");
 app.MapControllers();
 var summaries = new[]
 {
