@@ -1,12 +1,20 @@
 @using IMQ.Core.Entities
 @inject IHttpClientFactory HttpClientFactory
 
-
 @page "/mrl"
 @code {
     private IReadOnlyCollection<QualificationRequirement>? _requirements;
     private bool _isLoading = true;
     private string? _error;
+    private string? _selectedType;
+    private string? _selectedStatus;
+    private IEnumerable<QualificationRequirement> FilteredRequirements =>
+    (_requirements ?? Enumerable.Empty<QualificationRequirement>())
+        .Where(r =>
+            (string.IsNullOrEmpty(_selectedType) || r.RequirementType.ToString() == _selectedType) &&
+            (string.IsNullOrEmpty(_selectedStatus) || r.RequirementApprovalStatus.ToString() == _selectedStatus)
+        );
+
     protected override async Task OnInitializedAsync()
 {
     try
@@ -28,50 +36,95 @@ _requirements = await client.GetFromJsonAsync<IReadOnlyCollection<QualificationR
     }
 }
 
-
-
 }
 
-<h3>Master Requirements List</h3>
+<div class="mb-4">
+    <h3 class="mb-3">Master Requirements List</h3>
+    
+    <div class="alert alert-info mb-3" role="alert">
+        <strong>What is this?</strong>
+        <p class="mb-0 mt-2">
+            The Master Requirements List defines the approved, audit-ready expectations used across Jobs, Qualifications, and Assessments. 
+            It serves as a single source of truth, preventing inconsistencies and ensuring compliance across your organization.
+        </p>
+    </div>
+</div>
 
-<p>
-    <em>Read-only demo view of the Master Requirements List.</em>
-</p>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <span class="text-muted small">
+        Read-only view. Requirements are managed by authorized administrators.
+    </span>
+
+    <button class="btn btn-sm btn-outline-secondary" disabled>
+        + New Requirement
+    </button>
+</div>
 
 <hr />
 
 @if (_isLoading)
 {
-    <p><em>Loading Master Requirements…</em></p>
+    <div class="text-muted fst-italic">
+        Loading master requirements…
+    </div>
 }
 else if (!string.IsNullOrEmpty(_error))
 {
-    <p class="text-danger">
-        Error loading requirements: @_error
-    </p>
+    <div class="alert alert-danger">
+        <strong>Error loading requirements:</strong><br />
+        @_error
+    </div>
 }
 else if (_requirements == null || !_requirements.Any())
 {
-    <p><em>No requirements found.</em></p>
+    <div class="alert alert-secondary">
+        No requirements found.
+    </div>
 }
 else
 {
-    <p>
+    <div class="row mb-3">
+    <div class="col-md-4">
+        <label class="form-label">Requirement Type</label>
+        <select class="form-select" @bind="_selectedType">
+            <option value="">All</option>
+            @foreach (var type in _requirements.Select(r => r.RequirementType).Distinct())
+            {
+                <option value="@type">@type</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Approval Status</label>
+        <select class="form-select" @bind="_selectedStatus">
+            <option value="">All</option>
+            @foreach (var status in _requirements.Select(r => r.RequirementApprovalStatus).Distinct())
+            {
+                <option value="@status">@status</option>
+            }
+        </select>
+    </div>
+</div>
+
+    <p class="text-muted">
         <strong>@_requirements.Count()</strong> requirements loaded.
     </p>
 
-    <ul>
-        @foreach (var req in _requirements)
-        {
-            <li>
-                <strong>@req.Name</strong>
-                <br />
-                <small>
-                    @req.RequirementType —
-                    @req.RequirementLevel —
-                    @req.RequirementApprovalStatus
-                </small>
-            </li>
-        }
-    </ul>
+    <div class="list-group">
+    @foreach (var req in FilteredRequirements)
+    {
+        <div class="list-group-item">
+            <div class="fw-semibold">@req.Name</div>
+
+            <div class="small text-muted">
+                @req.RequirementType —
+                @req.RequirementLevel —
+                @req.RequirementApprovalStatus
+            </div>
+        </div>
+    }
+</div>
+
+
 }
