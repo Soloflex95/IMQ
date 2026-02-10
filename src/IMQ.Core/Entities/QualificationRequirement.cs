@@ -7,6 +7,11 @@ namespace IMQ.Core.Entities;
 /// </summary>
 public class QualificationRequirement : BaseEntity
 {
+    public QualificationRequirement()
+    {
+        ApprovedAt = DateTime.UtcNow;
+    }
+
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
     public RequirementType RequirementType { get; set; }
