@@ -39,7 +39,8 @@ builder.Services.AddHttpClient<IQualificationMatchingService, OpenAIQualificatio
 // IMQ API client (single, correct registration)
 builder.Services.AddHttpClient("IMQApi", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5091");
+    var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5091";
+    client.BaseAddress = new Uri(apiBaseUrl);
 });
 
 var app = builder.Build();
