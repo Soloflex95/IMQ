@@ -13,9 +13,9 @@
     private string? _selectedType;
     private string? _selectedStatus;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await Task.Run(() => LoadAllRequirements());
+        LoadAllRequirements();
     }
 
     private void LoadAllRequirements()
@@ -37,13 +37,13 @@
         }
     }
 
-    private async Task OnTypeFilterChanged(ChangeEventArgs e)
+    private void OnTypeFilterChanged(ChangeEventArgs e)
     {
         _selectedType = e.Value?.ToString();
         
         if (string.IsNullOrEmpty(_selectedType))
         {
-            await Task.Run(() => LoadAllRequirements());
+            LoadAllRequirements();
             return;
         }
 
@@ -54,7 +54,7 @@
         {
             if (Enum.TryParse<RequirementType>(_selectedType, out var type))
             {
-                _requirements = await Task.Run(() => MasterRequirementsService.GetByType(type));
+                _requirements = MasterRequirementsService.GetByType(type);
             }
         }
         catch (Exception ex)
@@ -67,13 +67,13 @@
         }
     }
 
-    private async Task OnStatusFilterChanged(ChangeEventArgs e)
+    private void OnStatusFilterChanged(ChangeEventArgs e)
     {
         _selectedStatus = e.Value?.ToString();
         
         if (string.IsNullOrEmpty(_selectedStatus))
         {
-            await Task.Run(() => LoadAllRequirements());
+            LoadAllRequirements();
             return;
         }
 
@@ -84,7 +84,7 @@
         {
             if (Enum.TryParse<RequirementApprovalStatus>(_selectedStatus, out var status))
             {
-                _requirements = await Task.Run(() => MasterRequirementsService.GetByApprovalStatus(status));
+                _requirements = MasterRequirementsService.GetByApprovalStatus(status);
             }
         }
         catch (Exception ex)
