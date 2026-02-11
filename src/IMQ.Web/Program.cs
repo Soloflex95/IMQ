@@ -29,6 +29,9 @@ builder.Configuration.AddEnvironmentVariables();
 // Add services to the container.
 builder.Services.AddSingleton<IQualificationService, InMemoryQualificationService>();
 
+// Master Requirements Service (in-memory for PoC)
+builder.Services.AddSingleton<IMQ.Core.Services.Read.IMasterRequirementsReadService, IMQ.Core.Services.Read.InMemoryMasterRequirementsReadService>();
+
 // Document parsing service (OpenAI)
 builder.Services.AddScoped<IComplianceCalculationService, ComplianceCalculationService>();
 builder.Services.AddHttpClient<IDocumentParsingService, OpenAIDocumentParsingService>();
@@ -36,7 +39,7 @@ builder.Services.AddHttpClient<IDocumentParsingService, OpenAIDocumentParsingSer
 // Qualification matching service (AI-powered standardization)
 builder.Services.AddHttpClient<IQualificationMatchingService, OpenAIQualificationMatchingService>();
 
-// IMQ API client (single, correct registration)
+// IMQ API client (single, correct registration) - kept for other potential API calls
 builder.Services.AddHttpClient("IMQApi", client =>
 {
     var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? "http://localhost:5091";
