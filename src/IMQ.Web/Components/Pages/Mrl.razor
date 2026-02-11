@@ -4,6 +4,8 @@
 @inject IMasterRequirementsReadService MasterRequirementsService
 
 @page "/mrl"
+@rendermode InteractiveServer
+
 @code {
     private IReadOnlyCollection<QualificationRequirement>? _requirements;
     private bool _isLoading = true;
