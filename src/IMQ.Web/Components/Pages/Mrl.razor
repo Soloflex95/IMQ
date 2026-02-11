@@ -8,34 +8,89 @@
     private string? _error;
     private string? _selectedType;
     private string? _selectedStatus;
-    private IEnumerable<QualificationRequirement> FilteredRequirements =>
-    (_requirements ?? Enumerable.Empty<QualificationRequirement>())
-        .Where(r =>
-            (string.IsNullOrEmpty(_selectedType) || r.RequirementType.ToString() == _selectedType) &&
-            (string.IsNullOrEmpty(_selectedStatus) || r.RequirementApprovalStatus.ToString() == _selectedStatus)
-        );
 
     protected override async Task OnInitializedAsync()
-{
-    try
     {
-        var client = HttpClientFactory.CreateClient("IMQApi");
-
-_requirements = await client.GetFromJsonAsync<IReadOnlyCollection<QualificationRequirement>>(
-    "/api/mrl"
-);
-
+        await LoadAllRequirementsAsync();
     }
-    catch (Exception ex)
+
+    private async Task LoadAllRequirementsAsync()
     {
-        _error = ex.Message;
+        _isLoading = true;
+        _error = null;
+        
+        try
+        {
+            var client = HttpClientFactory.CreateClient("IMQApi");
+            _requirements = await client.GetFromJsonAsync<IReadOnlyCollection<QualificationRequirement>>("/api/mrl");
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
     }
-    finally
-    {
-        _isLoading = false;
-    }
-}
 
+    private async Task OnTypeFilterChanged(ChangeEventArgs e)
+    {
+        _selectedType = e.Value?.ToString();
+        
+        if (string.IsNullOrEmpty(_selectedType))
+        {
+            await LoadAllRequirementsAsync();
+            return;
+        }
+
+        _isLoading = true;
+        _error = null;
+        
+        try
+        {
+            var client = HttpClientFactory.CreateClient("IMQApi");
+            _requirements = await client.GetFromJsonAsync<IReadOnlyCollection<QualificationRequirement>>(
+                $"/api/mrl/by-type/{_selectedType}");
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task OnStatusFilterChanged(ChangeEventArgs e)
+    {
+        _selectedStatus = e.Value?.ToString();
+        
+        if (string.IsNullOrEmpty(_selectedStatus))
+        {
+            await LoadAllRequirementsAsync();
+            return;
+        }
+
+        _isLoading = true;
+        _error = null;
+        
+        try
+        {
+            var client = HttpClientFactory.CreateClient("IMQApi");
+            _requirements = await client.GetFromJsonAsync<IReadOnlyCollection<QualificationRequirement>>(
+                $"/api/mrl/by-status/{_selectedStatus}");
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
 }
 
 <div class="mb-4">
@@ -84,47 +139,46 @@ else if (_requirements == null || !_requirements.Any())
 else
 {
     <div class="row mb-3">
-    <div class="col-md-4">
-        <label class="form-label">Requirement Type</label>
-        <select class="form-select" @bind="_selectedType">
-            <option value="">All</option>
-            @foreach (var type in _requirements.Select(r => r.RequirementType).Distinct())
-            {
-                <option value="@type">@type</option>
-            }
-        </select>
-    </div>
+        <div class="col-md-4">
+            <label class="form-label">Requirement Type</label>
+            <select class="form-select" value="@_selectedType" @onchange="OnTypeFilterChanged">
+                <option value="">Show All</option>
+                <option value="Education">Education</option>
+                <option value="Training">Training</option>
+                <option value="Experience">Experience</option>
+                <option value="Certification">Certification</option>
+            </select>
+        </div>
 
-    <div class="col-md-4">
-        <label class="form-label">Approval Status</label>
-        <select class="form-select" @bind="_selectedStatus">
-            <option value="">All</option>
-            @foreach (var status in _requirements.Select(r => r.RequirementApprovalStatus).Distinct())
-            {
-                <option value="@status">@status</option>
-            }
-        </select>
+        <div class="col-md-4">
+            <label class="form-label">Approval Status</label>
+            <select class="form-select" value="@_selectedStatus" @onchange="OnStatusFilterChanged">
+                <option value="">Show All</option>
+                <option value="Draft">Draft</option>
+                <option value="Approved">Approved</option>
+                <option value="Retired">Retired</option>
+            </select>
+        </div>
     </div>
-</div>
 
     <p class="text-muted">
-        <strong>@_requirements.Count()</strong> requirements loaded.
+        <strong>@_requirements.Count()</strong> requirement@(_requirements.Count() != 1 ? "s" : "") loaded.
     </p>
 
     <div class="list-group">
-    @foreach (var req in FilteredRequirements)
-    {
-        <div class="list-group-item">
-            <div class="fw-semibold">@req.Name</div>
+        @foreach (var req in _requirements)
+        {
+            <div class="list-group-item">
+                <div class="fw-semibold">@req.Name</div>
 
-            <div class="small text-muted">
-                @req.RequirementType —
-                @req.RequirementLevel —
-                @req.RequirementApprovalStatus
+                <div class="small text-muted">
+                    @req.RequirementType —
+                    @req.RequirementLevel —
+                    @req.RequirementApprovalStatus
+                </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
 
 
 }
