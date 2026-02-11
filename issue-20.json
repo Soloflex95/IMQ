@@ -1,14 +1,14 @@
 ﻿{
-    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3",
+    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/20",
     "repository_url":  "https://api.github.com/repos/Soloflex95/IMQ",
-    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/labels{/name}",
-    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/comments",
-    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/events",
-    "html_url":  "https://github.com/Soloflex95/IMQ/issues/3",
-    "id":  3813503093,
-    "node_id":  "I_kwDOQh91ws7jTXB1",
-    "number":  3,
-    "title":  "IMQ Dashboard \u003e \"24\" Qualified Workers. Link does not display 24 workers.",
+    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/20/labels{/name}",
+    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/20/comments",
+    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/20/events",
+    "html_url":  "https://github.com/Soloflex95/IMQ/issues/20",
+    "id":  3844906406,
+    "node_id":  "I_kwDOQh91ws7lLJ2m",
+    "number":  20,
+    "title":  "Enhance Recent Activity timestamps with absolute time and time zone",
     "user":  {
                  "login":  "seanwinz2030",
                  "id":  248097794,
@@ -41,9 +41,9 @@
                   ],
     "milestone":  null,
     "comments":  0,
-    "created_at":  "2026-01-14T14:40:54Z",
-    "updated_at":  "2026-01-20T19:29:53Z",
-    "closed_at":  "2026-01-20T19:29:53Z",
+    "created_at":  "2026-01-22T21:54:36Z",
+    "updated_at":  "2026-01-24T04:24:27Z",
+    "closed_at":  "2026-01-24T04:24:27Z",
     "author_association":  "COLLABORATOR",
     "active_lock_reason":  null,
     "sub_issues_summary":  {
@@ -57,7 +57,7 @@
                                        "blocking":  0,
                                        "total_blocking":  0
                                    },
-    "body":  "When I log into IMQ and land on the IMQ dashboard, there is a green box labeled “qualified workers” and has the number 24 (indicating 24 qualified workers). When I click on this box, it takes me to the team management page. What is displayed is only 5 workers, and only 3 are labeled as Qualified. I need to be able to see all 24 Qualified Workers. So the Team Management view should default to the Qualified filter, and 24 workers should be displayed.",
+    "body":  "Update the \"Recent Activity\" panel to include both relative and absolute timestamps, along with the appropriate time zone. This ensures clarity across global teams and supports audit traceability in regulated environments.\n\n**Requirements:**\n\n- Maintain existing relative time (e.g., 2h ago)\n- Append absolute time and time zone in smaller gray text\n     - Example: • 3:45 PM EDT or • Jul 23, 9:12 AM UTC+1\n- Acceptable formats:\n     - 2h ago • 3:45 PM EDT\n     - 1d ago • Jul 23, 9:12 AM UTC\n- Use user/system-local time for display\n- Default to UTC if time zone context is unavailable\n\n**Design Considerations:**\n\n- Use lighter or smaller font for appended timestamp to reduce visual clutter\n- Maintain responsiveness and readability on mobile\n\n**Implementation Notes:**\n\n- Static timestamps may be mocked for now\n- Time zone formatting may use browser locale or fallback to server-side default",
     "closed_by":  {
                       "login":  "Soloflex95",
                       "id":  45412620,
@@ -80,7 +80,7 @@
                       "site_admin":  false
                   },
     "reactions":  {
-                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/reactions",
+                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/20/reactions",
                       "total_count":  0,
                       "+1":  0,
                       "-1":  0,
@@ -91,7 +91,7 @@
                       "rocket":  0,
                       "eyes":  0
                   },
-    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/timeline",
+    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/20/timeline",
     "performed_via_github_app":  null,
     "state_reason":  "completed"
 }

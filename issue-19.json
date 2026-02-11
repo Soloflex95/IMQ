@@ -1,14 +1,14 @@
 ﻿{
-    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3",
+    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/19",
     "repository_url":  "https://api.github.com/repos/Soloflex95/IMQ",
-    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/labels{/name}",
-    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/comments",
-    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/events",
-    "html_url":  "https://github.com/Soloflex95/IMQ/issues/3",
-    "id":  3813503093,
-    "node_id":  "I_kwDOQh91ws7jTXB1",
-    "number":  3,
-    "title":  "IMQ Dashboard \u003e \"24\" Qualified Workers. Link does not display 24 workers.",
+    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/19/labels{/name}",
+    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/19/comments",
+    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/19/events",
+    "html_url":  "https://github.com/Soloflex95/IMQ/issues/19",
+    "id":  3843865170,
+    "node_id":  "I_kwDOQh91ws7lHLpS",
+    "number":  19,
+    "title":  "Redesign Quick Actions Section with Role-Aware Functional Buttons",
     "user":  {
                  "login":  "seanwinz2030",
                  "id":  248097794,
@@ -41,9 +41,9 @@
                   ],
     "milestone":  null,
     "comments":  0,
-    "created_at":  "2026-01-14T14:40:54Z",
-    "updated_at":  "2026-01-20T19:29:53Z",
-    "closed_at":  "2026-01-20T19:29:53Z",
+    "created_at":  "2026-01-22T17:06:35Z",
+    "updated_at":  "2026-01-23T04:43:25Z",
+    "closed_at":  "2026-01-23T04:43:25Z",
     "author_association":  "COLLABORATOR",
     "active_lock_reason":  null,
     "sub_issues_summary":  {
@@ -57,7 +57,7 @@
                                        "blocking":  0,
                                        "total_blocking":  0
                                    },
-    "body":  "When I log into IMQ and land on the IMQ dashboard, there is a green box labeled “qualified workers” and has the number 24 (indicating 24 qualified workers). When I click on this box, it takes me to the team management page. What is displayed is only 5 workers, and only 3 are labeled as Qualified. I need to be able to see all 24 Qualified Workers. So the Team Management view should default to the Qualified filter, and 24 workers should be displayed.",
+    "body":  "Transform current \"Quick Actions\" cards into interactive action buttons. These should serve as immediate launch points based on user role and scope.\n\n**Initial Actions (static for now):**\n\n1. Upload CV – Upload resume for parsing (open modal)\n2. Add Qualification – Manual entry of new qualification (launch form)\n3. Assign Role – Select user and assign job (modal, dummy for now)\n4. Run Compliance Check – Show simulated compliance panel\n\n- UI: 2x2 card layout\n- Behavior: Buttons should visually suggest interactivity\n- Implementation: Use static placeholders; future enhancements will enable dynamic behavior based on role\n\nNote: These are no longer navigation shortcuts. Each card should trigger an interactive action (e.g., open modal or launch panel). Please remove any href-based navigation if already implemented.",
     "closed_by":  {
                       "login":  "Soloflex95",
                       "id":  45412620,
@@ -80,7 +80,7 @@
                       "site_admin":  false
                   },
     "reactions":  {
-                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/reactions",
+                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/19/reactions",
                       "total_count":  0,
                       "+1":  0,
                       "-1":  0,
@@ -91,7 +91,7 @@
                       "rocket":  0,
                       "eyes":  0
                   },
-    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/timeline",
+    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/19/timeline",
     "performed_via_github_app":  null,
     "state_reason":  "completed"
 }

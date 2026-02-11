@@ -33,7 +33,7 @@
     "labels":  [
 
                ],
-    "state":  "open",
+    "state":  "closed",
     "locked":  false,
     "assignee":  null,
     "assignees":  [
@@ -42,8 +42,8 @@
     "milestone":  null,
     "comments":  0,
     "created_at":  "2026-01-15T21:43:28Z",
-    "updated_at":  "2026-01-15T21:43:28Z",
-    "closed_at":  null,
+    "updated_at":  "2026-01-23T04:43:54Z",
+    "closed_at":  "2026-01-23T04:43:54Z",
     "author_association":  "OWNER",
     "active_lock_reason":  null,
     "sub_issues_summary":  {
@@ -58,7 +58,27 @@
                                        "total_blocking":  0
                                    },
     "body":  "Description: The vision requires \"electronic signatures, approvals, and justifications\". Automated parsing isn\u0027t enough; a human manager must often validate the evidence.\n\nAcceptance Criteria:\n\n[ ] Add a \"Status\" field to User Qualifications (Pending, Approved, Rejected).\n[ ] Create a UI for Managers to view \"Pending Approvals\".\n[ ] When a Manager clicks \"Approve\", require them to \"Sign\" (re-enter password or type full name) to generate a digital signature record.\n[ ] Store the digital signature hash with the approval record.\n\nContext for Copilot:\n\nStart with a simple \"Type name to sign\" mechanism.\nEnsure the backend verifies the current user has \"Manager\" permissions before accepting the approval.",
-    "closed_by":  null,
+    "closed_by":  {
+                      "login":  "Soloflex95",
+                      "id":  45412620,
+                      "node_id":  "MDQ6VXNlcjQ1NDEyNjIw",
+                      "avatar_url":  "https://avatars.githubusercontent.com/u/45412620?v=4",
+                      "gravatar_id":  "",
+                      "url":  "https://api.github.com/users/Soloflex95",
+                      "html_url":  "https://github.com/Soloflex95",
+                      "followers_url":  "https://api.github.com/users/Soloflex95/followers",
+                      "following_url":  "https://api.github.com/users/Soloflex95/following{/other_user}",
+                      "gists_url":  "https://api.github.com/users/Soloflex95/gists{/gist_id}",
+                      "starred_url":  "https://api.github.com/users/Soloflex95/starred{/owner}{/repo}",
+                      "subscriptions_url":  "https://api.github.com/users/Soloflex95/subscriptions",
+                      "organizations_url":  "https://api.github.com/users/Soloflex95/orgs",
+                      "repos_url":  "https://api.github.com/users/Soloflex95/repos",
+                      "events_url":  "https://api.github.com/users/Soloflex95/events{/privacy}",
+                      "received_events_url":  "https://api.github.com/users/Soloflex95/received_events",
+                      "type":  "User",
+                      "user_view_type":  "public",
+                      "site_admin":  false
+                  },
     "reactions":  {
                       "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/7/reactions",
                       "total_count":  0,
@@ -73,5 +93,5 @@
                   },
     "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/7/timeline",
     "performed_via_github_app":  null,
-    "state_reason":  null
+    "state_reason":  "completed"
 }

@@ -33,7 +33,7 @@
     "labels":  [
 
                ],
-    "state":  "open",
+    "state":  "closed",
     "locked":  false,
     "assignee":  null,
     "assignees":  [
@@ -42,8 +42,8 @@
     "milestone":  null,
     "comments":  0,
     "created_at":  "2026-01-16T02:33:07Z",
-    "updated_at":  "2026-01-16T02:33:07Z",
-    "closed_at":  null,
+    "updated_at":  "2026-01-20T19:29:55Z",
+    "closed_at":  "2026-01-20T19:29:55Z",
     "author_association":  "OWNER",
     "active_lock_reason":  null,
     "sub_issues_summary":  {
@@ -58,7 +58,27 @@
                                        "total_blocking":  0
                                    },
     "body":  "Description: The vision states we must \"match qualifications against job/task requirements in real-time\". We need a logic engine that compares a User\u0027s structured qualifications against a specific Role\u0027s requirements.\n\nAcceptance Criteria:\n\n[ ] Create a RoleRequirement model (e.g., \"Must have GMP Training \u003e 2023\").\n[ ] Create a service function calculateCompliance(userId, roleId).\n[ ] The function returns a status: Qualified, Gap Detected, or Expired.\n[ ] If a gap is found, the system flags the specific missing skill/document.\n\nContext for Copilot:\n\nThis should be a pure function or service that can be called via API.\nComparison logic needs to handle dates (e.g., \"Is the certificate older than 1 year?\").\nReturn a detailed object: { isCompliant: boolean, missingRequirements: [] }.",
-    "closed_by":  null,
+    "closed_by":  {
+                      "login":  "Soloflex95",
+                      "id":  45412620,
+                      "node_id":  "MDQ6VXNlcjQ1NDEyNjIw",
+                      "avatar_url":  "https://avatars.githubusercontent.com/u/45412620?v=4",
+                      "gravatar_id":  "",
+                      "url":  "https://api.github.com/users/Soloflex95",
+                      "html_url":  "https://github.com/Soloflex95",
+                      "followers_url":  "https://api.github.com/users/Soloflex95/followers",
+                      "following_url":  "https://api.github.com/users/Soloflex95/following{/other_user}",
+                      "gists_url":  "https://api.github.com/users/Soloflex95/gists{/gist_id}",
+                      "starred_url":  "https://api.github.com/users/Soloflex95/starred{/owner}{/repo}",
+                      "subscriptions_url":  "https://api.github.com/users/Soloflex95/subscriptions",
+                      "organizations_url":  "https://api.github.com/users/Soloflex95/orgs",
+                      "repos_url":  "https://api.github.com/users/Soloflex95/repos",
+                      "events_url":  "https://api.github.com/users/Soloflex95/events{/privacy}",
+                      "received_events_url":  "https://api.github.com/users/Soloflex95/received_events",
+                      "type":  "User",
+                      "user_view_type":  "public",
+                      "site_admin":  false
+                  },
     "reactions":  {
                       "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/8/reactions",
                       "total_count":  0,
@@ -73,5 +93,5 @@
                   },
     "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/8/timeline",
     "performed_via_github_app":  null,
-    "state_reason":  null
+    "state_reason":  "completed"
 }

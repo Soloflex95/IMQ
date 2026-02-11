@@ -1,14 +1,14 @@
 ﻿{
-    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3",
+    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/23",
     "repository_url":  "https://api.github.com/repos/Soloflex95/IMQ",
-    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/labels{/name}",
-    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/comments",
-    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/events",
-    "html_url":  "https://github.com/Soloflex95/IMQ/issues/3",
-    "id":  3813503093,
-    "node_id":  "I_kwDOQh91ws7jTXB1",
-    "number":  3,
-    "title":  "IMQ Dashboard \u003e \"24\" Qualified Workers. Link does not display 24 workers.",
+    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/23/labels{/name}",
+    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/23/comments",
+    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/23/events",
+    "html_url":  "https://github.com/Soloflex95/IMQ/issues/23",
+    "id":  3845340350,
+    "node_id":  "I_kwDOQh91ws7lMzy-",
+    "number":  23,
+    "title":  "Improve Visual Hierarchy Between “How It Works” and “Tips” Panels",
     "user":  {
                  "login":  "seanwinz2030",
                  "id":  248097794,
@@ -41,9 +41,9 @@
                   ],
     "milestone":  null,
     "comments":  0,
-    "created_at":  "2026-01-14T14:40:54Z",
-    "updated_at":  "2026-01-20T19:29:53Z",
-    "closed_at":  "2026-01-20T19:29:53Z",
+    "created_at":  "2026-01-23T00:43:22Z",
+    "updated_at":  "2026-01-24T04:24:28Z",
+    "closed_at":  "2026-01-24T04:24:28Z",
     "author_association":  "COLLABORATOR",
     "active_lock_reason":  null,
     "sub_issues_summary":  {
@@ -57,7 +57,7 @@
                                        "blocking":  0,
                                        "total_blocking":  0
                                    },
-    "body":  "When I log into IMQ and land on the IMQ dashboard, there is a green box labeled “qualified workers” and has the number 24 (indicating 24 qualified workers). When I click on this box, it takes me to the team management page. What is displayed is only 5 workers, and only 3 are labeled as Qualified. I need to be able to see all 24 Qualified Workers. So the Team Management view should default to the Qualified filter, and 24 workers should be displayed.",
+    "body":  "The current design presents both the “How It Works” and “Tips” panels with equal visual weight, which makes it harder for users to distinguish between core process guidance and optional best practices. To improve clarity and guide the user more effectively, we should adjust the layout and styling to create a stronger visual hierarchy.\n\n**Proposed Enhancements:**\n\n1. Hierarchy Adjustment\n\n- Make “How It Works” visually dominant over “Tips” (e.g., bolder/larger header, different background color or border).\n- Consider using a numbered list layout with stronger emphasis to communicate sequential flow.\n\n2. Layout Improvements\n\n- Move the “How It Works” panel to the top of the content section, directly beneath the header and tagline.\n- Keep “Tips” in its current right-aligned box, but visually differentiate it as optional info (e.g., with a lightbulb icon 💡 or a lighter background color).\n\n3. Optional Enhancements\n\n- Add subtle icons for each step in “How It Works” (e.g., 📄 upload, 🤖 AI parse, 📝 review, ✅ save).\n- Allow collapsible/expandable behavior for “Tips” if needed later.\n\n**Rationale:**\nThis change helps guide first-time users by making it immediately clear which section explains the process and which is optional guidance. It improves onboarding and reduces the chance of user confusion or missed steps.",
     "closed_by":  {
                       "login":  "Soloflex95",
                       "id":  45412620,
@@ -80,7 +80,7 @@
                       "site_admin":  false
                   },
     "reactions":  {
-                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/reactions",
+                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/23/reactions",
                       "total_count":  0,
                       "+1":  0,
                       "-1":  0,
@@ -91,7 +91,7 @@
                       "rocket":  0,
                       "eyes":  0
                   },
-    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/timeline",
+    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/23/timeline",
     "performed_via_github_app":  null,
     "state_reason":  "completed"
 }

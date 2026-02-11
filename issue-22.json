@@ -1,14 +1,14 @@
 ﻿{
-    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3",
+    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/22",
     "repository_url":  "https://api.github.com/repos/Soloflex95/IMQ",
-    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/labels{/name}",
-    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/comments",
-    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/events",
-    "html_url":  "https://github.com/Soloflex95/IMQ/issues/3",
-    "id":  3813503093,
-    "node_id":  "I_kwDOQh91ws7jTXB1",
-    "number":  3,
-    "title":  "IMQ Dashboard \u003e \"24\" Qualified Workers. Link does not display 24 workers.",
+    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/22/labels{/name}",
+    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/22/comments",
+    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/22/events",
+    "html_url":  "https://github.com/Soloflex95/IMQ/issues/22",
+    "id":  3845302725,
+    "node_id":  "I_kwDOQh91ws7lMqnF",
+    "number":  22,
+    "title":  "Add Contextual Benefit Statement to Upload Qualifications Page",
     "user":  {
                  "login":  "seanwinz2030",
                  "id":  248097794,
@@ -41,9 +41,9 @@
                   ],
     "milestone":  null,
     "comments":  0,
-    "created_at":  "2026-01-14T14:40:54Z",
-    "updated_at":  "2026-01-20T19:29:53Z",
-    "closed_at":  "2026-01-20T19:29:53Z",
+    "created_at":  "2026-01-23T00:23:51Z",
+    "updated_at":  "2026-01-24T04:24:28Z",
+    "closed_at":  "2026-01-24T04:24:28Z",
     "author_association":  "COLLABORATOR",
     "active_lock_reason":  null,
     "sub_issues_summary":  {
@@ -57,7 +57,7 @@
                                        "blocking":  0,
                                        "total_blocking":  0
                                    },
-    "body":  "When I log into IMQ and land on the IMQ dashboard, there is a green box labeled “qualified workers” and has the number 24 (indicating 24 qualified workers). When I click on this box, it takes me to the team management page. What is displayed is only 5 workers, and only 3 are labeled as Qualified. I need to be able to see all 24 Qualified Workers. So the Team Management view should default to the Qualified filter, and 24 workers should be displayed.",
+    "body":  "The current subtitle under the “Upload Qualifications” header reads: “Upload your CV or training certificates to automatically extract qualifications.”\n\nThis line gives clear functional instruction, but it doesn’t explain the value of the action to the user. Adding a brief benefit-oriented tagline will reinforce why the user should engage.\n\n**Requested Change**\nAdd the following sentence directly beneath the current subtitle: “Save time, reduce manual entry, and keep your qualifications profile audit-ready.”\n\nUI Placement\n- Below the existing instructional line\n- Same font style (smaller than header)\n- If possible, slightly muted (e.g., gray text) to differentiate tone from the main instruction\n\nGoal\nMake the value of uploading documents immediately clear and compelling to first-time users or viewers.",
     "closed_by":  {
                       "login":  "Soloflex95",
                       "id":  45412620,
@@ -80,7 +80,7 @@
                       "site_admin":  false
                   },
     "reactions":  {
-                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/reactions",
+                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/22/reactions",
                       "total_count":  0,
                       "+1":  0,
                       "-1":  0,
@@ -91,7 +91,7 @@
                       "rocket":  0,
                       "eyes":  0
                   },
-    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/timeline",
+    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/22/timeline",
     "performed_via_github_app":  null,
     "state_reason":  "completed"
 }

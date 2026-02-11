@@ -1,0 +1,77 @@
+﻿{
+    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/32",
+    "repository_url":  "https://api.github.com/repos/Soloflex95/IMQ",
+    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/32/labels{/name}",
+    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/32/comments",
+    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/32/events",
+    "html_url":  "https://github.com/Soloflex95/IMQ/issues/32",
+    "id":  3872232097,
+    "node_id":  "I_kwDOQh91ws7mzZKh",
+    "number":  32,
+    "title":  "MRL Increment 5: UI Consumption of Master Requirements List (Read-Only)",
+    "user":  {
+                 "login":  "seanwinz2030",
+                 "id":  248097794,
+                 "node_id":  "U_kgDODsmsAg",
+                 "avatar_url":  "https://avatars.githubusercontent.com/u/248097794?v=4",
+                 "gravatar_id":  "",
+                 "url":  "https://api.github.com/users/seanwinz2030",
+                 "html_url":  "https://github.com/seanwinz2030",
+                 "followers_url":  "https://api.github.com/users/seanwinz2030/followers",
+                 "following_url":  "https://api.github.com/users/seanwinz2030/following{/other_user}",
+                 "gists_url":  "https://api.github.com/users/seanwinz2030/gists{/gist_id}",
+                 "starred_url":  "https://api.github.com/users/seanwinz2030/starred{/owner}{/repo}",
+                 "subscriptions_url":  "https://api.github.com/users/seanwinz2030/subscriptions",
+                 "organizations_url":  "https://api.github.com/users/seanwinz2030/orgs",
+                 "repos_url":  "https://api.github.com/users/seanwinz2030/repos",
+                 "events_url":  "https://api.github.com/users/seanwinz2030/events{/privacy}",
+                 "received_events_url":  "https://api.github.com/users/seanwinz2030/received_events",
+                 "type":  "User",
+                 "user_view_type":  "public",
+                 "site_admin":  false
+             },
+    "labels":  [
+
+               ],
+    "state":  "open",
+    "locked":  false,
+    "assignee":  null,
+    "assignees":  [
+
+                  ],
+    "milestone":  null,
+    "comments":  0,
+    "created_at":  "2026-01-29T19:28:06Z",
+    "updated_at":  "2026-01-29T19:28:06Z",
+    "closed_at":  null,
+    "author_association":  "COLLABORATOR",
+    "active_lock_reason":  null,
+    "sub_issues_summary":  {
+                               "total":  0,
+                               "completed":  0,
+                               "percent_completed":  0
+                           },
+    "issue_dependencies_summary":  {
+                                       "blocked_by":  0,
+                                       "total_blocked_by":  0,
+                                       "blocking":  0,
+                                       "total_blocking":  0
+                                   },
+    "body":  "MRL Increment 5: UI Consumption of Master Requirements List (Read-Only)\n\n## Objective\nRender the Master Requirements List (MRL) in the IMQ web interface using the existing read-only API from Increment 4. This increment is demo-focused and limited to presentation only—no write, persistence, or workflow behavior.\n\n## Backgrounda\nThis continues the sequence from:\n- Increment 1: Domain model for QualificationRequirement\n- Increment 2: In-memory service implementation\n- Increment 3: Read-only application interface\n- Increment 4: Read-only API layer\n\n## Scope\n\n### In Scope\n- Create a new route (e.g., `/mrl`) in the IMQ Web project\n- Fetch and display the MRL via `GET /api/mrl`\n- Add basic client-side controls to filter by:\n  - `RequirementType` (dropdown triggers `/api/mrl/by-type`)\n  - `RequirementApprovalStatus` (dropdown triggers `/api/mrl/by-status`)\n- Show the results in a simple list or table\n- Indicate clearly that this is a **prototype/demo** view (not production UX)\n\n### Implementation Constraints\n- Use the existing `IMasterRequirementsReadService` exposed via API\n- Do **not** reimplement filtering logic in the frontend\n- No create/update/delete actions\n- No persistence or database usage\n- No authentication or authorization logic\n- Route parameters for enums may use ASP.NET Core’s enum model binding\n- The MRL UI should be exposed via a dedicated route (e.g., `/mrl`) in the IMQ Web project, without modifying existing navigation unless explicitly required\n\n### Out of Scope\n- Editing or approval workflows\n- Persistence logic or state changes\n- Combined filtering or query composition\n- UI-side filtering of already-filtered results\n- Authorization or login behavior\n\n## Deliverables\n- A new page/component in the web UI for `/mrl`\n- Rendered output of requirements from API (plain layout is acceptable)\n- Dropdown filters for type and status, calling respective API routes\n- Clear demo labeling on page (e.g., “Read-only demo of Master Requirements”)\n- Easily replaceable UI layer—this is not final UX\n\n## Tests\n- Manual verification is sufficient for this increment\n- Automated UI tests are **optional**\n\n## Outcome\nThis completes the end-to-end visibility of MRL data from domain → API → UI.\nNo new architectural concerns are introduced.\n",
+    "closed_by":  null,
+    "reactions":  {
+                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/32/reactions",
+                      "total_count":  0,
+                      "+1":  0,
+                      "-1":  0,
+                      "laugh":  0,
+                      "hooray":  0,
+                      "confused":  0,
+                      "heart":  0,
+                      "rocket":  0,
+                      "eyes":  0
+                  },
+    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/32/timeline",
+    "performed_via_github_app":  null,
+    "state_reason":  null
+}

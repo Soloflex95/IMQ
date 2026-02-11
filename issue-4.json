@@ -1,14 +1,14 @@
 ﻿{
-    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/1",
+    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/4",
     "repository_url":  "https://api.github.com/repos/Soloflex95/IMQ",
-    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/1/labels{/name}",
-    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/1/comments",
-    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/1/events",
-    "html_url":  "https://github.com/Soloflex95/IMQ/issues/1",
-    "id":  3799239098,
-    "node_id":  "I_kwDOQh91ws7ic8m6",
-    "number":  1,
-    "title":  "Test AI workflow - update home page",
+    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/4/labels{/name}",
+    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/4/comments",
+    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/4/events",
+    "html_url":  "https://github.com/Soloflex95/IMQ/issues/4",
+    "id":  3818756452,
+    "node_id":  "I_kwDOQh91ws7jnZlk",
+    "number":  4,
+    "title":  "Feature: AI Extraction Service for CVs and Certificates",
     "user":  {
                  "login":  "Soloflex95",
                  "id":  45412620,
@@ -32,13 +32,31 @@
              },
     "labels":  [
                    {
-                       "id":  9967401421,
-                       "node_id":  "LA_kwDOQh91ws8AAAACUhp5zQ",
-                       "url":  "https://api.github.com/repos/Soloflex95/IMQ/labels/ai-ready",
-                       "name":  "ai-ready",
+                       "id":  10000975426,
+                       "node_id":  "LA_kwDOQh91ws8AAAACVBrGQg",
+                       "url":  "https://api.github.com/repos/Soloflex95/IMQ/labels/backend",
+                       "name":  "backend",
                        "color":  "aaaaaa",
                        "default":  false,
                        "description":  null
+                   },
+                   {
+                       "id":  10000978353,
+                       "node_id":  "LA_kwDOQh91ws8AAAACVBrRsQ",
+                       "url":  "https://api.github.com/repos/Soloflex95/IMQ/labels/ai",
+                       "name":  "ai",
+                       "color":  "aaf717",
+                       "default":  false,
+                       "description":  ""
+                   },
+                   {
+                       "id":  10000980213,
+                       "node_id":  "LA_kwDOQh91ws8AAAACVBrY9Q",
+                       "url":  "https://api.github.com/repos/Soloflex95/IMQ/labels/core-feature",
+                       "name":  "core-feature",
+                       "color":  "d48b31",
+                       "default":  false,
+                       "description":  ""
                    }
                ],
     "state":  "closed",
@@ -48,10 +66,10 @@
 
                   ],
     "milestone":  null,
-    "comments":  1,
-    "created_at":  "2026-01-10T07:02:23Z",
-    "updated_at":  "2026-01-20T19:29:53Z",
-    "closed_at":  "2026-01-20T19:29:53Z",
+    "comments":  0,
+    "created_at":  "2026-01-15T18:57:24Z",
+    "updated_at":  "2026-01-20T19:29:54Z",
+    "closed_at":  "2026-01-20T19:29:54Z",
     "author_association":  "OWNER",
     "active_lock_reason":  null,
     "sub_issues_summary":  {
@@ -65,7 +83,7 @@
                                        "blocking":  0,
                                        "total_blocking":  0
                                    },
-    "body":  "Change the main heading in Home.razor from its current text to \"Welcome to I aM Qualified - Your Compliance Partner\"",
+    "body":  "**Description:** We need to implement the core \"Opportunity\" defined in the vision: extracting structured data from unstructured documents. The system must allow users to upload PDF/Word documents (CVs, training certs) and use an AI service to parse them into JSON.\n\n**Acceptance Criteria:**\n[ ] User can upload a file (PDF, DOCX) via the frontend.\n[ ] Backend sends the file to an AI service (e.g., Azure OpenAI or Document Intelligence).\n[ ] System extracts the following fields: Skill Name, Date Acquired, Expiration Date, Issuing Authority.\n[ ] Extracted data is saved to the database linked to the user\u0027s profile.\n\n**Context for Copilot:**\nUse Azure Blob Storage for temporary file holding.\nUse a prompt strategy that asks the LLM to return strictly valid JSON.\nCreate a Mongoose/SQL schema for UserQualification that matches the extracted fields.",
     "closed_by":  {
                       "login":  "Soloflex95",
                       "id":  45412620,
@@ -88,7 +106,7 @@
                       "site_admin":  false
                   },
     "reactions":  {
-                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/1/reactions",
+                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/4/reactions",
                       "total_count":  0,
                       "+1":  0,
                       "-1":  0,
@@ -99,7 +117,7 @@
                       "rocket":  0,
                       "eyes":  0
                   },
-    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/1/timeline",
+    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/4/timeline",
     "performed_via_github_app":  null,
     "state_reason":  "completed"
 }

@@ -1,14 +1,14 @@
 ﻿{
-    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3",
+    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/12",
     "repository_url":  "https://api.github.com/repos/Soloflex95/IMQ",
-    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/labels{/name}",
-    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/comments",
-    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/events",
-    "html_url":  "https://github.com/Soloflex95/IMQ/issues/3",
-    "id":  3813503093,
-    "node_id":  "I_kwDOQh91ws7jTXB1",
-    "number":  3,
-    "title":  "IMQ Dashboard \u003e \"24\" Qualified Workers. Link does not display 24 workers.",
+    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/12/labels{/name}",
+    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/12/comments",
+    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/12/events",
+    "html_url":  "https://github.com/Soloflex95/IMQ/issues/12",
+    "id":  3836190407,
+    "node_id":  "I_kwDOQh91ws7kp57H",
+    "number":  12,
+    "title":  "AI: Qualification Title Mapping",
     "user":  {
                  "login":  "seanwinz2030",
                  "id":  248097794,
@@ -41,9 +41,9 @@
                   ],
     "milestone":  null,
     "comments":  0,
-    "created_at":  "2026-01-14T14:40:54Z",
-    "updated_at":  "2026-01-20T19:29:53Z",
-    "closed_at":  "2026-01-20T19:29:53Z",
+    "created_at":  "2026-01-21T01:50:43Z",
+    "updated_at":  "2026-01-22T06:26:43Z",
+    "closed_at":  "2026-01-22T06:26:43Z",
     "author_association":  "COLLABORATOR",
     "active_lock_reason":  null,
     "sub_issues_summary":  {
@@ -57,7 +57,7 @@
                                        "blocking":  0,
                                        "total_blocking":  0
                                    },
-    "body":  "When I log into IMQ and land on the IMQ dashboard, there is a green box labeled “qualified workers” and has the number 24 (indicating 24 qualified workers). When I click on this box, it takes me to the team management page. What is displayed is only 5 workers, and only 3 are labeled as Qualified. I need to be able to see all 24 Qualified Workers. So the Team Management view should default to the Qualified filter, and 24 workers should be displayed.",
+    "body":  "Problem to solve: Users can manually type inconsistent or ambiguous qualification titles when adding entries. This makes reporting, matching, and compliance tracking error-prone.\n\nStandardize user-entered qualification titles (e.g., “Aseptic Tech”, “Aseptic Procedures”) to match a controlled master list (e.g., “Aseptic Technique”).\n\nExample flow:\n- User types: Clean Room Handling\n- System recommends: Aseptic Technique\n\nImplementation Approach (Phase 1 MVP)\n\n1. Build a Master List (backend or static)\n[\"Aseptic Technique\", \"SOP Documentation\", \"GMP Compliance\", \"Environmental Monitoring\", \"Visual Inspection\", ...]\n\n2. Use a pre-trained sentence embedding model\n(e.g., all-MiniLM-L6-v2 from sentence-transformers)\n\n3. Create a local vector store (e.g., FAISS or in-memory array)\nCompute embeddings for each entry in the master list\n\n*When user types a new title:\n-Embed the input\n-Compute similarity against the master list\n-Recommend the top match(es)\n\n\n\n",
     "closed_by":  {
                       "login":  "Soloflex95",
                       "id":  45412620,
@@ -80,7 +80,7 @@
                       "site_admin":  false
                   },
     "reactions":  {
-                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/reactions",
+                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/12/reactions",
                       "total_count":  0,
                       "+1":  0,
                       "-1":  0,
@@ -91,7 +91,7 @@
                       "rocket":  0,
                       "eyes":  0
                   },
-    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/3/timeline",
+    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/12/timeline",
     "performed_via_github_app":  null,
     "state_reason":  "completed"
 }

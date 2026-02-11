@@ -1,0 +1,327 @@
+﻿{
+    "FetchedAt":  "2026-02-11T09:12:16Z",
+    "Repository":  "Soloflex95/IMQ",
+    "ClosedIssues":  31,
+    "OpenIssues":  4,
+    "Issues":  [
+                   {
+                       "Number":  1,
+                       "Title":  "Test AI workflow - update home page",
+                       "State":  "closed",
+                       "Labels":  "ai-ready",
+                       "Created":  "2026-01-10T07:02:23Z",
+                       "Updated":  "2026-01-20T19:29:53Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  2,
+                       "Title":  "Test the workflow again",
+                       "State":  "closed",
+                       "Labels":  "ai-ready",
+                       "Created":  "2026-01-10T07:24:40Z",
+                       "Updated":  "2026-01-23T04:43:53Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  3,
+                       "Title":  "IMQ Dashboard \u003e \"24\" Qualified Workers. Link does not display 24 workers.",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-14T14:40:54Z",
+                       "Updated":  "2026-01-20T19:29:53Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  4,
+                       "Title":  "Feature: AI Extraction Service for CVs and Certificates",
+                       "State":  "closed",
+                       "Labels":  "backend, ai, core-feature",
+                       "Created":  "2026-01-15T18:57:24Z",
+                       "Updated":  "2026-01-20T19:29:54Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  5,
+                       "Title":  "Dashboard \u003e Active Jobs (12)",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-15T19:48:25Z",
+                       "Updated":  "2026-01-20T19:29:54Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  6,
+                       "Title":  "replace current logo with IMQ logo",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-15T19:49:55Z",
+                       "Updated":  "2026-01-20T19:29:54Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  7,
+                       "Title":  "Feature: Electronic Signature and Approval Flow",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-15T21:43:28Z",
+                       "Updated":  "2026-01-23T04:43:54Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  8,
+                       "Title":  "Feature: Real-time Qualification vs. Requirement Matcher",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-16T02:33:07Z",
+                       "Updated":  "2026-01-20T19:29:55Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  9,
+                       "Title":  "Add guardrail header for every page",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-19T15:00:45Z",
+                       "Updated":  "2026-01-20T19:29:55Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  10,
+                       "Title":  "Add Executive Summary to top of README,md page",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-19T15:10:47Z",
+                       "Updated":  "2026-01-20T19:29:55Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  11,
+                       "Title":  "Merge everthing from develop into main",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-20T19:29:35Z",
+                       "Updated":  "2026-01-20T19:29:51Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  12,
+                       "Title":  "AI: Qualification Title Mapping",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-21T01:50:43Z",
+                       "Updated":  "2026-01-22T06:26:43Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  13,
+                       "Title":  "Navigation for mobile devices",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-22T12:46:39Z",
+                       "Updated":  "2026-01-22T14:51:25Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  14,
+                       "Title":  "Improve Dashboard Clarity: Add Purpose Statement + Tooltip Descriptions",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-22T13:36:52Z",
+                       "Updated":  "2026-01-22T14:51:25Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  15,
+                       "Title":  "Simulate Manager View Context on Dashboard (Static UI Only)",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-22T13:45:20Z",
+                       "Updated":  "2026-01-23T04:43:54Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  16,
+                       "Title":  "Redesign \"Quick Actions\": Convert Buttons to Cards with Icons + Descriptions",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-22T14:01:06Z",
+                       "Updated":  "2026-01-22T17:32:57Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  17,
+                       "Title":  "Remove the \"about\" link.",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-22T15:19:09Z",
+                       "Updated":  "2026-01-22T17:32:56Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  18,
+                       "Title":  "Add Static Compliance Alert Banner (UI Only – No Backend Logic Yet)",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-22T16:50:18Z",
+                       "Updated":  "2026-01-23T04:43:25Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  19,
+                       "Title":  "Redesign Quick Actions Section with Role-Aware Functional Buttons",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-22T17:06:35Z",
+                       "Updated":  "2026-01-23T04:43:25Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  20,
+                       "Title":  "Enhance Recent Activity timestamps with absolute time and time zone",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-22T21:54:36Z",
+                       "Updated":  "2026-01-24T04:24:27Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  21,
+                       "Title":  "Add “Recommended Actions (AI)” to Dashboard Activity Panel",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-22T22:32:11Z",
+                       "Updated":  "2026-01-24T04:24:28Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  22,
+                       "Title":  "Add Contextual Benefit Statement to Upload Qualifications Page",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-23T00:23:51Z",
+                       "Updated":  "2026-01-24T04:24:28Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  23,
+                       "Title":  "Improve Visual Hierarchy Between “How It Works” and “Tips” Panels",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-23T00:43:22Z",
+                       "Updated":  "2026-01-24T04:24:28Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  24,
+                       "Title":  "Improve Upload Feedback and AI Extraction Messaging",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-23T01:08:55Z",
+                       "Updated":  "2026-01-24T04:27:02Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  25,
+                       "Title":  "Add drag-and-drop functionality, intro line under \"How It Works,\" and subtle animation on upload page",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-23T15:54:22Z",
+                       "Updated":  "2026-02-05T22:14:14Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  26,
+                       "Title":  "Enhance Upload \u0026 Extraction Flow (Multi-File Support, Editable Fields, AI Summary)",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-23T16:38:23Z",
+                       "Updated":  "2026-02-05T22:14:28Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  27,
+                       "Title":  "Add Mock “Import from LinkedIn” Integration Button to Upload Page",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-23T16:55:54Z",
+                       "Updated":  "2026-02-05T22:14:37Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  28,
+                       "Title":  "Define Master Requirements Domain Model (MRL)",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-26T19:07:14Z",
+                       "Updated":  "2026-01-26T19:08:03Z",
+                       "Assignee":  "seanwinz2030"
+                   },
+                   {
+                       "Number":  29,
+                       "Title":  "MRL Increment 2 – InMemoryQualificationRequirementService (Read-Only)",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-26T22:15:03Z",
+                       "Updated":  "2026-01-29T15:42:44Z",
+                       "Assignee":  "seanwinz2030"
+                   },
+                   {
+                       "Number":  30,
+                       "Title":  "MRL Increment 3: Expose Master Requirements List (Read-Only via Application Layer)",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-27T03:26:43Z",
+                       "Updated":  "2026-01-29T15:42:45Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  31,
+                       "Title":  "MRL Increment 4: Expose Master Requirements List via API (Read-Only)",
+                       "State":  "closed",
+                       "Labels":  "",
+                       "Created":  "2026-01-29T16:10:20Z",
+                       "Updated":  "2026-02-06T01:15:52Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  32,
+                       "Title":  "MRL Increment 5: UI Consumption of Master Requirements List (Read-Only)",
+                       "State":  "open",
+                       "Labels":  "",
+                       "Created":  "2026-01-29T19:28:06Z",
+                       "Updated":  "2026-01-29T19:28:06Z",
+                       "Assignee":  "Unassigned"
+                   },
+                   {
+                       "Number":  33,
+                       "Title":  "MRL Increment 6: Filter by Requirement Type or Approval Status (Client-Side UI Only)",
+                       "State":  "open",
+                       "Labels":  "",
+                       "Created":  "2026-01-30T14:06:23Z",
+                       "Updated":  "2026-01-30T14:06:23Z",
+                       "Assignee":  "seanwinz2030"
+                   },
+                   {
+                       "Number":  34,
+                       "Title":  "MRL Increment 7: Navigation \u0026 Discoverability",
+                       "State":  "open",
+                       "Labels":  "",
+                       "Created":  "2026-02-06T01:18:08Z",
+                       "Updated":  "2026-02-06T01:18:08Z",
+                       "Assignee":  "Soloflex95"
+                   },
+                   {
+                       "Number":  35,
+                       "Title":  "IMQ – Increment 8 Education Master Requirements Seed Set (Top-40)",
+                       "State":  "open",
+                       "Labels":  "",
+                       "Created":  "2026-02-11T14:00:53Z",
+                       "Updated":  "2026-02-11T14:00:53Z",
+                       "Assignee":  "Unassigned"
+                   }
+               ],
+    "FailedIssues":  [
+
+                     ],
+    "TotalIssues":  35
+}
