@@ -2,9 +2,21 @@ using IMQ.Web.Components;
 using IMQ.Web.Services;
 using IMQ.Core.Interfaces;
 using Microsoft.AspNetCore.Components;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure culture settings (fix for Azure deployment)
+var supportedCultures = new[] { new CultureInfo("en-US") };
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("en-US");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
+
 // Razor Components (required for Blazor Server)
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
@@ -48,6 +60,8 @@ builder.Services.AddHttpClient("IMQApi", client =>
 
 var app = builder.Build();
 
+// Apply culture settings
+app.UseRequestLocalization();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
