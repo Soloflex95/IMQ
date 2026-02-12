@@ -1,0 +1,77 @@
+﻿{
+    "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/36",
+    "repository_url":  "https://api.github.com/repos/Soloflex95/IMQ",
+    "labels_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/36/labels{/name}",
+    "comments_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/36/comments",
+    "events_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/36/events",
+    "html_url":  "https://github.com/Soloflex95/IMQ/issues/36",
+    "id":  3932758660,
+    "node_id":  "I_kwDOQh91ws7qaSKE",
+    "number":  36,
+    "title":  "IMQ Increment 9 – Experience Master Requirements Seed Set",
+    "user":  {
+                 "login":  "seanwinz2030",
+                 "id":  248097794,
+                 "node_id":  "U_kgDODsmsAg",
+                 "avatar_url":  "https://avatars.githubusercontent.com/u/248097794?v=4",
+                 "gravatar_id":  "",
+                 "url":  "https://api.github.com/users/seanwinz2030",
+                 "html_url":  "https://github.com/seanwinz2030",
+                 "followers_url":  "https://api.github.com/users/seanwinz2030/followers",
+                 "following_url":  "https://api.github.com/users/seanwinz2030/following{/other_user}",
+                 "gists_url":  "https://api.github.com/users/seanwinz2030/gists{/gist_id}",
+                 "starred_url":  "https://api.github.com/users/seanwinz2030/starred{/owner}{/repo}",
+                 "subscriptions_url":  "https://api.github.com/users/seanwinz2030/subscriptions",
+                 "organizations_url":  "https://api.github.com/users/seanwinz2030/orgs",
+                 "repos_url":  "https://api.github.com/users/seanwinz2030/repos",
+                 "events_url":  "https://api.github.com/users/seanwinz2030/events{/privacy}",
+                 "received_events_url":  "https://api.github.com/users/seanwinz2030/received_events",
+                 "type":  "User",
+                 "user_view_type":  "public",
+                 "site_admin":  false
+             },
+    "labels":  [
+
+               ],
+    "state":  "open",
+    "locked":  false,
+    "assignee":  null,
+    "assignees":  [
+
+                  ],
+    "milestone":  null,
+    "comments":  0,
+    "created_at":  "2026-02-12T16:29:30Z",
+    "updated_at":  "2026-02-12T16:29:30Z",
+    "closed_at":  null,
+    "author_association":  "COLLABORATOR",
+    "active_lock_reason":  null,
+    "sub_issues_summary":  {
+                               "total":  0,
+                               "completed":  0,
+                               "percent_completed":  0
+                           },
+    "issue_dependencies_summary":  {
+                                       "blocked_by":  0,
+                                       "total_blocked_by":  0,
+                                       "blocking":  0,
+                                       "total_blocking":  0
+                                   },
+    "body":  "1. Business Context and Justification\n\nIMQ exists to provide objective, auditable evidence that a worker is qualified to perform assigned tasks within regulated life sciences environments.\n\nQualification defensibility requires structured evaluation of:\n\nEducation\n\nExperience\n\nTraining\n\nCertifications\n\nIncrement 8 introduced a structured Education Master Requirements dataset.\n\nIncrement 9 introduces a structured Experience Master Requirements dataset.\n\nThe purpose of this increment is to:\n\nStandardize experience expectations across roles\n\nEnable consistent Job Requirement composition\n\nImprove audit defensibility\n\nExpand Master Requirements List (MRL) coverage\n\nPrepare the system for future AI-assisted experience duration interpretation\n\nThis increment does NOT introduce AI duration parsing, CV semantic analysis, or probabilistic scoring. It standardizes experience requirement language only.\n\n2. Architectural Intent\n\nThis increment expands the existing Master Requirements List.\n\nIt must:\n\nAppend 40 Experience-type requirements\n\nPreserve all existing Education requirements\n\nPreserve all existing Training requirements\n\nPreserve existing API contracts\n\nPreserve existing domain model\n\nPreserve Qualification Engine logic\n\nIntroduce no schema changes\n\nThis is a data-only expansion.\n\nNo refactoring is permitted in this increment.\n\n3. Functional Behavior\n\nAfter implementation:\n\nManagers must be able to:\n\nSelect Experience requirements when building a Job Requirement\n\nFilter Master Requirements by RequirementType = Experience\n\nFilter by Approval Status\n\nView Experience requirements in the Master Requirements screen\n\nThe system must:\n\nMaintain deterministic filtering\n\nMaintain tenant isolation\n\nMaintain clean build integrity\n\nPreserve existing Education and Training behavior\n\n4. Data Model Constraints\n\nUse existing entity:\n\nQualificationRequirement\n\nUse existing enum values only:\n\nQualificationRequirementType.Experience\nRequirementLevel.Required\nRequirementLevel.Preferred\nRequirementApprovalStatus.Approved\nRequirementApprovalStatus.Draft\nRequirementApprovalStatus.Obsolete\n\nNo new properties introduced.\nNo entity refactoring.\nNo new relationships introduced.\n\n5. Acceptance Criteria\n\nAC1: Exactly 40 Experience records added\nAC2: All records have RequirementType = Experience\nAC3: No null required fields\n\nAC4: Majority Approved\nAC5: Exactly 4 Draft\nAC6: Exactly 2 Obsolete\n\nAC7: Filtering by RequirementType = Experience returns exactly 40 records\nAC8: Filtering by RequirementType = Education remains unchanged\nAC9: Filtering by RequirementType = Training remains unchanged\n\nAC10: Approval status filtering deterministic\n\nAC11: No API contract changes\nAC12: No new endpoints\n\nAC13: No compilation warnings\nAC14: All existing tests pass\n\n6. Authoritative Seed Payload (Do Not Modify)\n\nAppend exactly the following records to the existing MRL seed provider.\n\nDo not modify Education records.\nDo not refactor domain model.\nDo not introduce new properties.\n\n[\n  { \"name\": \"1+ Years GMP Manufacturing Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Required\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"2+ Years GMP Manufacturing Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"5+ Years GMP Manufacturing Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"1+ Years Clinical Trial Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Required\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"3+ Years Clinical Trial Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"5+ Years Clinical Trial Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"1+ Years Regulatory Affairs Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Required\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"3+ Years Regulatory Affairs Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"1+ Years Quality Assurance Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Required\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"3+ Years Quality Assurance Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"1+ Years Quality Control Laboratory Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Required\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"3+ Years Quality Control Laboratory Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Validation Experience – Computer System Validation (CSV)\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Required\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Validation Experience – Equipment Qualification (IQ/OQ/PQ)\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Required\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Audit Experience – FDA Inspection Support\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Audit Experience – Internal Quality Audits\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Experience with 21 CFR Part 11 Compliance\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Required\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Experience with ICH E6 (GCP)\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Required\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Medical Device Development Experience (Class II/III)\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Pharmaceutical Manufacturing Scale-Up Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Process Improvement Experience (Lean / Six Sigma)\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"CAPA Investigation Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Required\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Deviation Management Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Required\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Risk Management Experience (ICH Q9)\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Vendor Qualification Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Data Integrity Program Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Required\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Clinical Monitoring Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Investigational Product Handling Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Required\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Technology Transfer Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"Experience Managing GxP Documentation Systems\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Required\", \"requirementApprovalStatus\": \"Approved\" },\n  { \"name\": \"1+ Years Biotechnology Manufacturing Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Draft\", \"requirementApprovalStatus\": \"Draft\" },\n  { \"name\": \"3+ Years Biotechnology Manufacturing Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Draft\", \"requirementApprovalStatus\": \"Draft\" },\n  { \"name\": \"EU Annex 11 Compliance Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Draft\", \"requirementApprovalStatus\": \"Draft\" },\n  { \"name\": \"Health Canada Regulatory Submission Experience\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Draft\", \"requirementApprovalStatus\": \"Draft\" },\n  { \"name\": \"Experience – Paper-Based Manufacturing Systems (Legacy)\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Obsolete\" },\n  { \"name\": \"Experience – Manual Validation Documentation (Legacy)\", \"requirementType\": \"Experience\", \"requirementLevel\": \"Preferred\", \"requirementApprovalStatus\": \"Obsolete\" }\n]\n\n\n7. Documentation Generation Requirement\n\nAs part of this increment:\n\nGenerate or update documentation artifacts to reflect:\n\nBusiness rationale for Experience MRL\n\nUpdated functional behavior\n\nUpdated master requirement coverage\n\nTraceability alignment\n\nGenerate clean, structured:\n\nUser Requirements update section\n\nFunctional Requirements update section\n\nTraceability references\n\nDocumentation must reflect that this increment:\n\nExpands master requirement coverage\n\nIntroduces no architectural changes\n\nIntroduces no engine logic changes\n",
+    "closed_by":  null,
+    "reactions":  {
+                      "url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/36/reactions",
+                      "total_count":  0,
+                      "+1":  0,
+                      "-1":  0,
+                      "laugh":  0,
+                      "hooray":  0,
+                      "confused":  0,
+                      "heart":  0,
+                      "rocket":  0,
+                      "eyes":  0
+                  },
+    "timeline_url":  "https://api.github.com/repos/Soloflex95/IMQ/issues/36/timeline",
+    "performed_via_github_app":  null,
+    "state_reason":  null
+}

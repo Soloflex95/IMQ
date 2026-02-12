@@ -4,5 +4,5 @@ public enum RequirementApprovalStatus
 {
     Draft,
     Approved,
-    Retired
+    Obsolete
 }

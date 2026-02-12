@@ -48,7 +48,7 @@ public class QualificationRequirementTests
 
         Assert.Equal(0, (int)RequirementApprovalStatus.Draft);
         Assert.Equal(1, (int)RequirementApprovalStatus.Approved);
-        Assert.Equal(2, (int)RequirementApprovalStatus.Retired);
+        Assert.Equal(2, (int)RequirementApprovalStatus.Obsolete);
     }
 
     [Fact]

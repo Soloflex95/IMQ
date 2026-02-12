@@ -571,7 +571,7 @@ namespace IMQ.Core.Services
             RequirementType = RequirementType.Education,
             RequirementLevel = RequirementLevel.Preferred,
             Source = "HR Policy (Legacy)",
-            RequirementApprovalStatus = RequirementApprovalStatus.Retired,
+            RequirementApprovalStatus = RequirementApprovalStatus.Obsolete,
             Version = "1.0",
             Tags = new List<string> { "education", "associate", "legacy" }
         },
@@ -583,9 +583,502 @@ namespace IMQ.Core.Services
             RequirementType = RequirementType.Education,
             RequirementLevel = RequirementLevel.Preferred,
             Source = "HR Policy (Legacy)",
-            RequirementApprovalStatus = RequirementApprovalStatus.Retired,
+            RequirementApprovalStatus = RequirementApprovalStatus.Obsolete,
             Version = "1.0",
             Tags = new List<string> { "education", "bachelor", "legacy" }
+        },
+        // Experience Master Requirements (Top-36)
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "1+ Years GMP Manufacturing Experience",
+            Description = "At least one year of Good Manufacturing Practice (GMP) manufacturing experience",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "gmp", "manufacturing" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "2+ Years GMP Manufacturing Experience",
+            Description = "At least two years of Good Manufacturing Practice (GMP) manufacturing experience",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "gmp", "manufacturing" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "5+ Years GMP Manufacturing Experience",
+            Description = "At least five years of Good Manufacturing Practice (GMP) manufacturing experience",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "gmp", "manufacturing" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "1+ Years Clinical Trial Experience",
+            Description = "At least one year of clinical trial experience",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "clinical-trial" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "3+ Years Clinical Trial Experience",
+            Description = "At least three years of clinical trial experience",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "clinical-trial" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "5+ Years Clinical Trial Experience",
+            Description = "At least five years of clinical trial experience",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "clinical-trial" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "1+ Years Regulatory Affairs Experience",
+            Description = "At least one year of regulatory affairs experience",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Regulatory Affairs Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "regulatory-affairs" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "3+ Years Regulatory Affairs Experience",
+            Description = "At least three years of regulatory affairs experience",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Regulatory Affairs Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "regulatory-affairs" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "1+ Years Quality Assurance Experience",
+            Description = "At least one year of quality assurance experience",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "quality-assurance" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "3+ Years Quality Assurance Experience",
+            Description = "At least three years of quality assurance experience",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "quality-assurance" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "1+ Years Quality Control Laboratory Experience",
+            Description = "At least one year of quality control laboratory experience",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "quality-control", "laboratory" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "3+ Years Quality Control Laboratory Experience",
+            Description = "At least three years of quality control laboratory experience",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "quality-control", "laboratory" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Validation Experience – Computer System Validation (CSV)",
+            Description = "Experience with computer system validation (CSV)",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Validation Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "validation", "csv" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Validation Experience – Equipment Qualification (IQ/OQ/PQ)",
+            Description = "Experience with equipment qualification (IQ/OQ/PQ)",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Validation Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "validation", "equipment" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Audit Experience – FDA Inspection Support",
+            Description = "Experience supporting FDA inspections",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "audit", "fda" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Audit Experience – Internal Quality Audits",
+            Description = "Experience conducting internal quality audits",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "audit", "quality" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Experience with 21 CFR Part 11 Compliance",
+            Description = "Experience with 21 CFR Part 11 electronic records compliance",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "21-cfr-part-11", "compliance" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Experience with ICH E6 (GCP)",
+            Description = "Experience with ICH E6 Good Clinical Practice guidelines",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "ich-e6", "gcp" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Medical Device Development Experience (Class II/III)",
+            Description = "Experience with Class II or Class III medical device development",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "R&D Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "medical-device", "development" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Pharmaceutical Manufacturing Scale-Up Experience",
+            Description = "Experience with pharmaceutical manufacturing scale-up processes",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "pharmaceutical", "scale-up" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Process Improvement Experience (Lean / Six Sigma)",
+            Description = "Experience with process improvement methodologies such as Lean or Six Sigma",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "process-improvement", "lean", "six-sigma" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "CAPA Investigation Experience",
+            Description = "Experience with Corrective and Preventive Action (CAPA) investigations",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "capa", "investigation" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Deviation Management Experience",
+            Description = "Experience with deviation management and investigation",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "deviation", "management" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Risk Management Experience (ICH Q9)",
+            Description = "Experience with risk management following ICH Q9 guidelines",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "risk-management", "ich-q9" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Vendor Qualification Experience",
+            Description = "Experience with vendor qualification and management",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "vendor", "qualification" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Data Integrity Program Experience",
+            Description = "Experience implementing and managing data integrity programs",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "data-integrity" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Clinical Monitoring Experience",
+            Description = "Experience with clinical trial monitoring activities",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "clinical", "monitoring" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Investigational Product Handling Experience",
+            Description = "Experience with investigational product handling and management",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "investigational-product" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Technology Transfer Experience",
+            Description = "Experience with technology transfer processes",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "technology-transfer" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Experience Managing GxP Documentation Systems",
+            Description = "Experience managing Good Practice (GxP) documentation systems",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "gxp", "documentation" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "1+ Years Biotechnology Manufacturing Experience",
+            Description = "At least one year of biotechnology manufacturing experience",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Draft,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "biotechnology", "manufacturing" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "3+ Years Biotechnology Manufacturing Experience",
+            Description = "At least three years of biotechnology manufacturing experience",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Draft,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "biotechnology", "manufacturing" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "EU Annex 11 Compliance Experience",
+            Description = "Experience with EU Annex 11 computerized systems compliance",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Draft,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "eu-annex-11", "compliance" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Health Canada Regulatory Submission Experience",
+            Description = "Experience with Health Canada regulatory submissions",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines",
+            RequirementApprovalStatus = RequirementApprovalStatus.Draft,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "health-canada", "regulatory" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Experience – Paper-Based Manufacturing Systems (Legacy)",
+            Description = "Experience with legacy paper-based manufacturing systems (obsolete)",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines (Legacy)",
+            RequirementApprovalStatus = RequirementApprovalStatus.Obsolete,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "legacy", "paper-based" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Experience – Manual Validation Documentation (Legacy)",
+            Description = "Experience with manual validation documentation (obsolete)",
+            RequirementType = RequirementType.Experience,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Hiring Guidelines (Legacy)",
+            RequirementApprovalStatus = RequirementApprovalStatus.Obsolete,
+            Version = "1.0",
+            Tags = new List<string> { "experience", "legacy", "manual-validation" }
         }
     };
 public IReadOnlyCollection<QualificationRequirement> GetAll()
