@@ -24,4 +24,7 @@ public class QualificationRequirement : BaseEntity
     public string? ReviewedBy { get; set; }
     public string Version { get; set; } = string.Empty;
     public List<string>? Tags { get; set; }
+    public bool HasExpiration { get; set; } = false;
+    public int? DefaultValidityPeriodMonths { get; set; }
+    public bool RequiresPeriodicRenewal { get; set; } = false;
 }
