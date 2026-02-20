@@ -1628,6 +1628,555 @@ namespace IMQ.Core.Services
             RequirementApprovalStatus = RequirementApprovalStatus.Obsolete,
             Version = "1.0",
             Tags = new List<string> { "certification", "legacy", "office-safety" }
+        },
+        // Training Master Requirements (Increment 11)
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Good Manufacturing Practice (GMP) Fundamentals Training",
+            Description = "Good Manufacturing Practice (GMP) Fundamentals Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Training Lead",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "gmp", "fundamentals" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Good Clinical Practice (GCP) Fundamentals Training",
+            Description = "Good Clinical Practice (GCP) Fundamentals Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Training Lead",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "gcp", "fundamentals" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Good Laboratory Practice (GLP) Fundamentals Training",
+            Description = "Good Laboratory Practice (GLP) Fundamentals Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Training Lead",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "glp", "fundamentals" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Data Integrity and ALCOA+ Training",
+            Description = "Data Integrity and ALCOA+ Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "data-integrity", "alcoa" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "21 CFR Part 11 Awareness Training",
+            Description = "21 CFR Part 11 Awareness Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "21-cfr-part-11", "awareness" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "EU Annex 11 Awareness Training",
+            Description = "EU Annex 11 Awareness Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "eu-annex-11", "awareness" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Deviation Management Process Training",
+            Description = "Deviation Management Process Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "deviation", "quality" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "CAPA Process Training",
+            Description = "CAPA Process Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "capa", "quality" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Change Control Process Training",
+            Description = "Change Control Process Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "change-control", "quality" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Risk Management (ICH Q9) Training",
+            Description = "Risk Management (ICH Q9) Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "risk", "ich-q9" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Root Cause Analysis Training",
+            Description = "Root Cause Analysis Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "root-cause", "quality" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Internal Audit Procedure Training",
+            Description = "Internal Audit Procedure Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "internal-audit", "quality" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Supplier Qualification Process Training",
+            Description = "Supplier Qualification Process Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "supplier", "quality" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Computer System Validation (CSV) Process Training",
+            Description = "Computer System Validation (CSV) Process Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Validation Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "csv", "validation" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "GAMP 5 Lifecycle Training",
+            Description = "GAMP 5 Lifecycle Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Validation Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "gamp5", "validation" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Clinical Trial Protocol Compliance Training",
+            Description = "Clinical Trial Protocol Compliance Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "clinical-trial", "protocol" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Informed Consent Process Training",
+            Description = "Informed Consent Process Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "informed-consent", "clinical" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Investigational Product Handling Training",
+            Description = "Investigational Product Handling Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "investigational-product", "clinical" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Pharmacovigilance Reporting Training",
+            Description = "Pharmacovigilance Reporting Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Drug Safety Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "pharmacovigilance", "safety" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "ISO 13485 Quality Management System Training",
+            Description = "ISO 13485 Quality Management System Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "iso-13485", "qms" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "ISO 9001 Quality Management System Training",
+            Description = "ISO 9001 Quality Management System Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "iso-9001", "qms" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Document Control Procedure Training",
+            Description = "Document Control Procedure Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "document-control", "quality" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Records Retention and Archiving Training",
+            Description = "Records Retention and Archiving Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "records", "archiving" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Workplace Safety (OSHA) Training",
+            Description = "Workplace Safety (OSHA) Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "EHS Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "safety", "osha" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Hazard Communication (HAZCOM) Training",
+            Description = "Hazard Communication (HAZCOM) Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "EHS Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "safety", "hazcom" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Bloodborne Pathogens Safety Training",
+            Description = "Bloodborne Pathogens Safety Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "EHS Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "safety", "bloodborne-pathogens" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Cybersecurity Awareness Training",
+            Description = "Cybersecurity Awareness Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Information Security Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "security", "awareness" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "HIPAA Privacy and Security Training",
+            Description = "HIPAA Privacy and Security Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Compliance Officer",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "hipaa", "privacy" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Environmental Monitoring Program Training",
+            Description = "Environmental Monitoring Program Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Draft,
+            Version = "1.0",
+            Tags = new List<string> { "training", "environmental-monitoring", "draft" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Sterile Manufacturing Practices Training",
+            Description = "Sterile Manufacturing Practices Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Draft,
+            Version = "1.0",
+            Tags = new List<string> { "training", "sterile-manufacturing", "draft" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Cleanroom Behavior and Gowning Training",
+            Description = "Cleanroom Behavior and Gowning Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Draft,
+            Version = "1.0",
+            Tags = new List<string> { "training", "cleanroom", "draft" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Advanced Clinical Monitoring Training",
+            Description = "Advanced Clinical Monitoring Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Draft,
+            Version = "1.0",
+            Tags = new List<string> { "training", "clinical-monitoring", "draft" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Legacy Paper Documentation Practices Training",
+            Description = "Legacy Paper Documentation Practices Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog (Legacy)",
+            RequirementApprovalStatus = RequirementApprovalStatus.Obsolete,
+            Version = "1.0",
+            Tags = new List<string> { "training", "legacy", "paper-documentation" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Legacy Manual Batch Record Review Training",
+            Description = "Legacy Manual Batch Record Review Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog (Legacy)",
+            RequirementApprovalStatus = RequirementApprovalStatus.Obsolete,
+            Version = "1.0",
+            Tags = new List<string> { "training", "legacy", "batch-record" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Electronic Batch Record (EBR) System Training",
+            Description = "Electronic Batch Record (EBR) System Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "ebr", "manufacturing" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Quality Management System (QMS) Software Training",
+            Description = "Quality Management System (QMS) Software Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "qms", "software" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Clinical Data Management System Training",
+            Description = "Clinical Data Management System Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "clinical-data", "systems" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Laboratory Information Management System (LIMS) Training",
+            Description = "Laboratory Information Management System (LIMS) Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Laboratory Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "lims", "laboratory" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Regulatory Submission Process Training",
+            Description = "Regulatory Submission Process Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Regulatory Affairs Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "regulatory", "submissions" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Complaint Handling and Post-Market Surveillance Training",
+            Description = "Complaint Handling and Post-Market Surveillance Training",
+            RequirementType = RequirementType.Training,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Training Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "training", "complaints", "post-market" }
         }
     };
 public IReadOnlyCollection<QualificationRequirement> GetAll()

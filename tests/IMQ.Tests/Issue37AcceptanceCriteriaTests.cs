@@ -89,7 +89,7 @@ public class Issue37AcceptanceCriteriaTests
     public void AC10_TrainingCountRemainsUnchanged()
     {
         var training = _service.GetByRequirementType(RequirementType.Training);
-        Assert.Equal(1, training.Count);
+        Assert.Equal(41, training.Count);
     }
 
     [Fact]

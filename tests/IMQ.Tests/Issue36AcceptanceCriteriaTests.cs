@@ -92,9 +92,9 @@ public class Issue36AcceptanceCriteriaTests
     public void AC9_TrainingCountRemainsUnchanged()
     {
         // AC9: Filtering by RequirementType = Training remains unchanged
-        // 1 original training requirement
+        // Baseline has expanded through subsequent increments
         var training = _service.GetByRequirementType(RequirementType.Training);
-        Assert.Equal(1, training.Count);
+        Assert.Equal(41, training.Count);
     }
 
     [Fact]
