@@ -1079,6 +1079,555 @@ namespace IMQ.Core.Services
             RequirementApprovalStatus = RequirementApprovalStatus.Obsolete,
             Version = "1.0",
             Tags = new List<string> { "experience", "legacy", "manual-validation" }
+        },
+        // Certification / Licensure Master Requirements (Increment 10)
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Regulatory Affairs Certification (RAC)",
+            Description = "Regulatory Affairs Certification (RAC)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "regulatory", "rac" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Certified Quality Auditor (CQA) – ASQ",
+            Description = "Certified Quality Auditor (CQA) by ASQ",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "quality", "asq" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Certified Quality Engineer (CQE) – ASQ",
+            Description = "Certified Quality Engineer (CQE) by ASQ",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "quality", "asq" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Certified Manager of Quality/Organizational Excellence (CMQ/OE) – ASQ",
+            Description = "Certified Manager of Quality/Organizational Excellence (CMQ/OE) by ASQ",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "quality", "management" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Project Management Professional (PMP)",
+            Description = "Project Management Professional (PMP)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "project-management", "pmp" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Certified Associate in Project Management (CAPM)",
+            Description = "Certified Associate in Project Management (CAPM)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "project-management", "capm" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Lean Six Sigma Green Belt",
+            Description = "Lean Six Sigma Green Belt certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "lean", "six-sigma" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Lean Six Sigma Black Belt",
+            Description = "Lean Six Sigma Black Belt certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "lean", "six-sigma" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "ISO 9001 Lead Auditor Certification",
+            Description = "ISO 9001 Lead Auditor Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "iso", "audit" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "ISO 13485 Lead Auditor Certification",
+            Description = "ISO 13485 Lead Auditor Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "iso", "medical-device" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Certified Clinical Research Professional (CCRP)",
+            Description = "Certified Clinical Research Professional (CCRP)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "clinical-research", "ccrp" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Certified Clinical Research Associate (CCRA)",
+            Description = "Certified Clinical Research Associate (CCRA)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "clinical-research", "ccra" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Clinical Research Coordinator Certification (CCRC)",
+            Description = "Clinical Research Coordinator Certification (CCRC)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "clinical-research", "ccrc" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Good Clinical Practice (GCP) Certification",
+            Description = "Good Clinical Practice (GCP) Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "gcp", "compliance" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Good Manufacturing Practice (GMP) Certification",
+            Description = "Good Manufacturing Practice (GMP) Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "gmp", "compliance" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Good Laboratory Practice (GLP) Certification",
+            Description = "Good Laboratory Practice (GLP) Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Laboratory Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "glp", "compliance" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "21 CFR Part 11 Compliance Certification",
+            Description = "21 CFR Part 11 Compliance Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "21-cfr-part-11", "compliance" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "EU Annex 11 Compliance Certification",
+            Description = "EU Annex 11 Compliance Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Quality Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "eu-annex-11", "compliance" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Computer System Validation (CSV) Certification",
+            Description = "Computer System Validation (CSV) Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Validation Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "csv", "validation" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "GAMP 5 Practitioner Certification",
+            Description = "GAMP 5 Practitioner Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Validation Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "gamp5", "validation" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Certified Information Systems Security Professional (CISSP)",
+            Description = "Certified Information Systems Security Professional (CISSP)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Information Security Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "security", "cissp" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Certified Information Security Manager (CISM)",
+            Description = "Certified Information Security Manager (CISM)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Information Security Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "security", "cism" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Certified Information Systems Auditor (CISA)",
+            Description = "Certified Information Systems Auditor (CISA)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Information Security Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "security", "cisa" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "HIPAA Privacy and Security Certification",
+            Description = "HIPAA Privacy and Security Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Compliance Officer",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "hipaa", "privacy" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Pharmacovigilance Certification",
+            Description = "Pharmacovigilance Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Drug Safety Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "pharmacovigilance", "safety" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Medical Device Regulatory Certification",
+            Description = "Medical Device Regulatory Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Regulatory Affairs Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "medical-device", "regulatory" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Bloodborne Pathogens Certification",
+            Description = "Bloodborne Pathogens Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "EHS Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "safety", "bloodborne-pathogens" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Hazard Communication (HAZCOM) Certification",
+            Description = "Hazard Communication (HAZCOM) Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Required,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "EHS Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "safety", "hazcom" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "OSHA General Industry Safety Certification",
+            Description = "OSHA General Industry Safety Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "EHS Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "safety", "osha" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "IATA Dangerous Goods Regulations (DGR) Certification",
+            Description = "IATA Dangerous Goods Regulations (DGR) Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Logistics Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "iata", "dangerous-goods" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Registered Nurse (RN) License",
+            Description = "Registered Nurse (RN) License",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "licensure", "nursing", "rn" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Licensed Practical Nurse (LPN) License",
+            Description = "Licensed Practical Nurse (LPN) License",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Clinical Operations Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "licensure", "nursing", "lpn" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Clinical Laboratory Scientist (CLS) License",
+            Description = "Clinical Laboratory Scientist (CLS) License",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Laboratory Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "licensure", "laboratory", "cls" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Medical Technologist (MT/MLS) Certification",
+            Description = "Medical Technologist (MT/MLS) Certification",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Approved,
+            ApprovedBy = "Laboratory Manager",
+            ApprovedAt = DateTime.UtcNow,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "laboratory", "mt-mls" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Certified Biomedical Equipment Technician (CBET)",
+            Description = "Certified Biomedical Equipment Technician (CBET)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Draft,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "biomedical", "cbet" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Certified Pharmaceutical Industry Professional (CPIP)",
+            Description = "Certified Pharmaceutical Industry Professional (CPIP)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Draft,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "pharmaceutical", "cpip" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Certified Validation Professional (CVP)",
+            Description = "Certified Validation Professional (CVP)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Draft,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "validation", "cvp" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "Certified Supplier Quality Professional (CSQP)",
+            Description = "Certified Supplier Quality Professional (CSQP)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog",
+            RequirementApprovalStatus = RequirementApprovalStatus.Draft,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "supplier-quality", "csqp" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "First Aid / CPR Certification (Legacy)",
+            Description = "First Aid / CPR Certification (legacy)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog (Legacy)",
+            RequirementApprovalStatus = RequirementApprovalStatus.Obsolete,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "legacy", "first-aid" }
+        },
+        new QualificationRequirement
+        {
+            Id = Guid.NewGuid(),
+            Name = "General Office Safety Certification (Legacy)",
+            Description = "General Office Safety Certification (legacy)",
+            RequirementType = RequirementType.Certification,
+            RequirementLevel = RequirementLevel.Preferred,
+            Source = "Certification Governance Catalog (Legacy)",
+            RequirementApprovalStatus = RequirementApprovalStatus.Obsolete,
+            Version = "1.0",
+            Tags = new List<string> { "certification", "legacy", "office-safety" }
         }
     };
 public IReadOnlyCollection<QualificationRequirement> GetAll()
