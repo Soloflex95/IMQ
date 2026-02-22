@@ -1,4 +1,6 @@
 using IMQ.Core.Services.Read;
+using IMQ.Core.Interfaces;
+using IMQ.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -8,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IMasterRequirementsReadService, InMemoryMasterRequirementsReadService>();
+builder.Services.AddScoped<ICvQualificationAnalysisService, CvQualificationAnalysisService>();
 
 // CORS: allow the Web app origin (configurable via ApiSettings:AllowedWebAppOrigin)
 var allowedWebAppOrigin = builder.Configuration["ApiSettings:AllowedWebAppOrigin"] ?? "https://imq-poc-webapp-dev.azurewebsites.net";

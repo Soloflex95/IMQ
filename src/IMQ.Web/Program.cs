@@ -50,6 +50,7 @@ builder.Services.AddHttpClient<IDocumentParsingService, OpenAIDocumentParsingSer
 
 // Qualification matching service (AI-powered standardization)
 builder.Services.AddHttpClient<IQualificationMatchingService, OpenAIQualificationMatchingService>();
+builder.Services.AddScoped<ICvQualificationAnalysisService, IMQ.Core.Services.CvQualificationAnalysisService>();
 
 // IMQ API client (single, correct registration) - kept for other potential API calls
 builder.Services.AddHttpClient("IMQApi", client =>

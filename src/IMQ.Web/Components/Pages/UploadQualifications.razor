@@ -2,6 +2,7 @@
 @using IMQ.Core.Interfaces
 @using Microsoft.JSInterop
 @inject IDocumentParsingService DocumentParsingService
+@inject ICvQualificationAnalysisService CvQualificationAnalysisService
 @inject NavigationManager Navigation
 @inject IConfiguration Configuration
 @inject IJSRuntime JSRuntime
@@ -144,6 +145,74 @@
                                 <p class="mb-0">@parseResult.RoleSummary</p>
                             </div>
                         </div>
+                    }
+
+                    @if (cvAnalysisResult != null)
+                    {
+                        <div class="card mb-4 border-dark">
+                            <div class="card-header bg-dark text-white">
+                                <h6 class="mb-0"><i class="bi bi-clipboard2-check"></i> Qualification Summary</h6>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-2">
+                                    <strong>Authorization Status:</strong>
+                                    <span class="badge @GetAuthorizationBadgeClass(cvAnalysisResult.AuthorizationStatus)">
+                                        @GetAuthorizationIcon(cvAnalysisResult.AuthorizationStatus)
+                                        @GetAuthorizationLabel(cvAnalysisResult.AuthorizationStatus)
+                                    </span>
+                                </p>
+                                <p class="mb-2"><strong>Profile Alignment Score:</strong> @cvAnalysisResult.ProfileAlignmentScore%</p>
+                                <p class="mb-2"><strong>Requirements Evaluated:</strong> @cvAnalysisResult.RequirementsEvaluated</p>
+                                <p class="mb-2"><strong>Required Met:</strong> @cvAnalysisResult.RequiredMet / @cvAnalysisResult.TotalRequired</p>
+                                <p class="mb-0"><strong>Preferred Met:</strong> @cvAnalysisResult.PreferredMet / @cvAnalysisResult.TotalPreferred</p>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <div class="card h-100 border-info">
+                                    <div class="card-header bg-light">
+                                        <strong>Extracted Evidence</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        @foreach (var evidence in cvAnalysisResult.ExtractedEvidence)
+                                        {
+                                            <div class="mb-1">• @evidence</div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card h-100 border-info">
+                                    <div class="card-header bg-light">
+                                        <strong>Requirement Evaluation</strong>
+                                    </div>
+                                    <div class="card-body">
+                                        @foreach (var evaluation in cvAnalysisResult.RequirementEvaluations)
+                                        {
+                                            <div class="mb-1">
+                                                @(evaluation.IsMet ? "✔" : "✖") @evaluation.RequirementName (@evaluation.RequirementLevel) - @(evaluation.IsMet ? "Met" : "Missing")
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (cvAnalysisResult.Gaps.Any())
+                        {
+                            <div class="card mb-4 border-warning">
+                                <div class="card-header bg-warning-subtle">
+                                    <strong>Gaps</strong>
+                                </div>
+                                <div class="card-body">
+                                    @foreach (var gap in cvAnalysisResult.Gaps)
+                                    {
+                                        <div class="mb-1">@gap.RequirementName (@gap.RequirementLevel) - @gap.Reason</div>
+                                    }
+                                </div>
+                            </div>
+                        }
                     }
 
                     <h5 class="mt-4 mb-3">Extracted Qualifications <span class="badge bg-secondary">@allQualifications.Count</span></h5>
@@ -326,6 +395,11 @@
                                 </label>
                                 <InputFile id="fileInput" OnChange="@LoadFile" class="d-none" accept=".txt,.pdf,.docx,.doc" />
                             </div>
+                            <div class="mt-3">
+                                <button class="btn btn-outline-success" @onclick="UseSampleCv">
+                                    <i class="bi bi-fire"></i> Use Sample CV (Recommended)
+                                </button>
+                            </div>
                             <p class="text-muted mt-2 mb-0" style="font-size: 0.9rem;">
                                 Or drag your file here
                             </p>
@@ -346,6 +420,12 @@
                                     Maximum file size: 10 MB<br />
                                     Your data is processed securely and not stored permanently
                                 </small>
+                            </div>
+
+                            <div class="alert alert-success mt-3 mb-0 text-start">
+                                <div>✔ CV parsed in-session</div>
+                                <div>✔ Raw files not permanently stored</div>
+                                <div>✔ Only structured qualification evidence retained</div>
                             </div>
                             
                             <!-- LinkedIn Import Button (Mock) -->
@@ -437,6 +517,7 @@
     private bool isProcessing = false;
     private string? errorMessage;
     private DocumentParseResult? parseResult;
+    private CvQualificationAnalysisResult? cvAnalysisResult;
     private const long MaxFileSize = 10 * 1024 * 1024; // 10 MB
     private IBrowserFile? selectedFile;
     private string? selectedFileName;
@@ -600,6 +681,8 @@
                     processedFiles.Add(selectedFile.Name);
                 }
 
+                AnalyzeCurrentEvidence();
+
                 // Reset upload for next file
                 selectedFile = null;
                 selectedFileName = null;
@@ -628,6 +711,7 @@
     private void ResetAll()
     {
         parseResult = null;
+        cvAnalysisResult = null;
         allQualifications.Clear();
         processedFiles.Clear();
         selectedFile = null;
@@ -678,6 +762,79 @@
     {
         errorMessage = $"Qualification '{qual.SkillName}' will be saved (database integration pending)";
         StateHasChanged();
+    }
+
+    private void UseSampleCv()
+    {
+        cvAnalysisResult = CvQualificationAnalysisService.AnalyzeSampleCv();
+
+        allQualifications = cvAnalysisResult.ExtractedEvidence
+            .Select(evidence => new EditableQualification
+            {
+                SkillName = evidence,
+                IssuingAuthority = "Sample CV",
+                ConfidenceScore = 1.0,
+                IsFlagged = false
+            })
+            .ToList();
+
+        if (!processedFiles.Contains("Sample CV (Deterministic Demo)"))
+        {
+            processedFiles.Add("Sample CV (Deterministic Demo)");
+        }
+
+        parseResult = new DocumentParseResult
+        {
+            Success = true,
+            Qualifications = new List<ExtractedQualification>()
+        };
+
+        selectedFile = null;
+        selectedFileName = null;
+        showUploadZone = false;
+    }
+
+    private void AnalyzeCurrentEvidence()
+    {
+        var evidence = allQualifications
+            .Select(q => q.SkillName)
+            .Where(skill => !string.IsNullOrWhiteSpace(skill))
+            .ToList();
+
+        if (evidence.Any())
+        {
+            cvAnalysisResult = CvQualificationAnalysisService.AnalyzeFromEvidence(evidence);
+        }
+    }
+
+    private static string GetAuthorizationLabel(IMQ.Core.Enums.AuthorizationStatus status)
+    {
+        return status switch
+        {
+            IMQ.Core.Enums.AuthorizationStatus.Authorized => "Authorized",
+            IMQ.Core.Enums.AuthorizationStatus.RequiresReview => "Requires Review",
+            _ => "Not Authorized"
+        };
+    }
+
+    private static string GetAuthorizationIcon(IMQ.Core.Enums.AuthorizationStatus status)
+    {
+        return status switch
+        {
+            IMQ.Core.Enums.AuthorizationStatus.Authorized => "✔ ",
+            IMQ.Core.Enums.AuthorizationStatus.RequiresReview => "⚠ ",
+            _ => "✖ "
+        };
+    }
+
+    private static string GetAuthorizationBadgeClass(IMQ.Core.Enums.AuthorizationStatus status)
+    {
+        return status switch
+        {
+            IMQ.Core.Enums.AuthorizationStatus.Authorized => "bg-success",
+            IMQ.Core.Enums.AuthorizationStatus.RequiresReview => "bg-warning text-dark",
+            _ => "bg-danger"
+        };
     }
 
     private int GetFlaggedCount()
