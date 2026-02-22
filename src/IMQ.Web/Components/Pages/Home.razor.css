@@ -2,6 +2,7 @@
     transition: all 0.3s ease;
     border: 2px solid #e0e0e0;
     cursor: pointer;
+    position: relative;
 }
 
 .quick-action-card:hover {
@@ -31,6 +32,22 @@
     box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
 }
 
+.demo-banner {
+    background-color: #eef5ff;
+    border-left: 4px solid #0d6efd;
+    border-radius: 0.375rem;
+    padding: 1rem;
+}
+
+.quick-action-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 1;
+    pointer-events: none;
+    font-size: 0.7rem;
+}
+
 .timestamp-absolute {
     font-size: 0.85em;
     color: #6c757d;
@@ -51,4 +68,10 @@
 .ai-recommendations .btn-outline-secondary:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+@media (max-width: 576px) {
+    .quick-action-badge {
+        font-size: 0.65rem;
+    }
 }
