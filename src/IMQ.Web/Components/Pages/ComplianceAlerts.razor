@@ -1,0 +1,65 @@
+@page "/compliance-alerts"
+@rendermode InteractiveServer
+
+<PageTitle>Compliance Alerts - IMQ</PageTitle>
+
+<style>
+    .review-disabled {
+        color: var(--bs-secondary-color);
+        cursor: not-allowed;
+        text-decoration: underline;
+    }
+</style>
+
+<h1><i class="bi bi-exclamation-triangle"></i> Compliance Alerts</h1>
+<p class="lead text-muted">3 unresolved compliance alerts</p>
+
+<div class="card">
+    <div class="card-header bg-warning-subtle">
+        <strong>Unresolved Alerts</strong>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">Alert ID</th>
+                    <th scope="col">Worker</th>
+                    <th scope="col">Issue</th>
+                    <th scope="col">Severity</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>CA-001</td>
+                    <td>Mike Johnson</td>
+                    <td>Critical training expired</td>
+                    <td><span class="badge bg-danger">High</span></td>
+                    <td>
+                        <span class="review-disabled" role="button" title="Not available yet — requires electronic signature.">Review</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>CA-002</td>
+                    <td>Jane Doe</td>
+                    <td>Assessment override pending justification</td>
+                    <td><span class="badge bg-warning text-dark">Medium</span></td>
+                    <td>
+                        <span class="review-disabled" role="button" title="Not available yet — requires electronic signature.">Review</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>CA-003</td>
+                    <td>Robert Chen</td>
+                    <td>Missing required qualification evidence</td>
+                    <td><span class="badge bg-danger">High</span></td>
+                    <td>
+                        <span class="review-disabled" role="button" title="Not available yet — requires electronic signature.">Review</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<p class="text-muted fs-6 mt-2 mb-0">Note: Alert review workflows require electronic signature and are not enabled in this demo build.</p>
