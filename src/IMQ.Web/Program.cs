@@ -1,6 +1,7 @@
 using IMQ.Web.Components;
 using IMQ.Web.Services;
 using IMQ.Core.Interfaces;
+using IMQ.Core.Services;
 using Microsoft.AspNetCore.Components;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
@@ -40,6 +41,7 @@ builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
 builder.Services.AddSingleton<IQualificationService, InMemoryQualificationService>();
+builder.Services.AddScoped<IComplianceAlertService, ComplianceAlertService>();
 
 // Master Requirements Service (in-memory for PoC)
 builder.Services.AddSingleton<IMQ.Core.Services.Read.IMasterRequirementsReadService, IMQ.Core.Services.Read.InMemoryMasterRequirementsReadService>();

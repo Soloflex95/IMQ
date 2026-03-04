@@ -1,4 +1,8 @@
 @page "/compliance-alerts"
+@using IMQ.Core.Entities
+@using IMQ.Core.Enums
+@using IMQ.Core.Interfaces
+@inject IComplianceAlertService ComplianceAlertService
 @rendermode InteractiveServer
 
 <PageTitle>Compliance Alerts - IMQ</PageTitle>
@@ -12,7 +16,7 @@
 </style>
 
 <h1><i class="bi bi-exclamation-triangle"></i> Compliance Alerts</h1>
-<p class="lead text-muted">3 unresolved compliance alerts</p>
+<p class="lead text-muted">@alerts.Count unresolved compliance alerts</p>
 
 <div class="card">
     <div class="card-header bg-warning-subtle">
@@ -30,36 +34,47 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>CA-001</td>
-                    <td>Mike Johnson</td>
-                    <td>Critical training expired</td>
-                    <td><span class="badge bg-danger">High</span></td>
-                    <td>
-                        <span class="review-disabled" role="button" title="Not available yet — requires electronic signature.">Review</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>CA-002</td>
-                    <td>Jane Doe</td>
-                    <td>Assessment override pending justification</td>
-                    <td><span class="badge bg-warning text-dark">Medium</span></td>
-                    <td>
-                        <span class="review-disabled" role="button" title="Not available yet — requires electronic signature.">Review</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>CA-003</td>
-                    <td>Robert Chen</td>
-                    <td>Missing required qualification evidence</td>
-                    <td><span class="badge bg-danger">High</span></td>
-                    <td>
-                        <span class="review-disabled" role="button" title="Not available yet — requires electronic signature.">Review</span>
-                    </td>
-                </tr>
+                @foreach (var alert in alerts)
+                {
+                    <tr>
+                        <td>@alert.AlertId</td>
+                        <td>@alert.WorkerName</td>
+                        <td>
+                            <div>@alert.Issue</div>
+                            <small class="text-muted d-block">Impacts: @alert.RoleName</small>
+                            @if (alert.DaysOverdue.HasValue)
+                            {
+                                <small class="text-muted d-block">@alert.DaysOverdue days overdue</small>
+                            }
+                        </td>
+                        <td><span class="badge @GetSeverityBadgeClass(alert.Severity)">@alert.Severity</span></td>
+                        <td>
+                            <span class="review-disabled" role="button" title="Not available yet — requires electronic signature.">Review</span>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
 </div>
 
 <p class="text-muted fs-6 mt-2 mb-0">Note: Alert review workflows require electronic signature and are not enabled in this demo build.</p>
+
+@code {
+    private IReadOnlyList<ComplianceAlert> alerts = [];
+
+    protected override void OnInitialized()
+    {
+        alerts = ComplianceAlertService.GetUnresolvedAlerts();
+    }
+
+    private static string GetSeverityBadgeClass(AlertSeverity severity)
+    {
+        return severity switch
+        {
+            AlertSeverity.High => "bg-danger",
+            AlertSeverity.Medium => "bg-warning text-dark",
+            _ => "bg-secondary"
+        };
+    }
+}
