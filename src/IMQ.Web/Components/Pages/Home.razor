@@ -160,7 +160,7 @@
                         </button>
                     </div>
                     <small class="text-muted d-block mb-2" title="These recommendations are based on recent user activity and qualification data.">
-                        <i class="bi bi-brain"></i> AI-Generated | Last Updated: Mar 1, 2026 9:00 AM EST
+                        <i class="bi bi-brain"></i> AI-Generated | Last Updated: @DemoNowUtc.ToString("MMM d, yyyy h:mm tt 'UTC'")
                     </small>
                     <ul class="list-unstyled mb-0">
                         <li class="mb-2">
@@ -274,7 +274,7 @@
         }
         
         // Format: "3:45 PM EDT" or "Jul 23, 9:12 AM UTC"
-        var today = DateTime.Today;
+        var today = TimeZoneInfo.ConvertTimeFromUtc(DemoNowUtc, TimeZoneInfo.Local).Date;
         if (localTime.Date == today)
         {
             // Same day: show time only

@@ -320,3 +320,10 @@ Based on codebase state, prioritize:
 
 *Last Updated: January 10, 2026 | Reflects .NET 9, in-memory prototype phase*
 
+Deterministic Demo Output (Hard Rule)
+
+For demo/stage UI, do not render current time/date, random values, or newly generated GUIDs in UI-visible content.
+
+Prohibited in UI-visible output: DateTime.Now, DateTime.UtcNow, Guid.NewGuid(), Random.
+
+If time must be shown, use fixed demo constants (e.g., Mar 2, 2026 3:05 PM EST) so the UI is identical across refresh and deploy.
