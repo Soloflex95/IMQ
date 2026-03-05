@@ -41,6 +41,7 @@ builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
 builder.Services.AddSingleton<IQualificationService, InMemoryQualificationService>();
+builder.Services.AddSingleton<IQualificationRecordService, QualificationRecordService>();
 builder.Services.AddScoped<IComplianceAlertService, ComplianceAlertService>();
 
 // Master Requirements Service (in-memory for PoC)
