@@ -1,0 +1,313 @@
+@page "/workers/{workerId}/qualification-record"
+@namespace IMQ.Web.Components.Pages.WorkerRecords
+@using IMQ.Core.Entities
+@using IMQ.Core.Interfaces
+@using QualificationRecordModel = IMQ.Core.Entities.QualificationRecord
+@inject IQualificationRecordService QualificationRecordService
+@rendermode InteractiveServer
+
+<PageTitle>Structured Qualification Record - IMQ</PageTitle>
+
+<div class="mb-3">
+    <a href="/workers" class="small">&larr; Back to Workers</a>
+</div>
+
+<h1>Structured Qualification Record</h1>
+<p class="lead">IMQ organizes training, certifications, skills, and experience into a standardized record so qualifications can be evaluated consistently.</p>
+
+@if (_record is null)
+{
+    <div class="alert alert-info" role="alert">
+        Loading qualification record...
+    </div>
+}
+else if (string.IsNullOrWhiteSpace(_record.WorkerId))
+{
+    <div class="alert alert-warning" role="alert">
+        Worker record not found for "@workerId".
+        <a class="ms-2" href="/workers">Return to Workers</a>
+    </div>
+}
+else
+{
+    <div class="card mb-4">
+        <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h4 class="mb-1">@_record.WorkerName</h4>
+                <div class="text-muted">@_record.Role</div>
+            </div>
+            <span class="badge @GetStatusBadgeClass(_record.QualificationStatus)">@_record.QualificationStatus</span>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header"><strong>Qualification Summary</strong></div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <div class="small text-muted">Coverage</div>
+                    <div class="fw-semibold">@_requirementsMet / @_totalRequirements requirements met</div>
+                </div>
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <div class="small text-muted">Requirements Missing</div>
+                    <div class="fw-semibold text-danger">@_requirementsMissing</div>
+                </div>
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <div class="small text-muted">Critical Gaps</div>
+                    <div class="fw-semibold text-danger">@_criticalGaps</div>
+                </div>
+                <div class="col-md-3">
+                    <div class="small text-muted">Evidence Types</div>
+                    <div class="fw-semibold">@_evidenceTypes</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header"><strong>Role Requirements</strong></div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Requirement</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Critical</th>
+                            <th>Matched Evidence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var requirement in _record.RoleRequirements)
+                        {
+                            <tr class="@(requirement.IsMet ? string.Empty : "table-danger")">
+                                <td>@requirement.RequirementName</td>
+                                <td>@requirement.RequirementType</td>
+                                <td>
+                                    <span class="fw-semibold @(requirement.IsMet ? "text-success" : "text-danger")">@requirement.Status</span>
+                                </td>
+                                <td>
+                                    <span class="badge @(requirement.IsCriticalGap ? "bg-danger" : "bg-secondary")">@(requirement.IsCriticalGap ? "Critical" : "Standard")</span>
+                                </td>
+                                <td>@GetRequirementEvidenceDisplay(requirement)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header"><strong>Certifications</strong></div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>Certification</th>
+                            <th>Issuer</th>
+                            <th>Date Acquired</th>
+                            <th>Expiration Date</th>
+                            <th>Status</th>
+                            <th>Evidence Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var cert in _record.Certifications)
+                        {
+                            <tr>
+                                <td>@cert.CertificationName</td>
+                                <td>@cert.Issuer</td>
+                                <td>@FormatDate(cert.DateAcquired)</td>
+                                <td>@(cert.ExpirationDate.HasValue ? FormatDate(cert.ExpirationDate.Value) : "N/A")</td>
+                                <td>@cert.Status</td>
+                                <td>@cert.EvidenceSource</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header"><strong>Training</strong></div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Provider</th>
+                            <th>Completion Date</th>
+                            <th>Recertification Cycle</th>
+                            <th>Status</th>
+                            <th>Evidence Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var training in _record.TrainingRecords)
+                        {
+                            <tr>
+                                <td>@training.CourseName</td>
+                                <td>@training.Provider</td>
+                                <td>@FormatDate(training.CompletionDate)</td>
+                                <td>@GetRecertificationCycleText(training.RecertCycleMonths)</td>
+                                <td>@training.Status</td>
+                                <td>@training.EvidenceSource</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header"><strong>Skills</strong></div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>Skill</th>
+                            <th>Level</th>
+                            <th>Required Level</th>
+                            <th>Status</th>
+                            <th>Evidence Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var skill in _record.Skills)
+                        {
+                            <tr>
+                                <td>@skill.SkillName</td>
+                                <td>@skill.WorkerLevel</td>
+                                <td>@skill.RequiredLevel</td>
+                                <td>@skill.Status</td>
+                                <td>@skill.EvidenceSource</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header"><strong>Education</strong></div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>Degree Type</th>
+                            <th>Field</th>
+                            <th>Verification Status</th>
+                            <th>Evidence Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var edu in _record.Education)
+                        {
+                            <tr>
+                                <td>@edu.Degree</td>
+                                <td>@edu.Field</td>
+                                <td>@edu.VerificationStatus</td>
+                                <td>@edu.EvidenceSource</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string workerId { get; set; } = string.Empty;
+
+    private QualificationRecordModel? _record;
+    private int _totalRequirements;
+    private int _requirementsMet;
+    private int _requirementsMissing;
+    private int _criticalGaps;
+    private string _evidenceTypes = "N/A";
+
+    protected override void OnParametersSet()
+    {
+        _record = QualificationRecordService.GetQualificationRecord(workerId);
+
+        if (_record is null)
+        {
+            _totalRequirements = 0;
+            _requirementsMet = 0;
+            _requirementsMissing = 0;
+            _criticalGaps = 0;
+            _evidenceTypes = "N/A";
+            return;
+        }
+
+        _totalRequirements = _record.RoleRequirements.Count;
+        _requirementsMet = _record.RoleRequirements.Count(requirement => requirement.IsMet);
+        _requirementsMissing = _record.RoleRequirements.Count(requirement => !requirement.IsMet);
+        _criticalGaps = Math.Min(
+            _requirementsMissing,
+            _record.RoleRequirements.Count(requirement => requirement.IsCriticalGap));
+
+        var evidenceTypes = new List<string>();
+        if (_record.Certifications.Any(cert => !string.IsNullOrWhiteSpace(cert.EvidenceSource)))
+        {
+            evidenceTypes.Add("Certifications");
+        }
+
+        if (_record.TrainingRecords.Any(training => !string.IsNullOrWhiteSpace(training.EvidenceSource)))
+        {
+            evidenceTypes.Add("Training");
+        }
+
+        if (_record.Skills.Any(skill => !string.IsNullOrWhiteSpace(skill.EvidenceSource)))
+        {
+            evidenceTypes.Add("Skills");
+        }
+
+        if (_record.Education.Any(education => !string.IsNullOrWhiteSpace(education.EvidenceSource)))
+        {
+            evidenceTypes.Add("Education");
+        }
+
+        _evidenceTypes = evidenceTypes.Count > 0
+            ? string.Join(", ", evidenceTypes)
+            : "N/A";
+    }
+
+    private static string GetStatusBadgeClass(string status) => status switch
+    {
+        "Qualified" => "bg-success",
+        "Needs Review" => "bg-warning text-dark",
+        "Not Qualified" => "bg-danger",
+        _ => "bg-secondary"
+    };
+
+    private static string GetRecertificationCycleText(int? recertCycleMonths)
+    {
+        return recertCycleMonths.HasValue
+            ? $"{recertCycleMonths.Value} months"
+            : "N/A";
+    }
+
+    private static string FormatDate(DateOnly date)
+    {
+        return date.ToString("yyyy-MM-dd");
+    }
+
+    private static string GetRequirementEvidenceDisplay(RoleRequirementTraceRecord requirement)
+    {
+        return requirement.IsMet
+            ? requirement.MatchedEvidence
+            : "-- (No evidence)";
+    }
+}

@@ -9,6 +9,7 @@
     <i class="bi bi-people"></i> Team Management
 </h1>
 <p class="lead">Manage your team's qualifications and assignments</p>
+<p class="text-muted mb-3"><strong>Structured Qualification Records:</strong> IMQ organizes qualification evidence into a standardized record used for compliance evaluation.</p>
 
 <div class="row mt-3">
     <div class="col-md-12">
@@ -86,6 +87,7 @@
                                                 </div>
                                             </div>
                                             <small class="text-muted">@worker.TotalQualifications total</small>
+                                            <div><small class="text-muted">@worker.QualifiedCount / @worker.TotalQualifications requirements</small></div>
                                         </td>
                                         <td>
                                             <span class="badge @GetOverallStatusBadgeClass(worker.OverallStatus)">
@@ -94,15 +96,36 @@
                                         </td>
                                         <td>
                                             <div class="btn-group btn-group-sm" role="group">
-                                                <button class="btn btn-outline-primary" @onclick="() => ViewWorker(worker.Id)">
+                                                <button class="btn btn-outline-secondary text-secondary opacity-50" disabled title="Not available yet - planned feature" style="cursor: not-allowed;">
                                                     <i class="bi bi-eye"></i>
                                                 </button>
-                                                <button class="btn btn-outline-success" @onclick="() => AssessWorker(worker.Id)">
+                                                <button class="btn btn-outline-secondary text-secondary opacity-50" disabled title="Not available yet - planned feature" style="cursor: not-allowed;">
                                                     <i class="bi bi-clipboard-check"></i>
                                                 </button>
-                                                <button class="btn btn-outline-secondary" @onclick="() => EditWorker(worker.Id)">
+                                                <button class="btn btn-outline-secondary text-secondary opacity-50" disabled title="Not available yet - planned feature" style="cursor: not-allowed;">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
+                                                @{
+                                                    var workerId = GetWorkerId($"{worker.FirstName} {worker.LastName}");
+                                                }
+                                                @if (!string.IsNullOrWhiteSpace(workerId))
+                                                {
+                                                    <a class="btn btn-sm btn-outline-primary fw-semibold" href="/workers/@workerId/qualification-record" title="Structured Record">
+                                                        <i class="bi bi-journal-check"></i> Structured Record
+                                                    </a>
+                                                    <a class="btn btn-sm btn-outline-dark fw-semibold" href="/workers/@workerId/qualification-decision" title="Qualification Decision">
+                                                        <i class="bi bi-clipboard2-check"></i> Decision
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-sm btn-outline-secondary text-secondary opacity-50" disabled title="Not available for this worker in demo build" style="cursor: not-allowed;">
+                                                        <i class="bi bi-journal-check"></i> Structured Record
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-secondary text-secondary opacity-50" disabled title="Not available for this worker in demo build" style="cursor: not-allowed;">
+                                                        <i class="bi bi-clipboard2-check"></i> Decision
+                                                    </button>
+                                                }
                                             </div>
                                         </td>
                                     </tr>
@@ -201,45 +224,45 @@
         workers = new List<WorkerViewModel>
         {
             // 24 Qualified Workers
-            new() { Id = Guid.NewGuid(), FirstName = "John", LastName = "Smith", Email = "john.smith@company.com", Department = "Quality Control", PrimaryJob = "QA Specialist", QualifiedCount = 7, ReviewCount = 2, NotQualifiedCount = 1, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Jane", LastName = "Doe", Email = "jane.doe@company.com", Department = "Compliance", PrimaryJob = "GMP Auditor", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = true },
-            new() { Id = Guid.NewGuid(), FirstName = "Sarah", LastName = "Williams", Email = "sarah.williams@company.com", Department = "Engineering", PrimaryJob = "Validation Engineer", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Michael", LastName = "Chen", Email = "michael.chen@company.com", Department = "Quality Control", PrimaryJob = "QC Analyst", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Emily", LastName = "Rodriguez", Email = "emily.rodriguez@company.com", Department = "Production", PrimaryJob = "Production Supervisor", QualifiedCount = 8, ReviewCount = 2, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = true },
-            new() { Id = Guid.NewGuid(), FirstName = "David", LastName = "Martinez", Email = "david.martinez@company.com", Department = "Compliance", PrimaryJob = "Compliance Officer", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Lisa", LastName = "Anderson", Email = "lisa.anderson@company.com", Department = "Quality Control", PrimaryJob = "QA Lead", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = true },
-            new() { Id = Guid.NewGuid(), FirstName = "James", LastName = "Taylor", Email = "james.taylor@company.com", Department = "Engineering", PrimaryJob = "Process Engineer", QualifiedCount = 8, ReviewCount = 2, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Maria", LastName = "Garcia", Email = "maria.garcia@company.com", Department = "Production", PrimaryJob = "Mfg Technician II", QualifiedCount = 7, ReviewCount = 3, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Robert", LastName = "Lee", Email = "robert.lee@company.com", Department = "Quality Control", PrimaryJob = "Lab Analyst", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Jennifer", LastName = "White", Email = "jennifer.white@company.com", Department = "Compliance", PrimaryJob = "Quality Specialist", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Thomas", LastName = "Harris", Email = "thomas.harris@company.com", Department = "Engineering", PrimaryJob = "Validation Lead", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = true },
-            new() { Id = Guid.NewGuid(), FirstName = "Patricia", LastName = "Clark", Email = "patricia.clark@company.com", Department = "Production", PrimaryJob = "Production Manager", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = true },
-            new() { Id = Guid.NewGuid(), FirstName = "Daniel", LastName = "Lewis", Email = "daniel.lewis@company.com", Department = "Quality Control", PrimaryJob = "QC Technician", QualifiedCount = 8, ReviewCount = 2, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Nancy", LastName = "Walker", Email = "nancy.walker@company.com", Department = "Compliance", PrimaryJob = "GMP Coordinator", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Christopher", LastName = "Hall", Email = "christopher.hall@company.com", Department = "Engineering", PrimaryJob = "Sr. Engineer", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Karen", LastName = "Allen", Email = "karen.allen@company.com", Department = "Production", PrimaryJob = "Mfg Technician III", QualifiedCount = 8, ReviewCount = 2, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Matthew", LastName = "Young", Email = "matthew.young@company.com", Department = "Quality Control", PrimaryJob = "QA Analyst", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Betty", LastName = "King", Email = "betty.king@company.com", Department = "Compliance", PrimaryJob = "Document Controller", QualifiedCount = 7, ReviewCount = 3, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Steven", LastName = "Wright", Email = "steven.wright@company.com", Department = "Engineering", PrimaryJob = "Equipment Engineer", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Sandra", LastName = "Lopez", Email = "sandra.lopez@company.com", Department = "Production", PrimaryJob = "Batch Coordinator", QualifiedCount = 8, ReviewCount = 2, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Kevin", LastName = "Hill", Email = "kevin.hill@company.com", Department = "Quality Control", PrimaryJob = "Method Analyst", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Donna", LastName = "Scott", Email = "donna.scott@company.com", Department = "Compliance", PrimaryJob = "Quality Assurance Rep", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Brian", LastName = "Green", Email = "brian.green@company.com", Department = "Engineering", PrimaryJob = "Automation Engineer", QualifiedCount = 8, ReviewCount = 2, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "John", LastName = "Smith", Email = "john.smith@company.com", Department = "Quality Control", PrimaryJob = "QA Specialist", QualifiedCount = 7, ReviewCount = 2, NotQualifiedCount = 1, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Jane", LastName = "Doe", Email = "jane.doe@company.com", Department = "Compliance", PrimaryJob = "GMP Auditor", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = true },
+            new() { FirstName = "Sarah", LastName = "Williams", Email = "sarah.williams@company.com", Department = "Engineering", PrimaryJob = "Validation Engineer", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Michael", LastName = "Chen", Email = "michael.chen@company.com", Department = "Quality Control", PrimaryJob = "QC Analyst", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Emily", LastName = "Rodriguez", Email = "emily.rodriguez@company.com", Department = "Production", PrimaryJob = "Production Supervisor", QualifiedCount = 8, ReviewCount = 2, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = true },
+            new() { FirstName = "David", LastName = "Martinez", Email = "david.martinez@company.com", Department = "Compliance", PrimaryJob = "Compliance Officer", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Lisa", LastName = "Anderson", Email = "lisa.anderson@company.com", Department = "Quality Control", PrimaryJob = "QA Lead", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = true },
+            new() { FirstName = "James", LastName = "Taylor", Email = "james.taylor@company.com", Department = "Engineering", PrimaryJob = "Process Engineer", QualifiedCount = 8, ReviewCount = 2, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Maria", LastName = "Garcia", Email = "maria.garcia@company.com", Department = "Production", PrimaryJob = "Mfg Technician II", QualifiedCount = 7, ReviewCount = 3, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Robert", LastName = "Lee", Email = "robert.lee@company.com", Department = "Quality Control", PrimaryJob = "Lab Analyst", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Jennifer", LastName = "White", Email = "jennifer.white@company.com", Department = "Compliance", PrimaryJob = "Quality Specialist", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Thomas", LastName = "Harris", Email = "thomas.harris@company.com", Department = "Engineering", PrimaryJob = "Validation Lead", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = true },
+            new() { FirstName = "Patricia", LastName = "Clark", Email = "patricia.clark@company.com", Department = "Production", PrimaryJob = "Production Manager", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = true },
+            new() { FirstName = "Daniel", LastName = "Lewis", Email = "daniel.lewis@company.com", Department = "Quality Control", PrimaryJob = "QC Technician", QualifiedCount = 8, ReviewCount = 2, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Nancy", LastName = "Walker", Email = "nancy.walker@company.com", Department = "Compliance", PrimaryJob = "GMP Coordinator", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Christopher", LastName = "Hall", Email = "christopher.hall@company.com", Department = "Engineering", PrimaryJob = "Sr. Engineer", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Karen", LastName = "Allen", Email = "karen.allen@company.com", Department = "Production", PrimaryJob = "Mfg Technician III", QualifiedCount = 8, ReviewCount = 2, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Matthew", LastName = "Young", Email = "matthew.young@company.com", Department = "Quality Control", PrimaryJob = "QA Analyst", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Betty", LastName = "King", Email = "betty.king@company.com", Department = "Compliance", PrimaryJob = "Document Controller", QualifiedCount = 7, ReviewCount = 3, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Steven", LastName = "Wright", Email = "steven.wright@company.com", Department = "Engineering", PrimaryJob = "Equipment Engineer", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Sandra", LastName = "Lopez", Email = "sandra.lopez@company.com", Department = "Production", PrimaryJob = "Batch Coordinator", QualifiedCount = 8, ReviewCount = 2, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Kevin", LastName = "Hill", Email = "kevin.hill@company.com", Department = "Quality Control", PrimaryJob = "Method Analyst", QualifiedCount = 10, ReviewCount = 0, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Donna", LastName = "Scott", Email = "donna.scott@company.com", Department = "Compliance", PrimaryJob = "Quality Assurance Rep", QualifiedCount = 9, ReviewCount = 1, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
+            new() { FirstName = "Brian", LastName = "Green", Email = "brian.green@company.com", Department = "Engineering", PrimaryJob = "Automation Engineer", QualifiedCount = 8, ReviewCount = 2, NotQualifiedCount = 0, TotalQualifications = 10, OverallStatus = "Qualified", IsManager = false },
             
             // 8 Needs Review Workers
-            new() { Id = Guid.NewGuid(), FirstName = "Mike", LastName = "Johnson", Email = "mike.johnson@company.com", Department = "Production", PrimaryJob = "Mfg Technician", QualifiedCount = 5, ReviewCount = 3, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Ashley", LastName = "Baker", Email = "ashley.baker@company.com", Department = "Production", PrimaryJob = "Line Operator", QualifiedCount = 6, ReviewCount = 2, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Ryan", LastName = "Adams", Email = "ryan.adams@company.com", Department = "Quality Control", PrimaryJob = "Trainee Analyst", QualifiedCount = 4, ReviewCount = 4, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Michelle", LastName = "Nelson", Email = "michelle.nelson@company.com", Department = "Engineering", PrimaryJob = "Junior Engineer", QualifiedCount = 5, ReviewCount = 3, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Jason", LastName = "Carter", Email = "jason.carter@company.com", Department = "Production", PrimaryJob = "Packaging Tech", QualifiedCount = 6, ReviewCount = 2, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Amanda", LastName = "Mitchell", Email = "amanda.mitchell@company.com", Department = "Compliance", PrimaryJob = "Compliance Trainee", QualifiedCount = 4, ReviewCount = 4, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Joshua", LastName = "Perez", Email = "joshua.perez@company.com", Department = "Quality Control", PrimaryJob = "Lab Tech I", QualifiedCount = 5, ReviewCount = 3, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Stephanie", LastName = "Roberts", Email = "stephanie.roberts@company.com", Department = "Production", PrimaryJob = "Material Handler", QualifiedCount = 6, ReviewCount = 2, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
+            new() { FirstName = "Mike", LastName = "Johnson", Email = "mike.johnson@company.com", Department = "Production", PrimaryJob = "Mfg Technician", QualifiedCount = 5, ReviewCount = 3, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
+            new() { FirstName = "Ashley", LastName = "Baker", Email = "ashley.baker@company.com", Department = "Production", PrimaryJob = "Line Operator", QualifiedCount = 6, ReviewCount = 2, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
+            new() { FirstName = "Ryan", LastName = "Adams", Email = "ryan.adams@company.com", Department = "Quality Control", PrimaryJob = "Trainee Analyst", QualifiedCount = 4, ReviewCount = 4, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
+            new() { FirstName = "Michelle", LastName = "Nelson", Email = "michelle.nelson@company.com", Department = "Engineering", PrimaryJob = "Junior Engineer", QualifiedCount = 5, ReviewCount = 3, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
+            new() { FirstName = "Jason", LastName = "Carter", Email = "jason.carter@company.com", Department = "Production", PrimaryJob = "Packaging Tech", QualifiedCount = 6, ReviewCount = 2, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
+            new() { FirstName = "Amanda", LastName = "Mitchell", Email = "amanda.mitchell@company.com", Department = "Compliance", PrimaryJob = "Compliance Trainee", QualifiedCount = 4, ReviewCount = 4, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
+            new() { FirstName = "Joshua", LastName = "Perez", Email = "joshua.perez@company.com", Department = "Quality Control", PrimaryJob = "Lab Tech I", QualifiedCount = 5, ReviewCount = 3, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
+            new() { FirstName = "Stephanie", LastName = "Roberts", Email = "stephanie.roberts@company.com", Department = "Production", PrimaryJob = "Material Handler", QualifiedCount = 6, ReviewCount = 2, NotQualifiedCount = 2, TotalQualifications = 10, OverallStatus = "Needs Review", IsManager = false },
             
             // 3 Not Qualified Workers
-            new() { Id = Guid.NewGuid(), FirstName = "Bob", LastName = "Brown", Email = "bob.brown@company.com", Department = "Quality Control", PrimaryJob = "Lab Analyst", QualifiedCount = 4, ReviewCount = 2, NotQualifiedCount = 4, TotalQualifications = 10, OverallStatus = "Not Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Derek", LastName = "Turner", Email = "derek.turner@company.com", Department = "Production", PrimaryJob = "New Hire", QualifiedCount = 2, ReviewCount = 3, NotQualifiedCount = 5, TotalQualifications = 10, OverallStatus = "Not Qualified", IsManager = false },
-            new() { Id = Guid.NewGuid(), FirstName = "Rachel", LastName = "Phillips", Email = "rachel.phillips@company.com", Department = "Engineering", PrimaryJob = "Intern", QualifiedCount = 3, ReviewCount = 2, NotQualifiedCount = 5, TotalQualifications = 10, OverallStatus = "Not Qualified", IsManager = false }
+            new() { FirstName = "Bob", LastName = "Brown", Email = "bob.brown@company.com", Department = "Quality Control", PrimaryJob = "Lab Analyst", QualifiedCount = 4, ReviewCount = 2, NotQualifiedCount = 4, TotalQualifications = 10, OverallStatus = "Not Qualified", IsManager = false },
+            new() { FirstName = "Derek", LastName = "Turner", Email = "derek.turner@company.com", Department = "Production", PrimaryJob = "New Hire", QualifiedCount = 2, ReviewCount = 3, NotQualifiedCount = 5, TotalQualifications = 10, OverallStatus = "Not Qualified", IsManager = false },
+            new() { FirstName = "Rachel", LastName = "Phillips", Email = "rachel.phillips@company.com", Department = "Engineering", PrimaryJob = "Intern", QualifiedCount = 3, ReviewCount = 2, NotQualifiedCount = 5, TotalQualifications = 10, OverallStatus = "Not Qualified", IsManager = false }
         };
         
         filteredWorkers = workers;
@@ -301,10 +324,16 @@
         _ => "bg-secondary"
     };
 
-    private void ViewWorker(Guid id) => Console.WriteLine($"View Worker {id}");
-    private void AssessWorker(Guid id) => Console.WriteLine($"Assess Worker {id}");
-    private void EditWorker(Guid id) => Console.WriteLine($"Edit Worker {id}");
     private void AddWorker() => Console.WriteLine("Add Worker");
+
+    private static string? GetWorkerId(string workerName) => workerName switch
+    {
+        "Mike Johnson" => "mike-johnson",
+        "Jane Doe" => "jane-doe",
+        "Robert Chen" => "robert-chen",
+        "Robert Lee" => "robert-lee",
+        _ => null
+    };
 
     private class WorkerViewModel
     {
