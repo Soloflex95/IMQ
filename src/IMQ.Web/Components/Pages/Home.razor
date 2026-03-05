@@ -1,5 +1,7 @@
 @page "/"
+@using IMQ.Core.Interfaces
 @inject NavigationManager Navigation
+@inject IComplianceAlertService ComplianceAlertService
 @rendermode InteractiveServer
 
 <PageTitle>IMQ Dashboard</PageTitle>
@@ -24,7 +26,7 @@
 <a href="/compliance-alerts" class="alert alert-warning d-flex align-items-center justify-content-between mb-3 compliance-alert text-decoration-none text-dark" role="button">
     <div>
         <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
-        <strong><span class="fw-bolder">3</span> unresolved compliance alerts</strong>
+        <strong><span class="fw-bolder">@unresolvedAlertCount</span> unresolved compliance alerts</strong>
     </div>
     <i class="bi bi-chevron-right"></i>
 </a>
@@ -158,7 +160,7 @@
                         </button>
                     </div>
                     <small class="text-muted d-block mb-2" title="These recommendations are based on recent user activity and qualification data.">
-                        <i class="bi bi-brain"></i> AI-Generated | Last Updated: @DateTime.Now.ToString("h:mm tt")
+                        <i class="bi bi-brain"></i> AI-Generated | Last Updated: @DemoNowUtc.ToString("MMM d, yyyy h:mm tt 'UTC'")
                     </small>
                     <ul class="list-unstyled mb-0">
                         <li class="mb-2">
@@ -185,21 +187,21 @@
                         <div class="list-group-item px-0">
                             <small class="text-muted">
                                 <i class="bi bi-clipboard-check"></i> 2h ago 
-                                <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DateTime.UtcNow.AddHours(-2))</span>
+                                <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DemoNowUtc.AddHours(-2))</span>
                             </small>
                             <p class="mb-0">Jane Doe assessed for Quality Specialist - Qualified</p>
                         </div>
                         <div class="list-group-item px-0">
                             <small class="text-muted">
                                 <i class="bi bi-check-circle"></i> 5h ago 
-                                <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DateTime.UtcNow.AddHours(-5))</span>
+                                <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DemoNowUtc.AddHours(-5))</span>
                             </small>
                             <p class="mb-0">Override approved for Mike Johnson - QA Lead</p>
                         </div>
                         <div class="list-group-item px-0">
                             <small class="text-muted">
                                 <i class="bi bi-file-earmark-arrow-up"></i> 1d ago 
-                                <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DateTime.UtcNow.AddDays(-1))</span>
+                                <span class="timestamp-absolute">• @GetAbsoluteTimestamp(DemoNowUtc.AddDays(-1))</span>
                             </small>
                             <p class="mb-0">New CV uploaded and parsed successfully</p>
                         </div>
@@ -211,7 +213,14 @@
 </div>
 
 @code {
+    private static readonly DateTime DemoNowUtc = new DateTime(2026, 3, 1, 14, 0, 0, DateTimeKind.Utc);
     private string selectedScope = "MyTeam";
+    private int unresolvedAlertCount;
+
+    protected override void OnInitialized()
+    {
+        unresolvedAlertCount = ComplianceAlertService.GetUnresolvedAlertCount();
+    }
 
     private void ShowUploadCVPlaceholder()
     {
@@ -265,7 +274,7 @@
         }
         
         // Format: "3:45 PM EDT" or "Jul 23, 9:12 AM UTC"
-        var today = DateTime.Today;
+        var today = TimeZoneInfo.ConvertTimeFromUtc(DemoNowUtc, TimeZoneInfo.Local).Date;
         if (localTime.Date == today)
         {
             // Same day: show time only
