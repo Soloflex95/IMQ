@@ -1,3 +1,5 @@
+using IMQ.Core.Enums;
+
 namespace IMQ.Core.Entities;
 
 /// <summary>
@@ -6,9 +8,8 @@ namespace IMQ.Core.Entities;
 public class RoleRequirementTraceRecord
 {
     public string RequirementName { get; set; } = string.Empty;
-    public string RequirementType { get; set; } = string.Empty;
+    public RequirementAssessmentType RequirementType { get; set; } = RequirementAssessmentType.Mandatory;
     public string Status { get; set; } = string.Empty;
     public bool IsMet { get; set; }
-    public bool IsCriticalGap { get; set; }
     public string MatchedEvidence { get; set; } = string.Empty;
 }

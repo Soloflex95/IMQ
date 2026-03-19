@@ -1,4 +1,5 @@
 using IMQ.Core.Entities;
+using IMQ.Core.Enums;
 using IMQ.Core.Interfaces;
 
 namespace IMQ.Core.Services;
@@ -429,6 +430,57 @@ public class QualificationRecordService : IQualificationRecordService
                         EvidenceSource = "Verified Diploma"
                     }
                 ])
+            ,
+            ["olivia-kim"] = BuildRecord(
+                workerId: "olivia-kim",
+                workerName: "Olivia Kim",
+                role: "Documentation Specialist",
+                certifications:
+                [
+                    new CertificationRecord
+                    {
+                        CertificationName = "GMP Documentation Essentials",
+                        Issuer = "IMQ Academy",
+                        DateAcquired = new DateOnly(2023, 5, 14),
+                        ExpirationDate = new DateOnly(2026, 5, 14),
+                        Status = "Expired",
+                        EvidenceSource = "Training Certificate Archive"
+                    }
+                ],
+                trainingRecords:
+                [
+                    new TrainingRecord
+                    {
+                        CourseName = "Controlled Document Lifecycle",
+                        Provider = "IMQ Learning",
+                        CompletionDate = new DateOnly(2025, 2, 11),
+                        RecertCycleMonths = 24,
+                        Status = "Complete",
+                        EvidenceSource = "LMS Transcript"
+                    },
+                    new TrainingRecord
+                    {
+                        CourseName = "SOP Change Management",
+                        Provider = "IMQ Learning",
+                        CompletionDate = new DateOnly(2025, 4, 5),
+                        RecertCycleMonths = 24,
+                        Status = "Complete",
+                        EvidenceSource = "Manager Signoff"
+                    }
+                ],
+                skills: [],
+                education:
+                [
+                    new EducationRecord
+                    {
+                        Degree = "Bachelor of Arts",
+                        Field = "Technical Communication",
+                        Institution = "University of Illinois",
+                        GraduationYear = 2017,
+                        VerificationStatus = "Verified",
+                        EvidenceSource = "Verified Diploma"
+                    }
+                ])
         };
 
     /// <inheritdoc />
@@ -462,17 +514,30 @@ public class QualificationRecordService : IQualificationRecordService
         IReadOnlyList<SkillRecord> skills,
         IReadOnlyList<EducationRecord> education)
     {
+        var roleRequirements = BuildRoleRequirements(certifications, trainingRecords, skills);
+
+        var totalMandatoryRequirements = roleRequirements.Count(requirement => requirement.RequirementType == RequirementAssessmentType.Mandatory);
+        var metMandatoryRequirements = roleRequirements.Count(requirement => requirement.RequirementType == RequirementAssessmentType.Mandatory && requirement.IsMet);
+        var totalSupportingRequirements = roleRequirements.Count(requirement => requirement.RequirementType == RequirementAssessmentType.Supporting);
+        var metSupportingRequirements = roleRequirements.Count(requirement => requirement.RequirementType == RequirementAssessmentType.Supporting && requirement.IsMet);
+
         return new QualificationRecord
         {
             WorkerId = workerId,
             WorkerName = workerName,
             Role = role,
-            QualificationStatus = CalculateQualificationStatus(certifications, trainingRecords, skills),
+            QualificationStatus = CalculateQualificationStatus(totalMandatoryRequirements, metMandatoryRequirements),
             Certifications = certifications,
             TrainingRecords = trainingRecords,
             Skills = skills,
             Education = education,
-            RoleRequirements = BuildRoleRequirements(certifications, trainingRecords, skills)
+            TotalMandatoryRequirements = totalMandatoryRequirements,
+            MetMandatoryRequirements = metMandatoryRequirements,
+            TotalSupportingRequirements = totalSupportingRequirements,
+            MetSupportingRequirements = metSupportingRequirements,
+            MandatoryGaps = totalMandatoryRequirements - metMandatoryRequirements,
+            SupportingGaps = totalSupportingRequirements - metSupportingRequirements,
+            RoleRequirements = roleRequirements
         };
     }
 
@@ -489,10 +554,9 @@ public class QualificationRecordService : IQualificationRecordService
             roleRequirements.Add(new RoleRequirementTraceRecord
             {
                 RequirementName = certification.CertificationName,
-                RequirementType = "Certification",
-                Status = isMet ? "Met" : "Missing",
+                RequirementType = RequirementAssessmentType.Mandatory,
+                Status = isMet ? "Met" : "Not Met",
                 IsMet = isMet,
-                IsCriticalGap = !isMet,
                 MatchedEvidence = isMet
                     ? certification.EvidenceSource ?? "N/A"
                     : "-- (No evidence)"
@@ -505,10 +569,9 @@ public class QualificationRecordService : IQualificationRecordService
             roleRequirements.Add(new RoleRequirementTraceRecord
             {
                 RequirementName = training.CourseName,
-                RequirementType = "Training",
-                Status = isMet ? "Met" : "Missing",
+                RequirementType = RequirementAssessmentType.Mandatory,
+                Status = isMet ? "Met" : "Not Met",
                 IsMet = isMet,
-                IsCriticalGap = !isMet,
                 MatchedEvidence = isMet
                     ? training.EvidenceSource ?? "N/A"
                     : "-- (No evidence)"
@@ -521,10 +584,9 @@ public class QualificationRecordService : IQualificationRecordService
             roleRequirements.Add(new RoleRequirementTraceRecord
             {
                 RequirementName = skill.SkillName,
-                RequirementType = "Skill",
-                Status = isMet ? "Met" : "Missing",
+                RequirementType = GetSkillRequirementType(skill.SkillName),
+                Status = isMet ? "Met" : "Not Met",
                 IsMet = isMet,
-                IsCriticalGap = !isMet,
                 MatchedEvidence = isMet
                     ? skill.EvidenceSource ?? "N/A"
                     : "-- (No evidence)"
@@ -534,23 +596,34 @@ public class QualificationRecordService : IQualificationRecordService
         return roleRequirements;
     }
 
-    private static string CalculateQualificationStatus(
-        IReadOnlyList<CertificationRecord> certifications,
-        IReadOnlyList<TrainingRecord> trainingRecords,
-        IReadOnlyList<SkillRecord> skills)
+    /// <summary>
+    /// Classifies a skill requirement as Mandatory or Supporting.
+    /// 
+    /// TODO: Future implementation should source this classification from governed requirement/configuration
+    /// data (e.g., job profile configuration, database lookup) rather than hardcoded skill names.
+    /// Current implementation: CAPA Authoring and Instrument Calibration Check are hardcoded as Supporting; all others are Mandatory.
+    /// This should be externalized to support:
+    ///   - Dynamic requirement classifications per job/role
+    ///   - Admin UI to manage mandatory vs supporting designations
+    ///   - Import from external requirement governance systems
+    /// </summary>
+    private static RequirementAssessmentType GetSkillRequirementType(string skillName)
     {
-        var hasExpiredCertification = certifications.Any(record => string.Equals(record.Status, "Expired", StringComparison.OrdinalIgnoreCase));
-        var hasOverdueTraining = trainingRecords.Any(record => string.Equals(record.Status, "Overdue", StringComparison.OrdinalIgnoreCase));
-        var hasSkillGap = skills.Any(record => string.Equals(record.Status, "Below Requirement", StringComparison.OrdinalIgnoreCase));
+        return skillName switch
+        {
+            "CAPA Authoring" => RequirementAssessmentType.Supporting,
+            "Instrument Calibration Check" => RequirementAssessmentType.Supporting,
+            _ => RequirementAssessmentType.Mandatory
+        };
+    }
 
-        if (hasExpiredCertification && hasOverdueTraining)
+    private static string CalculateQualificationStatus(
+        int totalMandatoryRequirements,
+        int metMandatoryRequirements)
+    {
+        if (metMandatoryRequirements < totalMandatoryRequirements)
         {
             return "Not Qualified";
-        }
-
-        if (hasExpiredCertification || hasOverdueTraining || hasSkillGap)
-        {
-            return "Needs Review";
         }
 
         return "Qualified";

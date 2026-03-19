@@ -59,8 +59,12 @@
                                             </span>
                                         </h5>
                                         <p class="card-text">
-                                            <strong>Match Score:</strong> 
-                                            <span class="fs-4 @GetScoreClass(assessment.MatchScore)">@assessment.MatchScore.ToString("F0")%</span>
+                                            <strong>Mandatory Coverage:</strong>
+                                            <span class="fs-5 fw-semibold">@assessment.MetMandatoryRequirements/@assessment.TotalMandatoryRequirements</span>
+                                        </p>
+                                        <p class="card-text">
+                                            <strong>Supporting Coverage:</strong>
+                                            <span class="fs-6">@assessment.MetSupportingRequirements/@assessment.TotalSupportingRequirements</span>
                                         </p>
                                         <p class="card-text">
                                             <strong>Assessed:</strong> @assessment.AssessedAt.ToString("MMM dd, yyyy HH:mm")
@@ -177,11 +181,11 @@
         
         allAssessments = new List<AssessmentViewModel>
         {
-            new() { Id = Guid.NewGuid(), WorkerName = "John Smith", JobTitle = "QA Specialist", Status = "Needs Review", MatchScore = 78m, AssessedAt = DateTime.Now.AddHours(-2), Rationale = "Worker has 5 years experience in quality control. Minor gaps in SOP documentation skills.", Gaps = new List<string> { "SOP Documentation - needs Level 3, has Level 2" } },
-            new() { Id = Guid.NewGuid(), WorkerName = "Mike Johnson", JobTitle = "GMP Auditor", Status = "Needs Review", MatchScore = 85m, AssessedAt = DateTime.Now.AddHours(-5), Rationale = "Strong GMP background with relevant certifications. Needs manager override for experience gap.", Gaps = new List<string> { "Min 5 years required, has 4.5 years" } },
-            new() { Id = Guid.NewGuid(), WorkerName = "Jane Doe", JobTitle = "Lab Analyst", Status = "Qualified", MatchScore = 95m, AssessedAt = DateTime.Now.AddDays(-1), Rationale = "Fully qualified with all required certifications current.", Gaps = new List<string>() },
-            new() { Id = Guid.NewGuid(), WorkerName = "Sarah Williams", JobTitle = "Validation Engineer", Status = "Qualified", MatchScore = 92m, AssessedAt = DateTime.Now.AddDays(-2), Rationale = "Excellent match with advanced validation experience.", Gaps = new List<string>() },
-            new() { Id = Guid.NewGuid(), WorkerName = "Bob Brown", JobTitle = "Mfg Technician", Status = "Not Qualified", MatchScore = 45m, AssessedAt = DateTime.Now.AddDays(-3), Rationale = "Significant gaps in required skills. Expired certification.", Gaps = new List<string> { "Aseptic Technique certification expired", "Quality Control Testing - needs Level 3, has Level 1" } }
+            new() { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), WorkerName = "John Smith", JobTitle = "QA Specialist", Status = "Needs Review", MetMandatoryRequirements = 6, TotalMandatoryRequirements = 7, MetSupportingRequirements = 2, TotalSupportingRequirements = 3, AssessedAt = new DateTime(2026, 3, 18, 9, 30, 0), Rationale = "One mandatory requirement remains unmet.", Gaps = new List<string> { "SOP Documentation - mandatory requirement not met" } },
+            new() { Id = Guid.Parse("22222222-2222-2222-2222-222222222222"), WorkerName = "Mike Johnson", JobTitle = "GMP Auditor", Status = "Needs Review", MetMandatoryRequirements = 7, TotalMandatoryRequirements = 7, MetSupportingRequirements = 1, TotalSupportingRequirements = 2, AssessedAt = new DateTime(2026, 3, 18, 6, 30, 0), Rationale = "All mandatory requirements are met; supporting gap is non-blocking.", Gaps = new List<string> { "CAPA Authoring - supporting requirement not met" } },
+            new() { Id = Guid.Parse("33333333-3333-3333-3333-333333333333"), WorkerName = "Jane Doe", JobTitle = "Lab Analyst", Status = "Qualified", MetMandatoryRequirements = 8, TotalMandatoryRequirements = 8, MetSupportingRequirements = 2, TotalSupportingRequirements = 2, AssessedAt = new DateTime(2026, 3, 17, 10, 0, 0), Rationale = "All mandatory and supporting requirements are met.", Gaps = new List<string>() },
+            new() { Id = Guid.Parse("44444444-4444-4444-4444-444444444444"), WorkerName = "Sarah Williams", JobTitle = "Validation Engineer", Status = "Qualified", MetMandatoryRequirements = 6, TotalMandatoryRequirements = 6, MetSupportingRequirements = 0, TotalSupportingRequirements = 0, AssessedAt = new DateTime(2026, 3, 16, 15, 45, 0), Rationale = "Role has no supporting requirements; all mandatory requirements are met.", Gaps = new List<string>() },
+            new() { Id = Guid.Parse("55555555-5555-5555-5555-555555555555"), WorkerName = "Bob Brown", JobTitle = "Mfg Technician", Status = "Not Qualified", MetMandatoryRequirements = 4, TotalMandatoryRequirements = 8, MetSupportingRequirements = 1, TotalSupportingRequirements = 2, AssessedAt = new DateTime(2026, 3, 15, 11, 15, 0), Rationale = "Multiple mandatory requirements are unmet.", Gaps = new List<string> { "Aseptic Technique certification expired", "Quality Control Testing - mandatory requirement not met" } }
         };
         
         FilterAssessments();
@@ -220,13 +224,6 @@
         _ => "bg-secondary"
     };
 
-    private string GetScoreClass(decimal score) => score switch
-    {
-        >= 85 => "text-success fw-bold",
-        >= 70 => "text-warning fw-bold",
-        _ => "text-danger fw-bold"
-    };
-
     private void ShowApprovalDialog(Guid id)
     {
         selectedAssessmentId = id;
@@ -259,7 +256,10 @@
         public string WorkerName { get; set; } = string.Empty;
         public string JobTitle { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
-        public decimal MatchScore { get; set; }
+        public int MetMandatoryRequirements { get; set; }
+        public int TotalMandatoryRequirements { get; set; }
+        public int MetSupportingRequirements { get; set; }
+        public int TotalSupportingRequirements { get; set; }
         public DateTime AssessedAt { get; set; }
         public string? Rationale { get; set; }
         public List<string> Gaps { get; set; } = new();
